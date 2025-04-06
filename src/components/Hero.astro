@@ -10,7 +10,7 @@ import svgArrow from '../assets/arrow.svg'
 import svgPinkStar from '../assets/pink-star.svg'
 import svgString from '../assets/string.svg'
 
-import { author } from '../sample'
+import { author, buy } from '../sample'
 
 ---
 
@@ -30,7 +30,7 @@ import { author } from '../sample'
             </h1>
             <p class="text-xl">Passionate UX Engineer & Designer crafting intuitive, user-centered experiences.</p>
            <div class="flex mt-5">
-             <Button text='See portfolio' link="/#work" />
+             <Button text={buy.title} link={buy.link} />
            </div>
         </div>
         <div class="relative mt-40 md:mt-0">

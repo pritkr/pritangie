@@ -4,10 +4,10 @@ import svgPinkStar from '../assets/pink-star.svg'
 import { author, buy } from '../sample'
 
 const links = [
-    { name: 'About', path: '/' },
-    { name: 'Blog', path: '/blog' },
-    { name: 'Hire Me', path: '/#hire' },
-    { name: buy.title, path: buy.link },
+    { name: 'About', path: '/', target: '_self' },
+    { name: 'Portfolio', path: '/#work', target: '_self' },
+    { name: 'Blog', path: '/blog', target: '_self' },
+    { name: 'Hire Me', path: '/#hire', target: '_self' },
 ]
 
 const { pathname } = Astro.url
@@ -39,7 +39,7 @@ const { pathname } = Astro.url
             <ul class="hidden md:flex">
                 {links.map(item => ( 
                     <li class="border-l-2 border-black p-3 py-4">
-                        <a href={item.path} class="whitespace-nowrap relative flex items-center before:absolute before:left-0 before:bottom-1 before:h-[8px] before:w-0 before:bg-[var(--yellow)] before:transition-all before:duration-300 hover:before:w-full">
+                        <a href={item.path} target={item.target} class="whitespace-nowrap relative flex items-center before:absolute before:left-0 before:bottom-1 before:h-[8px] before:w-0 before:bg-[var(--yellow)] before:transition-all before:duration-300 hover:before:w-full">
                             <span class="relative z-5">{item.name} {pathname == item.path ? '//' : ''}</span>
                         </a>
                     </li>
@@ -59,7 +59,7 @@ const { pathname } = Astro.url
     <ul class="flex flex-col justify-center items-center gap-4 md:hidden">
         {links.map(item => ( 
             <li class="py-3">
-                <a href={item.path} class="p-3 whitespace-nowrap text-2xl font-bold">
+                <a href={item.path} target={item.target} class="p-3 whitespace-nowrap text-2xl font-bold">
                     {item.name} {pathname == item.path ? '//' : ''}
                 </a>
             </li>

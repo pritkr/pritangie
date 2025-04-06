@@ -1,6 +1,7 @@
 const author = {
     name: `Angela`,
-    nickname: `angie`
+    nickname: `angie`,
+    social: `https://themes.temaly.com`
 }
 
 
