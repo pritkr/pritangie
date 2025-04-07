@@ -7,7 +7,7 @@ const links = [
     { name: 'About', path: '/', target: '_self' },
     { name: 'Portfolio', path: '/#work', target: '_self' },
     { name: 'Blog', path: '/blog/', target: '_self' },
-    { name: 'Hire Me', path: '/#hire', target: '_self' },
+    { name: 'Hire Me', path: author.email, target: '_blank' },
 ]
 
 const { pathname } = Astro.url
