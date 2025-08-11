@@ -10,8 +10,8 @@ const author = {
 
 
 const buy = {
-    title: `Purchase—$29.99`,
-    link: `https://buy.stripe.com/bIY5klbiBgZx2bKcMS`
+    title: `See on Github`,
+    link: `https://github.com/anthonylan/angie`
 }
 
 
