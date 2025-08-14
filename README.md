@@ -22,7 +22,7 @@ ANGIE is a sleek Astro portfolio template built for creatives and developers. Fe
 Inside of your Astro project, you'll see the following folders and files:
 
 ```text
-/
+
 ├── public/
 │   └── favicon.svg
 ├── src/
@@ -69,4 +69,7 @@ All commands are run from the root of the project, from a terminal:
 ## 👀 Curious to Explore More?
 
 Check out [LAB-CH3](https://github.com/LaB-CH3) for a growing collection of current and future templates. 
+
+If you’ve found this helpful, consider fueling my creativity!  
+[![Buy me a coffee](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/d2OuR1c)
 
