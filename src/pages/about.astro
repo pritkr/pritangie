@@ -1,14 +1,140 @@
 ---
 import "../styles/global.css";
 import Layout from "../layouts/Layout.astro";
-
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
-const allPosts = Object.values(
-    import.meta.glob("./posts/*.md", { eager: true }),
-);
 ---
 
 <Layout>
-    <Header></Header>
-    </Layout>
+    <Header />
+
+    <!-- Background same as Hero section gradient -->
+    <section class="relative py-24 sm:py-32 overflow-hidden">
+        <div class="max-w-5xl mx-auto px-6 lg:px-8">
+            <!-- Title -->
+            <div class="text-center mb-16">
+                <h1
+                    class="text-4xl sm:text-5xl font-extrabold text-black tracking-tight"
+                >
+                    About <span class="text-indigo-500">Me</span>
+                </h1>
+                <p class="mt-4 text-lg text-gray-600 dark:text-gray-300">
+                    Curious. Minimal. Builder of tools, code, and communities
+                    that make tech more human.
+                </p>
+            </div>
+
+            <!-- Content Card -->
+            <div
+                class="rounded-3xl shadow-lg p-8 sm:p-12 leading-relaxed text-gray-700 dark:text-gray-300"
+            >
+                <p class="mb-6">
+                    I’m a tinkerer from <span
+                        class="font-semibold text-indigo-500">Bihar</span
+                    > who loves making computers dance to my fingers. I started by
+                    breaking things just to see how they worked — now I build stuff
+                    that actually helps people.
+                </p>
+
+                <p class="mb-6">
+                    I work with <span class="font-semibold"
+                        >performant web tech</span
+                    > like <span class="font-semibold">React</span> and <span
+                        class="font-semibold">Astro</span
+                    >, along with <span class="font-semibold">Python</span>, <span
+                        class="font-semibold">C</span
+                    >, and <span class="font-semibold">C++ (DSA)</span>. I also
+                    script with <span class="font-semibold">Bash</span> and build
+                    real-world projects that solve small but real problems.
+                </p>
+
+                <p class="mb-6">
+                    I contribute to (and develop) <span
+                        class="font-semibold text-indigo-500"
+                        >open-source projects</span
+                    > — see my GitHub for code I’ve built, experiments, and collaborations.
+                    I design using <span class="font-semibold">Figma</span> & <span
+                        class="font-semibold">Canva</span
+                    >, and I like designs that feel <span class="italic"
+                        >minimal, friendly, and a little cute.</span
+                    >
+                </p>
+
+                <p class="mb-6">
+                    I’m also helping build a <span
+                        class="font-semibold text-indigo-500"
+                        >FOSS community</span
+                    >
+                    where people learn by doing — hosting workshops, shipping small
+                    projects, and pushing code into public repos for others to reuse.
+                </p>
+
+                <p class="mb-6">
+                    As an <span class="font-semibold">Arch Linux</span> user, I like
+                    seeing how the stack fits together. It’s part habit, part philosophy:
+                    control, transparency, and the ability to repair what you use.
+                    I deeply care about <span
+                        class="font-semibold text-indigo-500"
+                        >privacy, tech policy, and freedom.</span
+                    >
+                </p>
+
+                <p>
+                    If you’re working on something that excites curiosity — a
+                    project, collaboration, or an idea that challenges how we
+                    think about tech — or if you just want to talk, let’s
+                    connect.
+                </p>
+            </div>
+
+            <!-- Contact Buttons -->
+            <div class="flex flex-wrap justify-center gap-5 mt-16">
+                <a
+                    href="https://github.com/yourusername"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="px-6 py-3 bg-indigo-500 hover:bg-indigo-600 text-white font-medium rounded-2xl shadow-md transition"
+                >
+                    <i class="ri-github-fill text-lg mr-2"></i> GitHub
+                </a>
+
+                <a
+                    href="https://linkedin.com/in/yourusername"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="px-6 py-3 bg-indigo-500 hover:bg-indigo-600 text-white font-medium rounded-2xl shadow-md transition"
+                >
+                    <i class="ri-linkedin-box-fill text-lg mr-2"></i> LinkedIn
+                </a>
+
+                <a
+                    href="mailto:your@email.com"
+                    class="px-6 py-3 border border-indigo-500 text-indigo-600 dark:text-indigo-400 font-medium rounded-2xl hover:bg-indigo-50 dark:hover:bg-gray-800 transition"
+                >
+                    <i class="ri-mail-line text-lg mr-2"></i> Email
+                </a>
+            </div>
+
+            <!-- CTA -->
+            <div class="text-center mt-24">
+                <h2 class="text-2xl sm:text-3xl font-bold text-black
+ mb-4">
+                    Let’s Build Something Cool Together 🚀
+                </h2>
+                <p class="text-black
+ mb-8">
+                    Whether it’s a new web idea, open-source project, or FOSS
+                    event — I’d love to collaborate.
+                </p>
+                <a
+                    href="/contact"
+                    class="inline-block px-8 py-4 bg-indigo-500 hover:bg-indigo-600 text-white rounded-2xl font-semibold shadow-md transition"
+                >
+                    Get in Touch
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <Footer />
+</Layout>
