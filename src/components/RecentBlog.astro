@@ -1,0 +1,36 @@
+---
+const allPosts = Object.values(
+  import.meta.glob("../pages/posts/*.md", { eager: true }),
+);
+
+// sort by date if available in frontmatter, and take latest 3
+const recentPosts = allPosts
+  .sort(
+    (a, b) => new Date(b.frontmatter.pubDate) - new Date(a.frontmatter.pubDate),
+  )
+  .slice(0, 3);
+---
+<section class="py-5 bg-[#FFFDEB] text-black">
+  <div class="max-w-4xl mx-auto px-4">
+    <h2 class="text-4xl font-extrabold mb-10 text-center">Latest Articles</h2>
+
+    <div class="grid md:grid-cols-3 gap-6">
+      {recentPosts.map(({ url, frontmatter }: any) => (
+        <a href={url} class="block border-2 border-black bg-white hover:shadow-[4px_4px_0px_rgba(0,0,0,0.3)] transition-all duration-200">
+          <div class="w-full h-[180px] overflow-hidden border-b-2 border-black">
+            <img src={frontmatter?.image?.url} alt="" class="w-full h-full object-cover" />
+          </div>
+          <div class="p-4">
+            <h3 class="font-bold text-xl mb-2 line-clamp-2">{frontmatter.title}</h3>
+            <p class="text-sm line-clamp-3">{frontmatter.description || frontmatter.subtitle}</p>
+          </div>
+        </a>
+      ))}
+    </div>
+    <div class="text-center mt-10">
+      <a href="/blog" class="inline-block px-6 py-3 rounded-full bg-[#BEE7FF] border border-black text-black font-medium hover:translate-y-[-2px] transition-transform duration-200 shadow-[2px_2px_0_#000]">
+        See all blogs
+      </a>
+    </div>
+  </div>
+</section>

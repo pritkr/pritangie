@@ -1,0 +1,89 @@
+---
+import "../styles/global.css";
+---
+
+<section class="py-12 bg-[#FFFDEB] text-black">
+    <div
+        class="max-w-3xl mx-auto border-3 border-black bg-white p-8 relative shadow-[4px_4px_0_#000]"
+    >
+        <!-- corner accents -->
+        <div
+            class="size-2 bg-white border-2 border-black absolute -top-2 -right-2"
+        >
+        </div>
+        <div
+            class="size-2 bg-white border-2 border-black absolute -top-2 -left-2"
+        >
+        </div>
+        <div
+            class="size-2 bg-white border-2 border-black absolute -bottom-2 -left-2"
+        >
+        </div>
+        <div
+            class="size-2 bg-white border-2 border-black absolute -bottom-2 -right-2"
+        >
+        </div>
+
+        <blockquote class="text-center">
+            <p
+                class="text-xl md:text-2xl font-medium leading-relaxed italic mb-4"
+                id="quote-text"
+            >
+            </p>
+            <footer id="quote-author" class="text-lg font-bold"></footer>
+            
+        </blockquote>
+    </div>
+</section>
+<script is:inline>
+                
+                const quotes = [
+                    {
+                        text: "The more you know, the more you realize you don't know.",
+                        author: "Aristotle",
+                    },
+                    {
+                        text: "All truths are easy to understand once they are discovered; the point is to discover them.",
+                        author: "Galileo Galilei",
+                    },
+                    {
+                        text: "Arguing that you don't care about privacy because you have nothing to hide is no different than saying you don't care about free speech because you have nothing to say.",
+                        author: "Edward Snowden",
+                    },
+                    {
+                        text: "Sharing knowledge is the most fundamental act of friendship. Because it is a way you can give something without losing something.",
+                        author: "Richard Stallman",
+                    },
+                    {
+                        text: "If wars can be started by lies, peace can be started by truth.",
+                        author: "Julian Assange",
+                    },
+                    {
+                        text: "Courage is contagious. When a brave man takes a stand, the spines of others are often stiffened.",
+                        author: "Daniel Ellsberg",
+                    },
+                    {
+                        text: "Freedom is never voluntarily given by the oppressor; it must be demanded by the oppressed.",
+                        author: "Martin Luther King Jr.",
+                    },
+                    {
+                        text: "Disobedience is the true foundation of liberty. The obedient must be slaves.",
+                        author: "Henry David Thoreau",
+                    },
+                    {
+                        text: "Technology is not neutral. We’re building our future with the tools we create today.",
+                        author: "Tim Berners-Lee",
+                    },
+                    {
+                        text: "The purpose of education is to replace an empty mind with an open one.",
+                        author: "Malcolm Forbes",
+                    },
+                ];
+
+                const randomQuote =
+                    quotes[Math.floor(Math.random() * quotes.length)];
+                document.getElementById("quote-text").textContent =
+                    `"${randomQuote.text}"`;
+                document.getElementById("quote-author").textContent =
+                    `— ${randomQuote.author}`;
+            </script>

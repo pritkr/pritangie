@@ -16,9 +16,12 @@ import Footer from "../components/Footer.astro";
                 <h1
                     class="text-4xl sm:text-5xl font-extrabold text-black tracking-tight"
                 >
-                    About <span class="text-indigo-500">Me</span>
+                    About <span class="relative">
+                <span class="absolute bg-[var(--yellow)] w-full h-[50%] left-0 bottom-0 z-1"></span>
+                <span class="relative z-5">Me</span>
+              </span>
                 </h1>
-                <p class="mt-4 text-lg text-gray-600 dark:text-gray-300">
+                <p class="mt-4 text-lg text-black">
                     Curious. Minimal. Builder of tools, code, and communities
                     that make tech more human.
                 </p>
@@ -26,7 +29,7 @@ import Footer from "../components/Footer.astro";
 
             <!-- Content Card -->
             <div
-                class="rounded-3xl shadow-lg p-8 sm:p-12 leading-relaxed text-gray-700 dark:text-gray-300"
+                class="rounded-3xl shadow-lg p-8 sm:p-12 leading-relaxed text-black"
             >
                 <p class="mb-6">
                     I’m a tinkerer from <span
@@ -90,26 +93,26 @@ import Footer from "../components/Footer.astro";
             <!-- Contact Buttons -->
             <div class="flex flex-wrap justify-center gap-5 mt-16">
                 <a
-                    href="https://github.com/yourusername"
+                    href="https://github.com/pritkr"
                     target="_blank"
                     rel="noopener noreferrer"
-                    class="px-6 py-3 bg-indigo-500 hover:bg-indigo-600 text-white font-medium rounded-2xl shadow-md transition"
+                    class="inline-block px-6 py-3 rounded-full bg-[#BEE7FF] border border-black text-black font-medium hover:translate-y-[-2px] transition-transform duration-200 shadow-[2px_2px_0_#000]"
                 >
                     <i class="ri-github-fill text-lg mr-2"></i> GitHub
                 </a>
 
                 <a
-                    href="https://linkedin.com/in/yourusername"
+                    href="https://linkedin.com/in/prit-kumar"
                     target="_blank"
                     rel="noopener noreferrer"
-                    class="px-6 py-3 bg-indigo-500 hover:bg-indigo-600 text-white font-medium rounded-2xl shadow-md transition"
+                    class="inline-block px-6 py-3 rounded-full bg-[#BEE7FF] border border-black text-black font-medium hover:translate-y-[-2px] transition-transform duration-200 shadow-[2px_2px_0_#000]"
                 >
                     <i class="ri-linkedin-box-fill text-lg mr-2"></i> LinkedIn
                 </a>
 
                 <a
-                    href="mailto:your@email.com"
-                    class="px-6 py-3 border border-indigo-500 text-indigo-600 dark:text-indigo-400 font-medium rounded-2xl hover:bg-indigo-50 dark:hover:bg-gray-800 transition"
+                    href="mailto:pritkumarrrr@email.com"
+                    class="inline-block px-6 py-3 rounded-full bg-[#BEE7FF] border border-black text-black font-medium hover:translate-y-[-2px] transition-transform duration-200 shadow-[2px_2px_0_#000]"
                 >
                     <i class="ri-mail-line text-lg mr-2"></i> Email
                 </a>
@@ -128,7 +131,7 @@ import Footer from "../components/Footer.astro";
                 </p>
                 <a
                     href="/contact"
-                    class="inline-block px-8 py-4 bg-indigo-500 hover:bg-indigo-600 text-white rounded-2xl font-semibold shadow-md transition"
+                    class="inline-block px-6 py-3 rounded-full bg-[#BEE7FF] border border-black text-black font-medium hover:translate-y-[-2px] transition-transform duration-200 shadow-[2px_2px_0_#000]"
                 >
                     Get in Touch
                 </a>

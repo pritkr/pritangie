@@ -8,7 +8,7 @@ image:
   url: "https://images.pexels.com/photos/7693240/pexels-photo-7693240.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
   alt: "xx"
 tags: [""]
-pubDate: 'Oct 15, 2025'
+pubDate: '2025-10-18'
 likes: '6.3k'
 comments: '49'
 ---

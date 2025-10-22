@@ -1,41 +1,45 @@
 ---
-import Bars from "./Bars.astro"
+import Bars from "./Bars.astro";
 
-import svgUnderline from '../assets/underline.svg'
-import arrowCard from '../assets/arrow-card.svg'
+import svgUnderline from "../assets/underline.svg";
+import arrowCard from "../assets/arrow-card.svg";
 
 const portfolio = [
-  { 
-    name: 'Predirect', desc: `Web Extension that redirects to privacy friendly frontends`,
-    cover: `https://images.pexels.com/photos/1051075/pexels-photo-1051075.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2`
+  {
+    name: "Predirect",
+    desc: `Web Extension that redirects to privacy friendly frontends`,
+    cover: "../../src/assets/predirectpreview.avif",
+    link: "https://github.com/pritkr/predirect"
   },
-  { 
-    name: 'Portfolio design', desc: `UI design - User research - webflow development`,
-    cover: `https://images.pexels.com/photos/2303781/pexels-photo-2303781.jpeg?auto=compress&cs=tinysrgb&w=1600`
+  {
+    name: "BEU Help",
+    desc: `Syllabus, Results & all important info about all BEU colleges`,
+    cover: `https://images.pexels.com/photos/2303781/pexels-photo-2303781.jpeg?auto=compress&cs=tinysrgb&w=1600`,
+    link: "https://prit.eu.org/BEUhelp"
   },
-  { 
-    name: 'Portfolio design', desc: `UI design - User research - webflow development`,
-    cover: `https://images.pexels.com/photos/441963/pexels-photo-441963.jpeg?auto=compress&cs=tinysrgb&w=1600`
-  },
-  { 
-    name: 'Portfolio design', desc: `UI design - User research - webflow development`,
-    cover: `https://images.pexels.com/photos/245240/pexels-photo-245240.jpeg?auto=compress&cs=tinysrgb&w=1600`
-  },
-]
+];
 ---
 
-
 <section class="py-25 space-y-10 px-5" id="work">
-    <div class="max-w-md mx-auto relative ">
-      <h1 class="text-4xl font-medium text-center">My Portfolio</h1>
-      <img src={svgUnderline.src} alt="arrow" width="140" class="absolute left-50 -bottom-1" />
-    </div>
-  
-    <div class="max-w-3xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10"> 
-      {portfolio.map(item => ( 
-        <a href="#" class="flex flex-col bg-white p-5 group relative transition-all duration-200 hover:shadow-[4px_4px_0px_rgba(0,0,0,0.3)]">
+  <div class="max-w-md mx-auto relative">
+    <h1 class="text-4xl font-medium text-center">My Works</h1>
+    <img
+      src={svgUnderline.src}
+      alt="arrow"
+      width="140"
+      class="absolute left-50 -bottom-1"
+    />
+  </div>
+
+  <div class="max-w-3xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10">
+    {
+      portfolio.map((item) => (
+        <a
+          href={item.link}
+          class="flex flex-col bg-white p-5 group relative transition-all duration-200 hover:shadow-[4px_4px_0px_rgba(0,0,0,0.3)]"
+        >
           <div class="w-full h-[200px] overflow-hidden border-2">
-           <img src={item.cover} alt="" class="w-full h-full object-cover" />
+            <img src={item.cover} alt="" class="w-full h-full object-cover" />
           </div>
           <div class="space-y-1 pt-4">
             <div class="flex pr-2">
@@ -46,6 +50,7 @@ const portfolio = [
           </div>
           <Bars />
         </a>
-      ))}
-    </div>
+      ))
+    }
+  </div>
 </section>
