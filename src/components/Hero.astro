@@ -12,12 +12,12 @@ import svgString from "../assets/string.svg";
 
 import { author, buy } from "../sample";
 const socials = [
-  { icon: 'ri-tiktok-fill', link: author.tiktok },
-	{ icon: 'ri-instagram-line', link: author.ig },
-  { icon: 'ri-twitter-x-line', link: author.x },
-  { icon: 'ri-twitter-x-line', link: author.x },
-  { icon: 'ri-twitter-x-line', link: author.x },
-  { icon: 'ri-twitter-x-line', link: author.x },
+  { icon: 'ri-github-fill', link: author.github },
+	{ icon: 'ri-instagram-line', link: author.ig},
+  { icon: 'ri-linkedin-box-fill', link: author.linkedin },
+  { icon: 'ri-telegram-line', link: author.telegram },
+  { icon: 'ri-chat-3-line', link: author.matrix },
+  { icon: 'ri-mail-line', link: author.email },
 ]
 ---
 
@@ -43,47 +43,9 @@ const socials = [
         <div class="flex flex-wrap items-center gap-8 mt-5">
           <Button text="See Works" link="/#work" target="_self" />
           <div class="flex items-center gap-3 text-black">
-            <a
-              href="https://github.com/pritkr"
-              target="_blank"
-              class="hover:scale-110 transition-transform"
-            >
-              <i class="ri-github-fill text-2xl"></i>
-            </a>
-            <a
-              href="https://www.instagram.com/pritkr20"
-              target="_blank"
-              class="hover:scale-110 transition-transform"
-            >
-              <i class="ri-instagram-line text-2xl"></i>
-            </a>
-            <a
-              href="https://www.linkedin.com/in/prit-kumar"
-              target="_blank"
-              class="hover:scale-110 transition-transform"
-            >
-              <i class="ri-linkedin-box-fill text-2xl"></i>
-            </a>
-            <a
-              href="https://t.me/annaaaron"
-              target="_blank"
-              class="hover:scale-110 transition-transform"
-            >
-              <i class="ri-telegram-line text-2xl"></i>
-            </a>
-            <a
-              href="https://matrix.to/#/@prit:matrix.org"
-              target="_blank"
-              class="hover:scale-110 transition-transform"
-            >
-              <i class="ri-chat-3-line text-2xl"></i>
-            </a>
-            <a
-              href="mailto:pritform@gmail.com"
-              class="hover:scale-110 transition-transform"
-            >
-              <i class="ri-mail-line text-2xl"></i>
-            </a>
+            {socials.map(item => ( 
+          <a href={item.link} target="_blank" class="transition-all duration-200 hover:translate-y-[2px]"><i class={`${item.icon} text-2xl`}></i></a>
+        ))}
           </div>
         </div>
       </div>
