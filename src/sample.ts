@@ -1,7 +1,7 @@
 const author = {
     name: `Prit`,
     nickname: `prit`,
-    ig: `https://www.instagram.com/pritkr20/`,
+    ig: `https://www.instagram.com/pritkmr/`,
     email: 'mailto:pritform@gmail.com',
     linkedin: 'https://linkedin.com/in/prit-kumar',
     github: 'https://github.com/pritkr',
