@@ -6,16 +6,45 @@ import arrowCard from "../assets/arrow-card.svg";
 
 const portfolio = [
   {
-    name: "Predirect",
-    desc: `Web Extension that redirects to privacy friendly frontends`,
-    cover: "/assets/predirectpreview.avif",
-    link: "https://github.com/pritkr/predirect"
+    name: "BEU Connect",
+    desc: `No more treasure hunts across official portals — syllabus, results & notices for every BEU college in one static page that works on any phone.`,
+    role: "Solo developer",
+    outcome: "Zero-backend static portal",
+    cover: "/assets/beuconnect-preview.png",
+    link: "https://beu.prit.eu.org",
+    externalLabel: "Live demo",
+    meta: "HTML · CSS · JS",
   },
   {
-    name: "BEU Connect",
-    desc: `Syllabus, Results & all important info about all BEU colleges`,
-    cover: `https://images.pexels.com/photos/2303781/pexels-photo-2303781.jpeg?auto=compress&cs=tinysrgb&w=1600`,
-    link: "https://prit.eu.org/BEUConnect/"
+    name: "Predirect",
+    desc: `One install kills the tracking — 30+ tracked sites (YouTube, X, Reddit, Google…) rewritten to privacy-friendly frontends.`,
+    role: "Solo developer",
+    outcome: "270★ on GitHub · Chrome, Firefox, Edge",
+    cover: "/assets/predirectpreview.avif",
+    link: "https://github.com/pritkr/predirect",
+    externalLabel: "Repository",
+    caseStudy: "/projects/predirect",
+    meta: "Manifest V3 · JavaScript",
+  },
+  {
+    name: "chaind",
+    desc: `Your messages never leave your machine — a daemon that bridges Telegram, Matrix & WhatsApp to local AI agents over a permission-gated Unix socket.`,
+    role: "Co-built with fossism",
+    outcome: "AGPL-3.0 · bridges 3 messengers",
+    cover: "https://img.youtube.com/vi/zMO8yXD-v0Q/maxresdefault.jpg",
+    link: "https://github.com/fossism/chaind-cli",
+    externalLabel: "Repository",
+    meta: "Go",
+  },
+  {
+    name: "listbrew",
+    desc: `Newsletters that send themselves — realtime auto-sync from Frappe to Listmonk, built for the Bodhya community (FOSS United · Samagata).`,
+    role: "Developer",
+    outcome: "Auto-sync for Bodhya newsletters",
+    cover: "https://raw.githubusercontent.com/pritkr/listbrew/develop/ss1.webp",
+    link: "https://github.com/pritkr/listbrew",
+    externalLabel: "Repository",
+    meta: "Python · Frappe",
   },
 ];
 ---
@@ -31,26 +60,98 @@ const portfolio = [
     />
   </div>
 
-  <div class="max-w-3xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10">
-    {
-      portfolio.map((item) => (
-        <a
-          href={item.link}
-          class="flex flex-col bg-white p-5 group relative transition-all duration-200 hover:shadow-[4px_4px_0px_rgba(0,0,0,0.3)]"
-        >
-          <div class="w-full h-[200px] overflow-hidden border-2">
-            <img src={item.cover} alt="" class="w-full h-full object-cover" />
-          </div>
-          <div class="space-y-1 pt-4">
-            <div class="flex pr-2">
-              <h2 class="text-xl font-medium flex-1">{item.name}</h2>
-              <img src={arrowCard.src} alt="arrow" width="25" />
+  <div class="max-w-4xl mx-auto relative">
+    <button
+      id="rail-prev"
+      aria-label="Previous projects"
+      class="hidden md:flex absolute -left-4 top-1/2 -translate-y-1/2 z-10 size-11 items-center justify-center bg-white border-3 border-black text-xl font-bold shadow-[3px_3px_0_#000]"
+    >
+      ←
+    </button>
+    <div class="works-rail flex gap-6 overflow-x-auto snap-x snap-mandatory px-1 py-4">
+      {
+        portfolio.map((item) => (
+          <article
+            class="group w-[300px] sm:w-[340px] shrink-0 snap-start flex flex-col bg-white border-2 border-black p-5 relative transition-all duration-200 hover:shadow-[4px_4px_0px_rgba(0,0,0,0.3)]"
+          >
+            <div class="h-[160px] overflow-hidden bg-[#eef0f2] border-2">
+              <img
+                src={item.cover}
+                alt={`${item.name} screenshot`}
+                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                loading="lazy"
+              />
             </div>
-            <p class="mr-20">{item.desc}</p>
-          </div>
-          <Bars />
-        </a>
-      ))
-    }
+            <div class="flex flex-col gap-1 pt-4 flex-1">
+              <div class="flex pr-2">
+                <h2 class="text-xl font-medium flex-1">{item.name}</h2>
+                <img src={arrowCard.src} alt="arrow" width="25" />
+              </div>
+              <p class="text-sm">{item.desc}</p>
+              {item.role && (
+                <p class="text-sm">
+                  <span class="font-semibold">{item.role}</span> · {item.outcome}
+                </p>
+              )}
+              {item.meta && (
+                <span class="self-start mt-1 px-3 py-1 text-xs font-semibold bg-[var(--yellow)] border-2 border-black">
+                  {item.meta}
+                </span>
+              )}
+              <div class="flex flex-wrap gap-x-5 gap-y-1 pt-2 text-sm font-semibold">
+                {item.caseStudy && (
+                  <a
+                    href={item.caseStudy}
+                    class="underline decoration-2 underline-offset-2 hover:bg-[var(--yellow)] px-0.5 transition-colors"
+                  >
+                    Case study →
+                  </a>
+                )}
+                <a
+                  href={item.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="underline decoration-2 underline-offset-2 hover:bg-[var(--yellow)] px-0.5 transition-colors"
+                >
+                  {item.externalLabel} ↗
+                </a>
+              </div>
+            </div>
+            <Bars />
+          </article>
+        ))
+      }
+    </div>
+    <button
+      id="rail-next"
+      aria-label="Next projects"
+      class="hidden md:flex absolute -right-4 top-1/2 -translate-y-1/2 z-10 size-11 items-center justify-center bg-white border-3 border-black text-xl font-bold shadow-[3px_3px_0_#000]"
+    >
+      →
+    </button>
   </div>
 </section>
+
+<style>
+  .works-rail {
+    scrollbar-width: none;
+  }
+  .works-rail::-webkit-scrollbar {
+    display: none;
+  }
+</style>
+
+<script>
+  const rail = document.querySelector(".works-rail")!;
+  const step = () =>
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches
+      ? "auto"
+      : "smooth";
+
+  document.getElementById("rail-prev")!.addEventListener("click", () =>
+    rail.scrollBy({ left: -360, behavior: step() }),
+  );
+  document.getElementById("rail-next")!.addEventListener("click", () =>
+    rail.scrollBy({ left: 360, behavior: step() }),
+  );
+</script>

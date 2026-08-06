@@ -3,12 +3,12 @@ import logoStar from '../assets/logo-star.svg'
 import { author } from '../sample'
 
 const socials = [
-  { icon: 'ri-github-fill', link: author.github },
-	{ icon: 'ri-instagram-line', link: author.ig},
-  { icon: 'ri-linkedin-box-fill', link: author.linkedin },
-  { icon: 'ri-telegram-line', link: author.telegram },
-  { icon: 'ri-chat-3-line', link: author.matrix },
-  { icon: 'ri-mail-line', link: author.email },
+  { icon: 'ri-github-fill', link: author.github, label: 'GitHub' },
+  { icon: 'ri-linkedin-box-fill', link: author.linkedin, label: 'LinkedIn' },
+  { icon: 'ri-mail-line', link: author.email, label: 'Email' },
+  { icon: 'ri-instagram-line', link: author.ig, label: 'Instagram' },
+  { icon: 'ri-telegram-line', link: author.telegram, label: 'Telegram' },
+  { icon: 'ri-chat-3-line', link: author.matrix, label: 'Matrix' },
 ]
 
 ---
@@ -25,8 +25,11 @@ const socials = [
       </div>
       <div class="flex md:justify-end gap-5">
         {socials.map(item => ( 
-          <a href={item.link} target="_blank" class="transition-all duration-200 hover:translate-y-[2px]"><i class={`${item.icon} text-2xl`}></i></a>
+          <a href={item.link} target="_blank" rel="noopener noreferrer" aria-label={item.label} class="transition-all duration-200 hover:translate-y-[2px]"><i class={`${item.icon} text-2xl`}></i></a>
         ))}
       </div>
     </div>
+    <p class="text-center text-xs mt-8">
+        No trackers · No cookies · Built with Astro · Hosted on my own terms
+    </p>
    </footer>

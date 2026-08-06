@@ -10,14 +10,16 @@ import svgArrow from "../assets/arrow.svg";
 import svgPinkStar from "../assets/pink-star.svg";
 import svgString from "../assets/string.svg";
 
-import { author, buy } from "../sample";
+import { author } from "../sample";
+import heroPhoto from "../assets/DSC_2754.avif";
+import heroPhotoFallback from "../assets/DSC_2754-small.jpg";
 const socials = [
-  { icon: 'ri-github-fill', link: author.github },
-	{ icon: 'ri-instagram-line', link: author.ig},
-  { icon: 'ri-linkedin-box-fill', link: author.linkedin },
-  { icon: 'ri-telegram-line', link: author.telegram },
-  { icon: 'ri-chat-3-line', link: author.matrix },
-  { icon: 'ri-mail-line', link: author.email },
+  { icon: 'ri-github-fill', link: author.github, label: 'GitHub' },
+  { icon: 'ri-linkedin-box-fill', link: author.linkedin, label: 'LinkedIn' },
+  { icon: 'ri-mail-line', link: author.email, label: 'Email' },
+  { icon: 'ri-instagram-line', link: author.ig, label: 'Instagram' },
+  { icon: 'ri-telegram-line', link: author.telegram, label: 'Telegram' },
+  { icon: 'ri-chat-3-line', link: author.matrix, label: 'Matrix' },
 ]
 ---
 
@@ -37,14 +39,22 @@ const socials = [
           </span>
         </h1>
         <p class="text-xl">
-          Curious tinkerer from Bihar — turning ideas, code, and pixels into
-          something useful, minimal, and a little weird.
+          Curious tinkerer from Bihar — building privacy-first, open-source
+          software and teaching students to do the same. Useful, minimal, and a
+          little weird.
         </p>
+        <div class="flex flex-wrap items-center gap-2 text-sm mt-3">
+          <span
+            class="inline-flex items-center border-2 border-black bg-[var(--yellow)] px-3 py-1"
+          >
+            building Predirect · Bodhya · chaind
+          </span>
+        </div>
         <div class="flex flex-wrap items-center gap-8 mt-5">
           <Button text="See Works" link="/#work" target="_self" />
           <div class="flex items-center gap-3 text-black">
             {socials.map(item => ( 
-          <a href={item.link} target="_blank" class="transition-all duration-200 hover:translate-y-[2px]"><i class={`${item.icon} text-2xl`}></i></a>
+          <a href={item.link} target="_blank" rel="noopener noreferrer" aria-label={item.label} class="transition-all duration-200 hover:translate-y-[2px]"><i class={`${item.icon} text-2xl`}></i></a>
         ))}
           </div>
         </div>
@@ -100,7 +110,14 @@ const socials = [
             class="absolute -top-6 -right-2 z-10"
           />
 
-          <div id="me" class="w-full h-[310px] border-2"></div>
+          <picture>
+            <source srcset={heroPhoto.src} type="image/avif" />
+            <img
+              src={heroPhotoFallback.src}
+              alt="Prit Kumar, founder of Prit's Den"
+              class="w-full h-[310px] object-cover object-top"
+            />
+          </picture>
           <Bars />
         </div>
       </div>
@@ -109,16 +126,8 @@ const socials = [
 
   <img
     src={svgPinkStar.src}
-    alt="start"
+    alt="star"
     width="50"
     class="absolute -bottom-4"
   />
 </section>
-
-<style>
-  #me {
-    background-image: url("../assets/DSC_2754.JPG");
-    background-position: top;
-    background-size: cover;
-  }
-</style>

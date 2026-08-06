@@ -1,27 +1,25 @@
 ---
 layout: ../../components/MarkdownPost.astro
-title: "The Looming Economic Catastrophe: China on the Brink of Collapse"
-author: 
-  name: "Kostya Jarvis"
-  url: "https://images.pexels.com/photos/28368876/pexels-photo-28368876/free-photo-of-a-man-in-black-sitting-on-a-red-couch.jpeg?auto=compress&cs=tinysrgb&w=1200"
+title: "BEU Connect: the portal my college actually needed"
+description: "One static page gathering syllabus, results, and notices for every BEU college in one place."
+author:
+  name: "Prit Kumar"
+  url: "https://github.com/pritkr"
 image:
-  url: "https://images.pexels.com/photos/7693240/pexels-photo-7693240.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
-  alt: "xx"
-tags: [""]
-pubDate: '2025-10-18'
-likes: '6.3k'
-comments: '49'
+  url: "/assets/beuconnect-preview.png"
+  alt: "BEU Connect portal preview"
+tags: ["web", "students", "beu"]
+pubDate: '2026-07-12'
 ---
 
+Every semester, every student at Bihar Engineering University goes through the same ritual: syllabus somewhere on one page, results scattered across three more, notices buried in PDFs nobody can find.
 
-Look around at social media, politics, or the news and you’re likely to agree with the bodybuilding champ-turned-movie star-turned-governor of California.
+So I built **BEU Connect** — one page that gathers the syllabus, results, and all the important info about every BEU college in one place.
 
+The constraints were fun: the official portals are slow, their layouts change without warning, and there's no API. Everything had to be a static site that survives anything, with the links maintained by hand when things move.
 
-Whether he was lifting weights for five hours a day or trying to hack a path through the thicket of California politics, Schwarzenegger claims he was consistently happy. What allowed him to maintain a positive outlook despite personal setbacks and tough jobs? In his book Be Useful, Schwarzenegger boils down his philosophy to just four words.
+Why not an app? Because an app needs maintenance, and a static page works on the cheapest of phones on the slowest of connections. That's the whole point.
 
+It now lives at [beu.prit.eu.org](https://beu.prit.eu.org) and it's been useful for exactly one thing more valuable than any feature: proving that a student can ship something more usable than the system that's supposed to serve them.
 
-You might think a simple mantra is too flimsy a thing to be actually meaningful in the face of real-life struggle. But according to top psychologists, the Governator actually manages to capture profound truths about human flourishing in one quick motto.
-
-
-
-
+If you're a BEU student — use it. And if you find a dead link, tell me. That's open maintenance at its best.

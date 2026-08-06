@@ -13,11 +13,22 @@ const stats = [
   { name: `Unfinished ideas`, value: "∞" },
 ];
 
+const recs = [
+  { name: "Brave", link: "https://brave.com" },
+  { name: "Bitwarden", link: "https://bitwarden.com" },
+  { name: "AdGuard DNS", link: "https://adguard-dns.io" },
+  { name: "Linux", link: "https://cachyos.org" },
+  { name: "fmhy.net", link: "https://fmhy.net" },
+  { name: "privacyguides.org", link: "https://privacyguides.org" },
+  { name: "E2EE messengers", link: "https://privacyguides.org/en/real-time-communication" },
+  { name: "Proton", link: "https://proton.me" },
+];
+
 const services = [
   {
-    name: `This Place`,
-    desc: `My corner of the internet where I can think & write anything without needing it to be useful`,
-    icon: researchIcon,
+    name: `Values`,
+    desc: `Empathy, FOSS, Privacy, Effective Accelerationism`,
+    icon: uiIcon,
   },
   {
     name: `Interests`,
@@ -25,13 +36,13 @@ const services = [
     icon: wireIcon,
   },
   {
-    name: `Values`,
-    desc: `Empathy, FOSS, Privacy, Effective Accelerationism`,
-    icon: uiIcon,
+    name: `This Place`,
+    desc: `My corner of the internet where I can think & write anything without needing it to be useful`,
+    icon: researchIcon,
   },
   {
     name: `Recommendations`,
-    desc: `Brave, Bitwarden, Adguard dns, Linux, fmhy.net, privacyguides.org, E2EE messenger, Proton`,
+    desc: recs,
     icon: protoIcon,
   },
 ];
@@ -91,7 +102,22 @@ const services = [
             <div class="flex flex-col gap-2 p-4 md:p-6 border-l-2 border-b-2">
               <img src={item.icon.src} width="40" alt="" />
               <h3 class="text-xl font-medium">{item.name}</h3>
-              <p>{item.desc}</p>
+              {Array.isArray(item.desc) ? (
+                <p class="flex flex-wrap gap-x-2 gap-y-1">
+                  {item.desc.map((r) => (
+                    <a
+                      href={r.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="underline decoration-2 underline-offset-2 hover:bg-[var(--yellow)] px-0.5 transition-colors"
+                    >
+                      {r.name}
+                    </a>
+                  ))}
+                </p>
+              ) : (
+                <p>{item.desc}</p>
+              )}
             </div>
           ))
         }

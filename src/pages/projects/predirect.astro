@@ -1,0 +1,119 @@
+---
+import "../../styles/global.css";
+import Layout from "../../layouts/Layout.astro";
+import Header from "../../components/Header.astro";
+import Footer from "../../components/Footer.astro";
+import CallToAction from "../../components/CallToAction.astro";
+---
+
+<Layout
+  title="Case Study — Predirect"
+  description="How Predirect went from a personal itch to a 270★ privacy extension that rewrites 30+ tracked sites to privacy-friendly frontends."
+>
+  <Header />
+
+  <section class="py-16 sm:py-24 px-4">
+    <div
+      class="max-w-3xl mx-auto bg-white border-3 border-black p-8 sm:p-12 relative shadow-[6px_6px_0_#000]"
+    >
+      <div class="size-2 bg-white border-2 border-black absolute -top-2 -right-2"></div>
+      <div class="size-2 bg-white border-2 border-black absolute -top-2 -left-2"></div>
+      <div class="size-2 bg-white border-2 border-black absolute -bottom-2 -left-2"></div>
+      <div class="size-2 bg-white border-2 border-black absolute -bottom-2 -right-2"></div>
+
+      <p class="text-xs font-bold uppercase tracking-wider">Case Study</p>
+      <h1 class="text-4xl sm:text-5xl font-black mt-2">Predirect</h1>
+      <p class="text-lg mt-3">
+        A one-install Manifest V3 extension that rewrites 30+ tracked sites
+        (YouTube, X, Reddit, Google…) to privacy-friendly frontends. No
+        settings, no thinking required.
+      </p>
+
+      <div class="flex flex-wrap gap-4 mt-6">
+        <a
+          href="https://github.com/pritkr/predirect"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-block px-6 py-3 bg-[var(--yellow)] border-2 border-black text-black font-bold hover:-translate-y-0.5 transition-transform shadow-[3px_3px_0_#000]"
+        >
+          <i class="ri-github-fill text-lg mr-2"></i>Repository
+        </a>
+        <a
+          href="/posts/post-1"
+          class="inline-block px-6 py-3 bg-[#BEE7FF] border-2 border-black text-black font-bold hover:-translate-y-0.5 transition-transform shadow-[3px_3px_0_#000]"
+        >
+          <i class="ri-article-line text-lg mr-2"></i>Full story
+        </a>
+      </div>
+
+      <div class="space-y-8 mt-12">
+        <div>
+          <h2 class="text-xl font-bold">Problem</h2>
+          <p class="mt-2 leading-relaxed">
+            Every time I opened YouTube, X, or Reddit in a normal browser, I was
+            being profiled — cookies, trackers, fingerprinting — before I'd even
+            scrolled. The usual answer, "just use a private frontend", means
+            juggling five tools and remembering five different URLs. Privacy
+            tooling shouldn't be homework.
+          </p>
+        </div>
+
+        <div>
+          <h2 class="text-xl font-bold">My contribution</h2>
+          <p class="mt-2 leading-relaxed">
+            I designed and built the entire extension solo: the redirect map
+            that knows how each tracked site's URLs are shaped, the
+            Manifest&nbsp;V3 packaging, and the Chrome/Firefox/Edge builds.
+          </p>
+        </div>
+
+        <div>
+          <h2 class="text-xl font-bold">Technical approach</h2>
+          <p class="mt-2 leading-relaxed">
+            The hard part was the redirect map. Every site has its own URL
+            quirks, and a naive <code class="bg-[#FFFDEB] border border-black px-1">replace("youtube.com", "invidious.example")</code> breaks
+            half the URLs. The map has to handle watch IDs, shorts, embeds, and
+            paths without breaking the content — so the extension had to
+            understand what kind of URL it was looking at, not just string-swap
+            domains.
+          </p>
+        </div>
+
+        <div>
+          <h2 class="text-xl font-bold">Result</h2>
+          <p class="mt-2 leading-relaxed">
+            <strong>270★ on GitHub</strong> and a working install on Chrome,
+            Firefox, and Edge. One install, and YouTube becomes Invidious, X
+            becomes a lightweight client, Reddit becomes a readable
+            alternative — automatically.
+          </p>
+        </div>
+
+        <div>
+          <h2 class="text-xl font-bold">After release</h2>
+          <p class="mt-2 leading-relaxed">
+            The project stays alive through public maintenance: users open
+            issues when a site breaks or a frontend goes down, and those issues
+            drive the fixes. The best privacy tool is the one you don't notice —
+            so most of the work now is keeping it invisible.
+          </p>
+        </div>
+      </div>
+
+      <div class="border-t-2 border-black mt-12 pt-6 text-sm">
+        <p>
+          Want the longer version?{" "}
+          <a
+            href="/posts/post-1"
+            class="font-semibold underline decoration-2 underline-offset-2 hover:bg-[var(--yellow)] px-0.5"
+          >
+            How Predirect became my most-starred project →
+          </a>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <CallToAction />
+  <Footer />
+</Layout>

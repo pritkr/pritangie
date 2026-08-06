@@ -1,37 +1,37 @@
 ---
 const mytools = [
-  'Figma', 'React', 'Astro', 'Tailwind CSS', 'Python', 'Canva', 'C', 'C++(DSA)', 'Linux', 'Bash', 'Git', 'PostgreSQL'
+  'Figma', 'React', 'Astro', 'Tailwind CSS', 'Python', 'Canva', 'C', 'C++(DSA)', 'Go', 'Linux', 'Bash', 'Git', 'PostgreSQL'
 ]
---- 
-<script>
-import { gsap } from 'gsap';
-
-document.addEventListener('DOMContentLoaded', function () {
-    const clonedContainer = document.querySelector('#cloned') as any
-
-    Array.from(clonedContainer.children).forEach((img: any) => {
-        const clone = img.cloneNode(true); 
-        clonedContainer.appendChild(clone); 
-    })
-
-    const tl = gsap.timeline({ repeat: -1 });
-    tl.to(clonedContainer, {
-        x: -(clonedContainer.scrollWidth / 2),  duration: 30, ease: 'none'
-    })
-});
-</script>
-  
+const marqueeItems = [...mytools, ...mytools];
+---
 
 
 <section class="bg-black py-6 relative z-5">
     <div class="overflow-hidden">
-        <div class="flex items-center gap-10 md:gap-30" id="cloned">
-            {mytools.map(item => (
-              <div class="text-white flex-1 text-2xl whitespace-nowrap"> {item} </div>
+        <div class="flex items-center gap-10 md:gap-30 w-max marquee-track">
+            {marqueeItems.map((item, i) => (
+              <div class="text-white flex-1 text-2xl whitespace-nowrap" aria-hidden={i >= mytools.length ? "true" : undefined}> {item} </div>
             ))}
         </div>
     </div>
 </section>
+
+<style>
+    .marquee-track {
+        animation: marquee-scroll 30s linear infinite;
+    }
+
+    @keyframes marquee-scroll {
+        from { transform: translateX(0); }
+        to { transform: translateX(-50%); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .marquee-track {
+            animation: none;
+        }
+    }
+</style>
 
 
 

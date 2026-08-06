@@ -1,26 +1,29 @@
 ---
 layout: ../../components/MarkdownPost.astro
-title: "The Financial Alchemy of Fiat Currency: A Historical Reflection on the Modern Economy"
-author: 
-  name: "Laura Ville"
-  url: "https://images.pexels.com/photos/30890403/pexels-photo-30890403/free-photo-of-young-woman-squeezing-orange-juice-on-face.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+title: "chaind: when your chat apps talk to your local AI"
+description: "A Go daemon that bridges Telegram, Matrix, and WhatsApp to local AI agents over a permission-gated Unix socket."
+author:
+  name: "Prit Kumar"
+  url: "https://github.com/pritkr"
 image:
-  url: "https://images.pexels.com/photos/9304917/pexels-photo-9304917.jpeg?auto=compress&cs=tinysrgb&w=1200&lazy=load"
-  alt: "xx"
-tags: [""]
-pubDate: '2025-10-15'
-likes: '6.3k'
-comments: '99'
+  url: "https://img.youtube.com/vi/zMO8yXD-v0Q/maxresdefault.jpg"
+  alt: "chaind demo video thumbnail"
+tags: ["go", "ai", "privacy", "fossism"]
+pubDate: '2026-07-01'
 ---
 
+A chatbot should not mean "someone else's server sees all my messages". That's the thought behind **chaind**, a Go daemon I co-built with [fossism](https://github.com/fossism) that bridges Telegram, Matrix, and WhatsApp to local AI agents over a permission-gated Unix socket.
 
-Look around at social media, politics, or the news and you’re likely to agree with the bodybuilding champ-turned-movie star-turned-governor of California.
+The idea: your messages stay on your machine. An agent daemon listens on a local socket, and only the bridges you explicitly allow can talk to it. No cloud round-trip for your chat history — the socket is the privacy boundary.
 
+What made this fun to build:
 
+- **The Unix socket permission model** — enforcing "who gets to talk to the agent" at the OS level instead of trusting an app-level check.
+- **Cross-platform watching** — knowing when a new message arrives on each bridge without polling everything into the ground.
+- **The outbox scheduler** — batching and broadcasting replies from the agent back to whichever bridge asked, so a slow model doesn't stall your chat.
 
-Whether he was lifting weights for five hours a day or trying to hack a path through the thicket of California politics, Schwarzenegger claims he was consistently happy. What allowed him to maintain a positive outlook despite personal setbacks and tough jobs? In his book Be Useful, Schwarzenegger boils down his philosophy to just four words.
+We shipped the status command and socket error handling first — boring plumbing, but it's what makes a daemon reliable instead of a demo.
 
+It's AGPL-3.0 licensed and lives at [fossism/chaind-cli](https://github.com/fossism/chaind-cli). If you've ever wanted your Telegram bots to be actually yours — this is the direction.
 
-You might think a simple mantra is too flimsy a thing to be actually meaningful in the face of real-life struggle. But according to top psychologists, the Governator actually manages to capture profound truths about human flourishing in one quick motto.
-
-
+Co-building it also reminded me why I love FOSS: two people, different time zones, one shared repo, and the best ideas come from arguing about the design in the README.

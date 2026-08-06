@@ -1,0 +1,40 @@
+---
+import "../styles/global.css";
+import Layout from "../layouts/Layout.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import Button from "../components/Button.astro";
+---
+
+<Layout title="404 — Page Not Found" description="This page doesn't exist, but your next move does.">
+    <Header />
+
+    <section class="py-24 sm:py-32 px-4">
+        <div class="max-w-3xl mx-auto text-center bg-white border-3 shadow-[8px_8px_0px_rgba(0,0,0,0.3)] p-10 relative">
+            <h1 class="text-6xl sm:text-7xl font-black relative inline-block">
+                <span class="absolute bg-[var(--yellow)] w-full h-[40%] left-0 bottom-0 z-1" aria-hidden="true"></span>
+                <span class="relative z-2">404</span>
+            </h1>
+            <div class="mt-10 flex flex-col gap-4 items-center">
+                <p class="text-xl font-medium">
+                    You broke the internet. Well, one URL of it.
+                </p>
+                <p class="max-w-md text-black">
+                    This page doesn't exist — maybe I moved it, or you typed something
+                    adventurous. Either way, the good stuff is one click away.
+                </p>
+                <div class="mt-4">
+                    <Button text="Back Home" link="/#work" target="_self" />
+                </div>
+                <a
+                    href="/blog"
+                    class="text-sm underline decoration-2 underline-offset-2 hover:bg-[var(--yellow)] px-1"
+                >
+                    or read the latest articles
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <Footer />
+</Layout>

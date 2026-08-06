@@ -1,41 +1,73 @@
 ---
 import '../styles/global.css'
-import { Image } from 'astro:assets';
 import Layout from '../layouts/Layout.astro';
 
 import AppHeader from './Header.astro';
 import AppFooter from './Footer.astro';
 import CallToAction from './CallToAction.astro';
 
-const styleSheet = {
-    actions: 'text-gray-500 flex items-center gap-2 hover:text-gray-700',
-}
-
 const { frontmatter } = Astro.props;
+
+type Post = {
+  url: string;
+  frontmatter: {
+    title: string;
+    pubDate: string;
+    image?: { url: string; alt?: string };
+    description?: string;
+    subtitle?: string;
+    author?: { name: string; url: string };
+    tags?: string[];
+  };
+};
+
+const posts = (Object.values(import.meta.glob('../pages/posts/*.md', { eager: true })) as Post[])
+    .sort((a, b) => new Date(b.frontmatter.pubDate).getTime() - new Date(a.frontmatter.pubDate).getTime());
+const currentPath = Astro.url.pathname.replace(/\/+$/, "");
+const currentIdx = posts.findIndex((p) => p.url?.replace(/\/+$/, "") === currentPath);
+const newer = currentIdx > 0 ? posts[currentIdx - 1] : null;
+const older = currentIdx >= 0 && currentIdx < posts.length - 1 ? posts[currentIdx + 1] : null;
 ---
 
-<Layout>
+<Layout title={frontmatter.title} description={frontmatter.description} image={frontmatter.image?.url}>
 
 <AppHeader />
 
 <section class="mb-30 p-3">
     <div class="max-w-3xl mx-auto p-3 bg-white flex flex-col gap-7 border-3 mt-10">
-        <Image src={frontmatter.image.url} alt="Head" width={100} height={100} class="w-full border-2" />
+        {frontmatter.image?.url && (
+            <img src={frontmatter.image.url} alt={frontmatter.image.alt ?? "Post cover image"} class="w-full max-h-[380px] object-cover border-2" loading="eager" />
+        )}
         <h1 class="title text-4xl font-black">{frontmatter.title}</h1>
 
         <div class="flex flex-col">
             <div class="flex border-t border-b border-gray-100 mb-5 py-4">
-                <div class="flex-1 flex gap-6">
-                    <a href="#" class={styleSheet.actions}><i class="ri-thumb-up-line text-xl"></i> {frontmatter.likes}</a>
-                    <a href="#" class={styleSheet.actions}><i class="ri-chat-1-line text-xl"></i> {frontmatter.comments}</a>
-                </div>
-                <div class="flex gap-6">
-                    <a href="#" class={styleSheet.actions}><i class="ri-bookmark-line text-xl"></i> </a>
-                    <a href="#" class={styleSheet.actions}><i class="ri-share-forward-box-line text-xl"></i> </a>
-                </div>
+                <span class="text-gray-600 text-sm">
+                    By <strong>{frontmatter.author?.name ?? "Prit Kumar"}</strong>
+                    {frontmatter.pubDate && (
+                        <> · {new Date(frontmatter.pubDate).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}</>
+                    )}
+                </span>
             </div>
             <slot />
         </div>
+
+        {(newer || older) && (
+            <nav class="grid grid-cols-1 sm:grid-cols-2 gap-4 border-t-2 border-black pt-6 mt-10" aria-label="More posts">
+                {newer ? (
+                    <a href={newer.url} class="p-4 border-2 border-black hover:shadow-[4px_4px_0px_rgba(0,0,0,0.3)] transition-all duration-200">
+                        <p class="text-xs uppercase tracking-wider text-black">Newer</p>
+                        <h3 class="font-bold line-clamp-2">{newer.frontmatter.title}</h3>
+                    </a>
+                ) : <span></span>}
+                {older ? (
+                    <a href={older.url} class="p-4 border-2 border-black sm:text-right hover:shadow-[4px_4px_0px_rgba(0,0,0,0.3)] transition-all duration-200">
+                        <p class="text-xs uppercase tracking-wider text-black">Older</p>
+                        <h3 class="font-bold line-clamp-2">{older.frontmatter.title}</h3>
+                    </a>
+                ) : <span></span>}
+            </nav>
+        )}
     </div>
 </section>
 

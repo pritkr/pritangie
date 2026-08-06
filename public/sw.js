@@ -1,48 +1,41 @@
-self.addEventListener('fetch', (event) => {
-  console.log('fetch');
-  event.respondWith(
-    fetch(event.request)
-      .catch(() => {
-        // Handle offline scenario
-        if (event.request.mode === 'navigate') {
-          // If it's a navigation (like opening a page)
-          return new Response(`
-            <!doctype html>
-            <html>
-              <head>
-                <meta charset="utf-8">
-                <title>Offline</title>
-                <style>
-                  body {
-                    font-family: system-ui, sans-serif;
-                    text-align: center;
-                    padding: 3rem;
-                    background: #fafafa;
-                    color: #333;
-                  }
-                  h1 {
-                    font-size: 2rem;
-                    margin-bottom: 1rem;
-                  }
-                  p {
-                    font-size: 1.2rem;
-                    color: #666;
-                  }
-                </style>
-              </head>
-              <body>
-                <h1>You’re Offline</h1>
-                <p>Check your internet connection and try again.</p>
-              </body>
-            </html>
-          `, {
-            headers: { 'Content-Type': 'text/html' }
-          });
-        }
+const CACHE = 'pritden-v1';
 
-        // For non-navigation requests (CSS, JS, images, etc.)
-        return new Response('', { status: 503, statusText: 'Offline' });
-      })
+self.addEventListener('install', () => {
+  self.skipWaiting();
+});
+
+self.addEventListener('activate', (event) => {
+  event.waitUntil(
+    caches
+      .keys()
+      .then((keys) => Promise.all(keys.filter((k) => k !== CACHE).map((k) => caches.delete(k))))
+      .then(() => self.clients.claim())
   );
 });
 
+self.addEventListener('fetch', (event) => {
+  const { request } = event;
+  if (request.method !== 'GET') return;
+
+  const url = new URL(request.url);
+  if (url.origin !== self.location.origin) return;
+
+  event.respondWith(
+    caches.open(CACHE).then(async (cache) => {
+      try {
+        const cached = await cache.match(request);
+        const network = fetch(request)
+          .then((resp) => {
+            if (resp && resp.ok) cache.put(request, resp.clone());
+            return resp;
+          })
+          .catch(() => cached);
+
+        if (request.mode === 'navigate' && cached) return cached;
+        return cached || network;
+      } catch {
+        return fetch(request);
+      }
+    })
+  );
+});

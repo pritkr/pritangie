@@ -1,0 +1,101 @@
+---
+import { author } from "../sample";
+import Bars from "./Bars.astro";
+import svgUnderline from "../assets/underline.svg";
+
+const tracks = [
+  {
+    icon: "ri-terminal-box-line",
+    title: "Linux & Self-Hosting 101",
+    desc: "Hands-on Linux install weekends (Arch, Debian), terminal workflows, and self-hosted privacy setups (SearXNG, Bitwarden, Listmonk).",
+    tag: "Hands-on Workshop"
+  },
+  {
+    icon: "ri-shield-keyhole-line",
+    title: "Privacy Tech & Web Extensions",
+    desc: "Building Manifest V3 browser extensions, non-surveillance web tools, and understanding privacy-first web architecture.",
+    tag: "Tech Talk & Demo"
+  },
+  {
+    icon: "ri-git-branch-line",
+    title: "FOSS Community & Mentorship",
+    desc: "Guiding tier-2/3 engineering students (BEU & Bihar colleges) into open source via Bodhya & FOSS United — Git, GitHub, and first PRs.",
+    tag: "Community Session"
+  }
+];
+---
+
+<section class="py-20 px-6 max-w-5xl mx-auto" id="workshops">
+  <!-- Section Title -->
+  <div class="text-center relative max-w-xl mx-auto mb-14">
+    <span class="inline-block bg-[var(--yellow)] border-2 border-black px-3 py-1 text-xs font-bold uppercase shadow-[2px_2px_0_#000] mb-3">
+      FOSS Community & Outreach
+    </span>
+    <h2 class="text-3xl sm:text-4xl font-extrabold text-black tracking-tight">
+      Host a Workshop or Collaborate
+    </h2>
+    <img
+      src={svgUnderline.src}
+      alt="underline decoration"
+      width="150"
+      class="mx-auto mt-2"
+    />
+    <p class="mt-4 text-gray-800 text-base leading-relaxed">
+      I love hosting hands-on workshops, install weekends, and open-source sessions for college campuses and developer meetups across Bihar.
+    </p>
+  </div>
+
+  <!-- Workshop Tracks Grid -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-14">
+    {tracks.map((track) => (
+      <div class="bg-white border-3 border-black p-6 relative flex flex-col justify-between shadow-[5px_5px_0_#000] hover:-translate-y-1 transition-transform">
+        <div>
+          <div class="flex items-center justify-between mb-4">
+            <div class="size-12 rounded-none bg-[#BEE7FF] border-2 border-black flex items-center justify-center text-2xl text-black">
+              <i class={track.icon}></i>
+            </div>
+            <span class="text-xs font-bold bg-[var(--yellow)] border border-black px-2 py-0.5 shadow-[1px_1px_0_#000]">
+              {track.tag}
+            </span>
+          </div>
+          <h3 class="text-xl font-bold text-black mb-2">{track.title}</h3>
+          <p class="text-gray-700 text-sm leading-relaxed mb-4">{track.desc}</p>
+        </div>
+        <Bars />
+      </div>
+    ))}
+  </div>
+
+  <!-- Booking CTA Card -->
+  <div class="bg-[#FFFDEB] border-3 border-black p-8 sm:p-10 relative shadow-[6px_6px_0_#000] text-center max-w-3xl mx-auto">
+    <div class="size-3 bg-white border-2 border-black absolute -top-2 -right-2"></div>
+    <div class="size-3 bg-white border-2 border-black absolute -top-2 -left-2"></div>
+    <div class="size-3 bg-white border-2 border-black absolute -bottom-2 -left-2"></div>
+    <div class="size-3 bg-white border-2 border-black absolute -bottom-2 -right-2"></div>
+
+    <h3 class="text-2xl font-extrabold text-black mb-3">
+      Organizing an event at your college or campus? 🚀
+    </h3>
+    <p class="text-gray-800 text-sm sm:text-base leading-relaxed mb-6 max-w-xl mx-auto">
+      Whether you're planning a campus Linux install party, a FOSS United meetup, or a web dev workshop for BEU colleges — let's make it happen.
+    </p>
+
+    <div class="flex flex-wrap justify-center gap-4">
+      <a
+        href={`mailto:pritform@gmail.com?subject=${encodeURIComponent('[FOSS Workshop Invite] Host an Event at My Campus')}&body=${encodeURIComponent('Hi Prit,\n\nWe would like to invite you for a workshop / talk at our campus / event.\n\nCollege / Organization:\nProposed Date:\nTopic of Interest:\n\nLooking forward to hearing from you!')}`}
+        class="inline-flex items-center px-6 py-3 bg-[var(--yellow)] border-2 border-black text-black font-bold hover:-translate-y-0.5 transition-transform shadow-[3px_3px_0_#000]"
+      >
+        <i class="ri-calendar-event-line text-lg mr-2"></i> Request Workshop Invite
+      </a>
+
+      <a
+        href={author.matrix}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="inline-flex items-center px-6 py-3 bg-[#BEE7FF] border-2 border-black text-black font-bold hover:-translate-y-0.5 transition-transform shadow-[3px_3px_0_#000]"
+      >
+        <i class="ri-chat-3-line text-lg mr-2"></i> Chat on Matrix
+      </a>
+    </div>
+  </div>
+</section>

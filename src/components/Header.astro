@@ -1,17 +1,19 @@
 ---
 import logoStar from "../assets/logo-star.svg";
 import svgPinkStar from "../assets/pink-star.svg";
-import { author, buy } from "../sample";
+import { author } from "../sample";
 
 const links = [
     { name: "Home", path: "/", target: "_self" },
     { name: "Blog", path: "/blog/", target: "_self" },
     { name: "Projects", path: "/projects", target: "_self" },
-    { name: "Résumé", path: "#", target: "_self" },
+    { name: "Résumé", path: "/resume.pdf", target: "_blank" },
     { name: "About", path: "/about", target: "_self" },
+    { name: "Contact", path: "mailto:pritform@gmail.com", target: "_self" },
 ];
 
 const { pathname } = Astro.url;
+const current = pathname.replace(/\/+$/, "") || "/";
 ---
 
 <header class="relative border-b-3 p-7 overflow-hidden">
@@ -58,7 +60,7 @@ const { pathname } = Astro.url;
                     {author.nickname}
                 </a>
             </div>
-            <a href="#" class="flex md:hidden" id="menu-open">
+            <a href="#" class="flex md:hidden" id="menu-open" aria-label="Open menu">
                 <i class="ri-menu-2-line text-2xl"></i>
             </a>
             <ul class="hidden md:flex">
@@ -72,7 +74,7 @@ const { pathname } = Astro.url;
                             >
                                 <span class="relative z-5">
                                     {item.name}{" "}
-                                    {pathname == item.path ? "//" : ""}
+                                    {current == (item.path.replace(/\/+$/, "") || "/") ? "//" : ""}
                                 </span>
                             </a>
                         </li>
@@ -89,7 +91,7 @@ const { pathname } = Astro.url;
 >
     <div class="flex p-6">
         <h3 class="flex-1 font-bold uppercase">Menu</h3>
-        <a href="#" id="menu-close">
+        <a href="#" id="menu-close" aria-label="Close menu">
             <i class="ri-close-line text-3xl"></i>
         </a>
     </div>
@@ -102,7 +104,7 @@ const { pathname } = Astro.url;
                         target={item.target}
                         class="p-3 whitespace-nowrap text-2xl font-bold"
                     >
-                        {item.name} {pathname == item.path ? "//" : ""}
+                        {item.name} {current == (item.path.replace(/\/+$/, "") || "/") ? "//" : ""}
                     </a>
                 </li>
             ))

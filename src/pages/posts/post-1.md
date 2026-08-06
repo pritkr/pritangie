@@ -1,28 +1,28 @@
 ---
 layout: ../../components/MarkdownPost.astro
-title: "Warren Buffett’s Seven Rules: An Economic Masterclass in Value Investing"
-author: 
-  name: "Jessica Stillman"
-  url: "https://images.pexels.com/photos/935743/pexels-photo-935743.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+title: "How Predirect became my most-starred project"
+description: "A one-install Manifest V3 extension that rewrites 30+ tracked sites to privacy-friendly frontends."
+author:
+  name: "Prit Kumar"
+  url: "https://github.com/pritkr"
 image:
-  url: "https://images.pexels.com/photos/313690/pexels-photo-313690.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
-  alt: "xx"
-tags: [""]
-pubDate: '2025-10-22'
-likes: '12.3k'
-comments: '119'
+  url: "/assets/predirectpreview.avif"
+  alt: "Predirect extension preview"
+tags: ["privacy", "browsers", "open-source"]
+pubDate: '2026-07-26'
 ---
 
+Predirect started as an itch. Every time I opened YouTube, X, or Reddit in a normal browser, I was being profiled — cookies, trackers, fingerprinting — before I'd even scrolled. The usual answer is "just use a private frontend", but then you're juggling five different tools and remembering five different URLs.
 
-Look around at social media, politics, or the news and you’re likely to agree with the bodybuilding champ-turned-movie star-turned-governor of California.
+So I built an extension that does it for you: one Manifest V3 extension that rewrites 30+ tracked sites to privacy-friendly frontends. Install once, and YouTube becomes Invidious, X becomes a lightweight client, Reddit becomes a readable alternative — automatically.
 
-Whether he was lifting weights for five hours a day or trying to hack a path through the thicket of California politics, Schwarzenegger claims he was consistently happy. What allowed him to maintain a positive outlook despite personal setbacks and tough jobs? In his book Be Useful, Schwarzenegger boils down his philosophy to just four words.
+The fun part was the redirect map. Every site has its own URL quirks, and a naive `replace("youtube.com", "invidious.example")` breaks half the URLs. The map needed to handle watch IDs, shorts, embeds, and paths without breaking the actual content.
 
+It took a few weekends and a lot of "why is this URL still leaking my IP" debugging. The result sits at **270 stars on GitHub** and works on Chrome, Firefox, and Edge.
 
-You might think a simple mantra is too flimsy a thing to be actually meaningful in the face of real-life struggle. But according to top psychologists, the Governator actually manages to capture profound truths about human flourishing in one quick motto.
+Two lessons I keep relearning:
 
+1. **The best privacy tool is the one you don't notice.** If a user has to think about their privacy, you've already lost.
+2. **Small, boring, focused tools win.** Not a "suite". One redirect map, done properly.
 
-
-
-
-
+If you use it, star it — and open an issue when a site breaks. That's how it gets better.

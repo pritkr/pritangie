@@ -1,12 +1,50 @@
 ---
-const title = Astro.props.title ?? "Prit's Den";
+interface Props {
+	title?: string;
+	description?: string;
+	image?: string;
+}
+
+const {
+	title = "Prit's Den — Open Source & Privacy Tech",
+	description = "Prit Kumar — privacy-first open-source developer and FOSS educator. Maintainer of Predirect (270+ ★), co-founder of Bodhya FOSS community.",
+	image = "/assets/predirectpreview.avif"
+} = Astro.props;
+
+const site = Astro.site ?? new URL("https://prit.eu.org");
+const canonicalURL = new URL(Astro.url.pathname, site);
+const socialImageURL = new URL(image, site);
 ---
 
 <!doctype html>
 <html lang="en">
 	<head>
 		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>{title}</title>
+
+		<!-- Primary Meta Tags -->
+		<meta name="title" content={title} />
+		<meta name="description" content={description} />
+		<meta name="author" content="Prit Kumar" />
+		<link rel="canonical" href={canonicalURL} />
+
+		<!-- Open Graph / Facebook / LinkedIn / Matrix -->
+		<meta property="og:type" content="website" />
+		<meta property="og:url" content={canonicalURL} />
+		<meta property="og:title" content={title} />
+		<meta property="og:description" content={description} />
+		<meta property="og:image" content={socialImageURL} />
+		<meta property="og:site_name" content="Prit's Den" />
+
+		<!-- Twitter -->
+		<meta property="twitter:card" content="summary_large_image" />
+		<meta property="twitter:url" content={canonicalURL} />
+		<meta property="twitter:title" content={title} />
+		<meta property="twitter:description" content={description} />
+		<meta property="twitter:image" content={socialImageURL} />
+
+		<!-- Icons & Manifest -->
 		<link
 			rel="icon"
 			type="image/png"
@@ -27,7 +65,8 @@ const title = Astro.props.title ?? "Prit's Den";
 		<meta name="theme-color" content="#fefff0" />
 		<link rel="manifest" href="/site.webmanifest" />
 		<meta name="generator" content={Astro.generator} />
-		<title>{title}</title>
+		<link rel="stylesheet" href="/fonts/remixicon/remixicon.css" />
+		<link rel="alternate" type="application/rss+xml" title="Prit's Den" href={new URL("/rss.xml", site).href} />
 	</head>
 	<body>
 		<slot />
@@ -59,7 +98,7 @@ const title = Astro.props.title ?? "Prit's Den";
 		navigator.serviceWorker
 			.register("/sw.js")
 			.then((reg) => {
-				console.log("Registration suddcceeded");
+				console.log("Service worker registered: " + reg.scope);
 			})
 			.catch((error) => {
 				console.log("Registration failed with " + error);

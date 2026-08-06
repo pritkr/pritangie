@@ -16,7 +16,7 @@ const testimonials = [
     author: {
       name: `Anonymous`,
       pos: `Faculty, BEE`,
-      pic: `https://images.pexels.com/photos/2128819/pexels-photo-2128819.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2`
+      pic: `https://api.dicebear.com/7.x/bottts/svg?seed=Faculty&backgroundColor=bae6ff`
     },
     cls: `-rotate-2 -translate-x-10  z-5`
    },
@@ -25,7 +25,7 @@ const testimonials = [
     author: {
       name: `You know who`,
       pos: `HOD, CSE`,
-      pic: `https://images.pexels.com/photos/2169429/pexels-photo-2169429.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2`
+      pic: `https://api.dicebear.com/7.x/bottts/svg?seed=HOD&backgroundColor=ffdc58`
     },
     cls: `rotate-2 translate-x-5 z-5`
    },
@@ -46,7 +46,7 @@ const testimonials = [
     <div class="max-w-4xl mx-auto pb-20 px-10 overflow-hidden">
       <div class="grid grid-cols-1 md:grid-cols-2">
         <div class="flex relative">
-          <h1 class="text-3xl">Here’s what people are saying about me</h1>
+          <h1 class="text-3xl">People that tolerate me</h1>
           <img src={svgNew.src} alt="arrow" width="40" class="absolute -right-3 md:-right-10 bottom-0" />
         </div>
       </div>
@@ -58,7 +58,7 @@ const testimonials = [
             <p>{item.comment}</p>
             <div class="flex items-center gap-2">
               <div><div class="size-11 rounded-full border overflow-hidden">
-                  <img src={item.author.pic} alt="" class="w-full h-full object-cover" />
+                  <img src={item.author.pic} alt={`${item.author.name} avatar`} class="w-full h-full object-cover" />
               </div></div>
               <div>
                 <h3 class="font-medium">{item.author.name}</h3>

@@ -11,10 +11,4 @@ const author = {
 }
 
 
-const buy = {
-    title: `See on Github`,
-    link: `https://github.com/anthonylan/angie`
-}
-
-
-export { author, buy }
+export { author }
