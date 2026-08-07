@@ -1,9 +1,9 @@
-#import "@preview/modern-cv:0.8.0": *
+#import "modern-cv/lib.typ": *
 
 #show: resume.with(
   author: (
-    firstname: "Prit",
-    lastname: "Kumar",
+    firstname: "Prit Kumar",
+    lastname: "",
     email: "pritform@gmail.com",
     github: "pritkr",
     linkedin: "prit-kumar",
@@ -18,18 +18,83 @@
   accent-color: rgb("#1e40af"),
   font: ("EB Garamond", "Georgia", "Times New Roman", "Liberation Serif"),
   header-font: ("EB Garamond", "Georgia", "Times New Roman"),
+  show-footer: false,
   paper-size: "a4"
 )
 
-= Summary
-Open-source developer and B.Tech CSE student building software that respects privacy and freedom. Maintainer of *Predirect* (Manifest V3 browser extension with *260+ ★* on GitHub) redirecting ~30 surveilled platforms to privacy-friendly frontends, published on Chrome, Firefox, and Edge. Co-founder of *Bodhya* FOSS community (aligned with FOSS United / Samagata) bringing tech opportunities, mentorship, and workshops to engineering students in Bihar.
+#set text(fill: rgb("#191919"))
 
-= Featured Project
+#let dark-ink = rgb("#141414")
+
+#let resume-entry(
+  title: none,
+  location: "",
+  location-link: none,
+  date: "",
+  description: "",
+  title-link: none,
+) = {
+  let title-content = if title-link != none {
+    link(title-link)[#title]
+  } else {
+    title
+  }
+  let location-content = if location-link != none {
+    link(location-link)[#location]
+  } else {
+    location
+  }
+  block(above: 1em, below: 0.65em)[
+    #pad[
+      #justified-header(title-content, location-content)
+      #if description != "" or date != "" [
+        #block[
+          #box(width: 1fr)[
+            #align(left)[
+              #text(fill: dark-ink, size: 11pt, weight: "regular")[
+                #description
+              ]
+            ]
+          ]
+          #box(width: 1fr)[
+            #align(right)[
+              #text(fill: dark-ink, size: 11pt, weight: "regular")[#date]
+            ]
+          ]
+        ]
+      ]
+    ]
+  ]
+}
+
+#let resume-item(body) = {
+  set text(
+    size: 11pt,
+    style: "normal",
+    weight: "regular",
+    fill: dark-ink,
+  )
+  set block(
+    above: 0.75em,
+    below: 1.25em,
+  )
+  set par(leading: 0.65em)
+  block(above: 0.5em)[
+    #body
+  ]
+}
+
+= Summary
+Open-source developer and B.Tech CSE student building software that respects privacy and freedom. Maintainer of *Predirect* (Manifest V3 browser extension with *270+ ★* on GitHub) redirecting ~30 surveilled platforms to privacy-friendly frontends, published on Chrome, Firefox, and Edge. Lead of tech & programs at *Bodhya* FOSS community (aligned with FOSS United / Samagata) bringing tech opportunities, mentorship, and workshops to engineering students in Bihar.
+
+= Projects
 #resume-entry(
   title: "Predirect — Privacy Browser Extension",
   location: "github.com/pritkr/predirect",
+  location-link: "https://github.com/pritkr/predirect",
+  title-link: "https://github.com/pritkr/predirect",
   date: "Nov 2023 - Present",
-  description: "Maintainer & Lead Developer (260+ ★ on GitHub · GPL-3.0)"
+  description: "Maintainer & Lead Developer (270+ ★ on GitHub · GPL-3.0)"
 )
 #resume-item[
   - Manifest V3 browser extension redirecting ~30 tracked sites (YouTube, X, Reddit, Google, Instagram, TikTok) to privacy-friendly frontends (Piped, Nitter, Redlib, SearXNG, etc.).
@@ -37,21 +102,40 @@ Open-source developer and B.Tech CSE student building software that respects pri
   - Automated instance health checking and sync workflows maintained via GitHub Actions (`pritkr/instances`).
 ]
 
-= Experience & Community
 #resume-entry(
-  title: "Bodhya FOSS Community",
-  location: "bodhya.net — Bihar, India",
-  date: "Jan 2026 - Present",
-  description: "Co-founder & Core Maintainer"
+  title: "BEU Connect — Academic Utility Portal",
+  location: "beu.prit.eu.org",
+  location-link: "https://beu.prit.eu.org",
+  title-link: "https://beu.prit.eu.org",
+  date: "2024 - Present",
+  description: "Creator & Lead Developer"
 )
 #resume-item[
-  - Co-founded a FOSS community aligned with FOSS United & Samagata linking tier-2/3 college students with open-source mentors, workshops, internships, and real projects.
-  - Built production tooling including automated certificate generators, event portals, and Frappe/Listmonk sync integrations.
+  - Centralized portal bundling syllabus, exam results, result analytics, and official alerts for Bihar Engineering University colleges.
+  - Scraped and parsed PYQ (past-year question) papers from scattered unofficial sites into a structured, searchable archive.
+  - Digitized scanned question papers using OCR and Vision-Language Models (VLMs).
+  - Built a bulk ingestion pipeline dumping result data for all BEU students into a queryable database powering result analytics.
+  - Optimized frontend architecture ensuring rapid mobile load times and seamless navigation for thousands of BEU engineering students.
 ]
 
 #resume-entry(
-  title: "listbrew",
+  title: "chaind-cli — Sovereign AI Agent Daemon",
+  location: "github.com/fossism/chaind-cli",
+  location-link: "https://github.com/fossism/chaind-cli",
+  title-link: "https://github.com/fossism/chaind-cli",
+  date: "2024 - Present",
+  description: "Lead Developer"
+)
+#resume-item[
+  - Headless Go daemon bridging messaging apps (WhatsApp, Matrix, Telegram) directly to local AI agents via permission-gated Unix sockets.
+  - Designed for secure, zero-cloud interaction with self-hosted LLMs without exposing open network ports.
+]
+
+#resume-entry(
+  title: "listbrew — Contact Sync Engine",
   location: "github.com/pritkr/listbrew",
+  location-link: "https://github.com/pritkr/listbrew",
+  title-link: "https://github.com/pritkr/listbrew",
   date: "Dec 2025 - Present",
   description: "Creator & Maintainer"
 )
@@ -60,52 +144,68 @@ Open-source developer and B.Tech CSE student building software that respects pri
   - Shipped with full automated CI/CD quality gates using Ruff, Semgrep, ESLint, PyUpgrade, and pip-audit.
 ]
 
+= Experience & Community
 #resume-entry(
-  title: "Bihar FOSS Workshops",
-  location: "Community & Install Parties",
-  date: "2024 - Present",
-  description: "Core Community Organizer"
+  title: "Bodhya FOSS Community",
+  location: "bodhya.net — Bihar, India",
+  location-link: "https://bodhya.net",
+  title-link: "https://bodhya.net",
+  date: "Jan 2026 - Present",
+  description: "Tech & Programs Lead — Founding Core Team"
 )
 #resume-item[
-  - Core member of Bihar-focused FOSS efforts — hosting Linux install weekends, self-hosting workshops, and privacy sessions.
+  - Lead tech and programs for a FOSS community aligned with FOSS United & Samagata linking tier-2/3 college students with open-source mentors, workshops, internships, and real projects.
+  - Built production tooling including automated certificate generators, event portals, and Frappe/Listmonk sync integrations.
+]
+
+#resume-entry(
+  title: "Navprayas — Student-Run Non-Profit Society",
+  location: "navprayas.in — Manpur Patwatoli, Gaya, Bihar",
+  location-link: "https://navprayas.in",
+  title-link: "https://navprayas.in",
+  date: "May 2025 - Present",
+  description: "Team Lead — Website, Database & Anchoring"
+)
+#resume-item[
+  - Team lead for website, database, and anchoring at Navprayas — a student-run non-profit (est. 2000) driving education and development for the Manpur–Patwatoli society in Gaya, Bihar (15K+ participants, 700+ alumni).
+  - Drove the org's first online registration transition, integrating Razorpay payment gateway, for MTSE (Manpur Talent Search Exam, classes V–X) and other events.
+  - Handled issues faced by school students and their parents using the new online forms for the first time — providing end-to-end support.
+  - Anchored annual felicitation ceremonies including Pratibha Milan.
+]
+
+#resume-entry(
+  title: "FOSS Club GEC Sheikhpura (FOSS United)",
+  location: "fossunited.org/c/gec-sheikhpura",
+  location-link: "https://fossunited.org/c/gec-sheikhpura",
+  title-link: "https://fossunited.org/c/gec-sheikhpura",
+  date: "Aug 2025 - Present",
+  description: "Core Team Member"
+)
+#resume-item[
+  - Core team member of Bihar's first FOSS United college club — organizing Git/GitHub workshops, Linux installation parties, and GSoC career conferences.
   - Arch Linux advocate; converted ~15 student machines to Linux environments and terminal workflows.
-]
-
-= Key Projects
-#resume-entry(
-  title: "BEU Connect — Academic Utility Portal",
-  location: "prit.eu.org/BEUConnect",
-  date: "2024 - Present",
-  description: "Creator & Lead Developer"
-)
-#resume-item[
-  - Centralized portal bundling syllabus, exam results, result analytics, and official alerts for Bihar Engineering University colleges.
-  - Optimized frontend architecture ensuring rapid mobile load times and seamless navigation for thousands of BEU engineering students.
-]
-
-#resume-entry(
-  title: "chaind-cli — Sovereign AI Agent Daemon",
-  location: "github.com/fossism/chaind-cli",
-  date: "2024 - Present",
-  description: "Collaborator (with @fossism)"
-)
-#resume-item[
-  - Headless Go daemon bridging messaging apps (WhatsApp, Matrix, Telegram) directly to local AI agents via permission-gated Unix sockets.
-  - Designed for secure, zero-cloud interaction with self-hosted LLMs without exposing open network ports.
 ]
 
 = Technical Skills
 #resume-skill-item(
   "Languages",
-  ("Python", "JavaScript", "Go", "C", "C++ (DSA)", "Bash", "SQL")
+  ("Python", "TypeScript", "JavaScript", "Go", "C", "C++", "Bash", "SQL")
 )
 #resume-skill-item(
   "Web & Stack",
-  ("React", "Astro", "Tailwind CSS", "HTML/CSS", "REST APIs")
+  ("React", "Astro", "Tailwind CSS", "HTML/CSS", "REST APIs", "Node.js")
 )
 #resume-skill-item(
   "Tools & Systems",
-  ("Git/GitHub", "Linux (Arch)", "Figma", "PostgreSQL", "Frappe")
+  ("Git/GitHub", "GitHub Actions", "Linux (Arch)", "Docker", "Nginx", "PostgreSQL", "Frappe")
+)
+#resume-skill-item(
+  "Data & Automation",
+  ("Web Scraping & Parsing", "OCR & Vision-Language Models", "ETL Pipelines", "CI/CD")
+)
+#resume-skill-item(
+  "Agentic AI",
+  ("OpenCode", "Claude Code", "AI Agent Workflows", "LLM-Assisted Development")
 )
 #resume-skill-item(
   "Focus Areas",
@@ -114,8 +214,8 @@ Open-source developer and B.Tech CSE student building software that respects pri
 
 = Education
 #resume-entry(
-  title: "Bihar Engineering University (BEU)",
+  title: "Government Engineering College (GEC), Sheikhpura",
   location: "Sheikhpura, Bihar, India",
-  date: "2023 - 2027",
-  description: "B.Tech in Computer Science & Engineering — Government Engineering College (GEC)"
+  date: "2024 - 2028",
+  description: "B.Tech in Computer Science & Engineering — Bihar Engineering University (BEU)"
 )
