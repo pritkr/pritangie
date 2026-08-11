@@ -197,7 +197,7 @@ Open-source developer and B.Tech CSE student building software that respects pri
 )
 #resume-skill-item(
   "Tools & Systems",
-  ("Git/GitHub", "GitHub Actions", "Linux (Arch)", "Docker", "Nginx", "PostgreSQL", "Frappe")
+  ("Git/GitHub", "GitHub Actions", "Linux (Arch)", "Docker", "Nginx", "PostgreSQL", "Supabase", "Frappe")
 )
 #resume-skill-item(
   "Data & Automation",
