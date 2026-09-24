@@ -56,7 +56,26 @@ const socials = [
             {socials.map(item => ( 
           <a href={item.link} target="_blank" rel="noopener noreferrer" aria-label={item.label} class="transition-all duration-200 hover:translate-y-[2px]"><i class={`${item.icon} text-2xl`}></i></a>
         ))}
+            <span class="inline-flex items-center gap-1.5 border-2 border-black bg-white px-2 py-1 text-xs font-bold shadow-[2px_2px_0_#000]">
+              <span class="relative flex size-2">
+                <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-500 opacity-75"></span>
+                <span class="relative inline-flex size-2 rounded-full bg-green-600"></span>
+              </span>
+              open to work
+            </span>
           </div>
+        </div>
+        <div class="mt-4 flex flex-wrap items-center gap-3">
+          <button
+            type="button"
+            data-copy-email="pritform@gmail.com"
+            class="inline-flex items-center gap-2 border-2 border-black bg-white px-3 py-1.5 text-sm font-mono shadow-[2px_2px_0_#000] hover:-translate-y-0.5 transition-transform"
+            title="Copy pritform@gmail.com to clipboard"
+          >
+            <i class="ri-mail-line" aria-hidden="true"></i>
+            <span data-copy-label>pritform@gmail.com</span>
+            <i class="ri-file-copy-line text-gray-500" aria-hidden="true"></i>
+          </button>
         </div>
       </div>
       <div class="relative mt-40 md:mt-0">
@@ -131,3 +150,39 @@ const socials = [
     class="absolute -bottom-4"
   />
 </section>
+
+<script>
+  document.querySelectorAll("[data-copy-email]").forEach((btn) => {
+    if ((btn as HTMLElement).dataset.bound === "true") return;
+    (btn as HTMLElement).dataset.bound = "true";
+    btn.addEventListener("click", async () => {
+      const email = (btn as HTMLElement).dataset.copyEmail ?? "";
+      const labelEl = btn.querySelector("[data-copy-label]");
+      const original = labelEl?.textContent ?? "";
+      let ok = false;
+      try {
+        await navigator.clipboard.writeText(email);
+        ok = true;
+      } catch {
+        try {
+          const ta = document.createElement("textarea");
+          ta.value = email;
+          ta.style.position = "fixed";
+          ta.style.opacity = "0";
+          document.body.appendChild(ta);
+          ta.select();
+          ok = document.execCommand("copy");
+          document.body.removeChild(ta);
+        } catch {
+          ok = false;
+        }
+      }
+      if (labelEl) {
+        labelEl.textContent = ok ? "Copied!" : original;
+        setTimeout(() => {
+          labelEl.textContent = original;
+        }, 2000);
+      }
+    });
+  });
+</script>

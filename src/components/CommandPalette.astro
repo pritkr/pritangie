@@ -1,0 +1,825 @@
+---
+import { author } from "../sample";
+
+type CommandAction = "navigate" | "external" | "copy" | "email";
+
+type Command = {
+  group: "Navigate" | "Quick actions";
+  label: string;
+  description: string;
+  icon: string;
+  action: CommandAction;
+  value: string;
+  keywords: string;
+};
+
+const email = "pritform@gmail.com";
+
+const commands: Command[] = [
+  {
+    group: "Navigate",
+    label: "Go home",
+    description: "Back to the front page",
+    icon: "ri-home-4-line",
+    action: "navigate",
+    value: "/",
+    keywords: "home start index",
+  },
+  {
+    group: "Navigate",
+    label: "Browse works",
+    description: "See projects, tools, and experiments",
+    icon: "ri-code-box-line",
+    action: "navigate",
+    value: "/#work",
+    keywords: "work projects portfolio build",
+  },
+  {
+    group: "Navigate",
+    label: "Read the blog",
+    description: "Notes from the Den",
+    icon: "ri-article-line",
+    action: "navigate",
+    value: "/blog/",
+    keywords: "blog posts writing notes",
+  },
+  {
+    group: "Navigate",
+    label: "About Prit",
+    description: "The person behind the projects",
+    icon: "ri-user-smile-line",
+    action: "navigate",
+    value: "/about",
+    keywords: "about bio contact",
+  },
+  {
+    group: "Navigate",
+    label: "Open résumé",
+    description: "View or download the PDF",
+    icon: "ri-file-text-line",
+    action: "navigate",
+    value: "/resume.pdf",
+    keywords: "resume cv pdf experience",
+  },
+  {
+    group: "Quick actions",
+    label: "Copy email",
+    description: "Copy pritform@gmail.com",
+    icon: "ri-file-copy-line",
+    action: "copy",
+    value: email,
+    keywords: "contact email clipboard",
+  },
+  {
+    group: "Quick actions",
+    label: "Open GitHub",
+    description: "See the code behind the ideas",
+    icon: "ri-github-fill",
+    action: "external",
+    value: author.github,
+    keywords: "github code repositories source",
+  },
+  {
+    group: "Quick actions",
+    label: "Chat on Matrix",
+    description: "Start a FOSS-friendly conversation",
+    icon: "ri-chat-3-line",
+    action: "external",
+    value: author.matrix,
+    keywords: "matrix chat message foss",
+  },
+  {
+    group: "Quick actions",
+    label: "Book a workshop",
+    description: "Invite Prit to your campus or meetup",
+    icon: "ri-calendar-event-line",
+    action: "navigate",
+    value: "/#workshops",
+    keywords: "workshop talk event community campus",
+  },
+  {
+    group: "Quick actions",
+    label: "Send an email",
+    description: "Open your mail app with Prit's address",
+    icon: "ri-mail-send-line",
+    action: "email",
+    value: author.email,
+    keywords: "email contact hello message",
+  },
+];
+
+const groups = ["Navigate", "Quick actions"] as const;
+---
+
+<div id="command-palette-root">
+  <button
+    id="command-trigger"
+    type="button"
+    aria-haspopup="dialog"
+    aria-controls="command-palette"
+    aria-expanded="false"
+    title="Open PritOS command menu"
+  >
+    <i class="ri-terminal-box-line" aria-hidden="true"></i>
+    <span class="command-trigger-label">Open PritOS</span>
+    <kbd data-command-shortcut>⌘ K</kbd>
+  </button>
+
+  <div
+    id="command-palette"
+    class="command-palette-shell"
+    hidden
+    aria-hidden="true"
+  >
+    <button
+      class="command-palette-backdrop"
+      type="button"
+      tabindex="-1"
+      aria-label="Close command menu"
+    ></button>
+
+    <section
+      id="command-palette-dialog"
+      class="command-palette-dialog"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="command-palette-title"
+    >
+      <header class="command-palette-header">
+        <div class="flex items-center gap-2">
+          <span class="command-palette-prompt" aria-hidden="true">~/prit/den</span>
+          <span class="command-palette-status">
+            <span class="command-palette-status-dot" aria-hidden="true"></span>
+            local only
+          </span>
+        </div>
+        <button
+          id="command-palette-close"
+          class="command-palette-close"
+          type="button"
+          aria-label="Close command menu"
+          title="Close command menu"
+        >
+          <i class="ri-close-line" aria-hidden="true"></i>
+        </button>
+      </header>
+
+      <div class="command-palette-search-wrap">
+        <i class="ri-search-line" aria-hidden="true"></i>
+        <label class="sr-only" for="command-search">Search commands</label>
+        <input
+          id="command-search"
+          type="search"
+          placeholder="Search commands…"
+          autocomplete="off"
+          spellcheck="false"
+          aria-controls="command-results"
+          aria-describedby="command-palette-hint"
+        />
+        <kbd>esc</kbd>
+      </div>
+
+      <div id="command-results" class="command-palette-results" role="listbox" aria-label="Available commands">
+        {
+          groups.map((group) => (
+            <div data-command-group={group} class="command-palette-group">
+              <p class="command-palette-group-label">{group}</p>
+              {commands
+                .filter((command) => command.group === group)
+                .map((command) => (
+                  <button
+                    type="button"
+                    class="command-palette-item"
+                    id={`command-item-${group === "Navigate" ? "go" : "act"}-${command.label.toLowerCase().replaceAll(" ", "-")}`}
+                    data-command-item
+                    data-command-action={command.action}
+                    data-command-value={command.value}
+                    data-command-keywords={`${command.label} ${command.description} ${command.keywords}`.toLowerCase()}
+                    role="option"
+                    aria-selected="false"
+                  >
+                    <span class="command-palette-item-icon">
+                      <i class={command.icon} aria-hidden="true"></i>
+                    </span>
+                    <span class="command-palette-item-copy">
+                      <span class="command-palette-item-label">{command.label}</span>
+                      <span class="command-palette-item-description">{command.description}</span>
+                    </span>
+                    <span class="command-palette-item-arrow" aria-hidden="true">↵</span>
+                  </button>
+                ))}
+            </div>
+          ))
+        }
+        <p id="command-empty" class="command-palette-empty" role="status" hidden>
+          No command found. Try <strong>work</strong>, <strong>email</strong>, or <strong>blog</strong>.
+        </p>
+      </div>
+
+      <footer id="command-palette-hint" class="command-palette-footer">
+        <span><kbd>↑</kbd><kbd>↓</kbd> navigate</span>
+        <span><kbd>↵</kbd> run</span>
+        <span class="command-palette-footer-note">no trackers · just shortcuts</span>
+      </footer>
+    </section>
+  </div>
+
+  <div id="command-toast" class="command-toast" role="status" aria-live="polite" hidden></div>
+</div>
+
+<style>
+  :global([hidden]) {
+    display: none !important;
+  }
+
+  #command-trigger {
+    position: fixed;
+    left: clamp(1rem, 3vw, 2rem);
+    bottom: clamp(1rem, 3vw, 2rem);
+    z-index: 55;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    min-height: 2.85rem;
+    padding: 0.55rem 0.7rem;
+    border: 3px solid #000;
+    background: #ffdc58;
+    color: #000;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 0.75rem;
+    font-weight: 800;
+    line-height: 1;
+    box-shadow: 4px 4px 0 #000;
+    cursor: pointer;
+    transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease;
+  }
+
+  #command-trigger:hover {
+    background: #bae6ff;
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0 #000;
+  }
+
+  #command-trigger:active {
+    transform: translate(1px, 1px);
+    box-shadow: 2px 2px 0 #000;
+  }
+
+  #command-trigger i {
+    font-size: 1.25rem;
+  }
+
+  #command-trigger kbd,
+  .command-palette-search-wrap kbd,
+  .command-palette-footer kbd {
+    border: 1px solid #000;
+    background: #fff;
+    padding: 0.2rem 0.35rem;
+    color: #000;
+    font-family: inherit;
+    font-size: 0.65rem;
+    font-weight: 800;
+    line-height: 1;
+  }
+
+  .command-palette-shell {
+    position: fixed;
+    inset: 0;
+    z-index: 70;
+    display: grid;
+    place-items: start center;
+    overflow-y: auto;
+    padding: clamp(1rem, 8vh, 6rem) 1rem 1rem;
+  }
+
+  .command-palette-backdrop {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    background: rgb(0 0 0 / 0.58);
+    cursor: default;
+  }
+
+  .command-palette-dialog {
+    position: relative;
+    z-index: 1;
+    width: min(42rem, 100%);
+    max-height: min(45rem, calc(100dvh - 2rem));
+    overflow: hidden;
+    border: 3px solid #000;
+    background: #fefff0;
+    color: #000;
+    box-shadow: 10px 10px 0 #000;
+    animation: command-palette-enter 180ms ease-out both;
+  }
+
+  .command-palette-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    min-height: 3.4rem;
+    padding: 0.7rem 0.85rem 0.7rem 1rem;
+    background: #000;
+    color: #fff;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  }
+
+  .command-palette-prompt {
+    color: #ffdc58;
+    font-size: 0.85rem;
+    font-weight: 800;
+  }
+
+  .command-palette-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    color: #bae6ff;
+    font-size: 0.68rem;
+  }
+
+  .command-palette-status-dot {
+    width: 0.45rem;
+    height: 0.45rem;
+    border-radius: 999px;
+    background: #62d66d;
+    box-shadow: 0 0 0 2px rgb(98 214 109 / 0.2);
+  }
+
+  .command-palette-close {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    border: 1px solid #fff;
+    background: #000;
+    color: #fff;
+    font-size: 1.25rem;
+    line-height: 1;
+    cursor: pointer;
+    transition: background 140ms ease, color 140ms ease;
+  }
+
+  .command-palette-close:hover {
+    background: #ffdc58;
+    color: #000;
+  }
+
+  .command-palette-search-wrap {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    margin: 1rem;
+    padding: 0.75rem 0.8rem;
+    border: 2px solid #000;
+    background: #fff;
+  }
+
+  .command-palette-search-wrap > i {
+    flex: 0 0 auto;
+    font-size: 1.25rem;
+  }
+
+  .command-palette-search-wrap input {
+    min-width: 0;
+    flex: 1;
+    border: 0;
+    outline: 0;
+    background: transparent;
+    color: #000;
+    font: inherit;
+    font-size: 1rem;
+  }
+
+  .command-palette-search-wrap input::placeholder {
+    color: #6b6b6b;
+  }
+
+  .command-palette-results {
+    max-height: min(27rem, calc(100dvh - 15rem));
+    overflow-y: auto;
+    padding: 0 1rem 0.5rem;
+  }
+
+  .command-palette-group + .command-palette-group {
+    margin-top: 0.7rem;
+  }
+
+  .command-palette-group-label {
+    margin: 0.55rem 0 0.35rem;
+    color: #5d5d5d;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 0.67rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .command-palette-item {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.7rem 0.65rem;
+    border: 1px solid transparent;
+    background: transparent;
+    color: #000;
+    text-align: left;
+    cursor: pointer;
+    transition: background 120ms ease, border-color 120ms ease, transform 120ms ease;
+  }
+
+  .command-palette-item:hover,
+  .command-palette-item[aria-selected="true"] {
+    border-color: #000;
+    background: #ffdc58;
+    transform: translateX(3px);
+  }
+
+  .command-palette-item-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+    width: 2.1rem;
+    height: 2.1rem;
+    border: 2px solid #000;
+    background: #bae6ff;
+    font-size: 1.1rem;
+  }
+
+  .command-palette-item-copy {
+    display: flex;
+    min-width: 0;
+    flex: 1;
+    flex-direction: column;
+    gap: 0.12rem;
+  }
+
+  .command-palette-item-label {
+    font-size: 0.95rem;
+    font-weight: 800;
+  }
+
+  .command-palette-item-description {
+    overflow: hidden;
+    color: #4e4e4e;
+    font-size: 0.75rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .command-palette-item-arrow {
+    flex: 0 0 auto;
+    color: #6b6b6b;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 0.8rem;
+  }
+
+  .command-palette-empty {
+    padding: 2.5rem 1rem;
+    color: #5d5d5d;
+    text-align: center;
+    font-size: 0.9rem;
+  }
+
+  .command-palette-empty strong {
+    color: #000;
+  }
+
+  .command-palette-footer {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.8rem 1rem;
+    padding: 0.8rem 1rem;
+    border-top: 2px solid #000;
+    color: #5d5d5d;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 0.67rem;
+  }
+
+  .command-palette-footer span:not(.command-palette-footer-note) {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+  }
+
+  .command-palette-footer-note {
+    margin-left: auto;
+    color: #000;
+  }
+
+  .command-toast {
+    position: fixed;
+    left: 50%;
+    bottom: 1.5rem;
+    z-index: 80;
+    transform: translateX(-50%);
+    padding: 0.7rem 1rem;
+    border: 2px solid #000;
+    background: #ffdc58;
+    color: #000;
+    box-shadow: 4px 4px 0 #000;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 0.78rem;
+    font-weight: 800;
+  }
+
+  :global(.command-palette-open) {
+    overflow: hidden;
+  }
+
+  @keyframes command-palette-enter {
+    from {
+      opacity: 0;
+      transform: translateY(-0.75rem) scale(0.98);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  @media (max-width: 520px) {
+    #command-trigger {
+      min-width: 2.85rem;
+      justify-content: center;
+      padding-inline: 0.55rem;
+    }
+
+    .command-trigger-label,
+    #command-trigger kbd {
+      display: none;
+    }
+
+    .command-palette-shell {
+      padding: 1rem 0.75rem;
+    }
+
+    .command-palette-dialog {
+      max-height: calc(100dvh - 1.5rem);
+      box-shadow: 6px 6px 0 #000;
+    }
+
+    .command-palette-search-wrap {
+      margin: 0.75rem;
+    }
+
+    .command-palette-results {
+      max-height: calc(100dvh - 13rem);
+      padding-inline: 0.75rem;
+    }
+
+    .command-palette-footer-note {
+      width: 100%;
+      margin-left: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #command-trigger,
+    .command-palette-item {
+      transition: none;
+    }
+
+    .command-palette-dialog {
+      animation: none;
+    }
+  }
+
+  @media (forced-colors: active) {
+    #command-trigger,
+    .command-palette-dialog,
+    .command-palette-item {
+      forced-color-adjust: auto;
+    }
+  }
+</style>
+
+<script>
+  type PaletteAction = "navigate" | "external" | "copy" | "email";
+
+  function initCommandPalette() {
+    const root = document.getElementById("command-palette-root");
+    if (!root || root.dataset.bound === "true") return;
+    root.dataset.bound = "true";
+
+    const palette = document.getElementById("command-palette");
+    const dialog = document.getElementById("command-palette-dialog");
+    const trigger = document.getElementById("command-trigger");
+    const closeButton = document.getElementById("command-palette-close");
+    const backdrop = root.querySelector<HTMLButtonElement>(".command-palette-backdrop");
+    const search = document.getElementById("command-search") as HTMLInputElement | null;
+    const empty = document.getElementById("command-empty");
+    const toast = document.getElementById("command-toast");
+    const shortcut = root.querySelector<HTMLElement>("[data-command-shortcut]");
+    const items = Array.from(root.querySelectorAll<HTMLElement>("[data-command-item]"));
+    const groups = Array.from(root.querySelectorAll<HTMLElement>("[data-command-group]"));
+
+    if (!palette || !dialog || !trigger || !closeButton || !search || !empty || !toast || !items.length) return;
+
+    let activeIndex = 0;
+    let previouslyFocused: HTMLElement | null = null;
+    let previousOverflow = "";
+    let toastTimer: number | undefined;
+
+    const isTypingTarget = (target: EventTarget | null) => {
+      const element = target as HTMLElement | null;
+      return Boolean(
+        element &&
+          (element.matches("input, textarea, select") || element.isContentEditable),
+      );
+    };
+
+    const visibleItems = () => items.filter((item) => !item.hidden);
+
+    const setActive = (index: number) => {
+      const visible = visibleItems();
+      if (!visible.length) {
+        search.removeAttribute("aria-activedescendant");
+        return;
+      }
+
+      activeIndex = (index + visible.length) % visible.length;
+      items.forEach((item) => item.setAttribute("aria-selected", "false"));
+      const active = visible[activeIndex]!;
+      active.setAttribute("aria-selected", "true");
+      search.setAttribute("aria-activedescendant", active.id);
+      active.scrollIntoView({ block: "nearest" });
+    };
+
+    const filterItems = () => {
+      const query = search.value.trim().toLowerCase();
+      items.forEach((item) => {
+        const haystack = item.dataset.commandKeywords ?? "";
+        item.hidden = Boolean(query && !haystack.includes(query));
+      });
+
+      groups.forEach((group) => {
+        group.hidden = !group.querySelector("[data-command-item]:not([hidden])");
+      });
+
+      const hasResults = visibleItems().length > 0;
+      empty.hidden = hasResults;
+      setActive(0);
+    };
+
+    const setOpen = (open: boolean) => {
+      palette.hidden = !open;
+      palette.setAttribute("aria-hidden", String(!open));
+      trigger.setAttribute("aria-expanded", String(open));
+
+      if (open) {
+        previouslyFocused = document.activeElement as HTMLElement | null;
+        previousOverflow = document.body.style.overflow;
+        document.body.classList.add("command-palette-open");
+        search.value = "";
+        filterItems();
+        window.setTimeout(() => search.focus(), 0);
+      } else {
+        document.body.classList.remove("command-palette-open");
+        document.body.style.overflow = previousOverflow;
+        previouslyFocused?.focus();
+      }
+    };
+
+    const copyText = async (text: string) => {
+      try {
+        await navigator.clipboard.writeText(text);
+        return true;
+      } catch {
+        try {
+          const textarea = document.createElement("textarea");
+          textarea.value = text;
+          textarea.setAttribute("readonly", "");
+          textarea.style.position = "fixed";
+          textarea.style.opacity = "0";
+          document.body.appendChild(textarea);
+          textarea.select();
+          const copied = document.execCommand("copy");
+          textarea.remove();
+          return copied;
+        } catch {
+          return false;
+        }
+      }
+    };
+
+    const showToast = (message: string) => {
+      window.clearTimeout(toastTimer);
+      toast.textContent = message;
+      toast.hidden = false;
+      toastTimer = window.setTimeout(() => {
+        toast.hidden = true;
+      }, 2200);
+    };
+
+    const execute = async (item: HTMLElement) => {
+      const action = item.dataset.commandAction as PaletteAction | undefined;
+      const value = item.dataset.commandValue ?? "";
+      if (!action || !value) return;
+
+      setOpen(false);
+
+      if (action === "copy") {
+        const copied = await copyText(value);
+        showToast(copied ? "Email copied to clipboard" : "Could not access the clipboard");
+        return;
+      }
+
+      if (action === "external") {
+        window.open(value, "_blank", "noopener,noreferrer");
+        return;
+      }
+
+      if (action === "email") {
+        window.location.href = value;
+        return;
+      }
+
+      window.location.assign(value);
+    };
+
+    const focusableElements = () => [
+      search,
+      closeButton,
+      ...visibleItems(),
+    ].filter((element): element is HTMLElement => Boolean(element && !element.hidden));
+
+    trigger.addEventListener("click", () => setOpen(true));
+    closeButton.addEventListener("click", () => setOpen(false));
+    backdrop?.addEventListener("click", () => setOpen(false));
+
+    search.addEventListener("input", filterItems);
+    search.addEventListener("keydown", (event) => {
+      const visible = visibleItems();
+      if (event.key === "ArrowDown" && visible.length) {
+        event.preventDefault();
+        setActive(activeIndex + 1);
+      } else if (event.key === "ArrowUp" && visible.length) {
+        event.preventDefault();
+        setActive(activeIndex - 1);
+      } else if (event.key === "Enter" && visible.length) {
+        event.preventDefault();
+        void execute(visible[activeIndex]!);
+      } else if (event.key === "Escape") {
+        event.preventDefault();
+        setOpen(false);
+      }
+    });
+
+    items.forEach((item) => {
+      item.addEventListener("click", () => void execute(item));
+    });
+
+    dialog.addEventListener("keydown", (event) => {
+      if (event.key !== "Tab") return;
+      const focusable = focusableElements();
+      if (!focusable.length) return;
+      const first = focusable[0]!;
+      const last = focusable[focusable.length - 1]!;
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    });
+
+    document.addEventListener("keydown", (event) => {
+      const shortcutPressed = (event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k";
+      if (shortcutPressed && !palette.hidden) {
+        event.preventDefault();
+        setOpen(false);
+        return;
+      }
+      if (shortcutPressed && palette.hidden) {
+        event.preventDefault();
+        setOpen(true);
+        return;
+      }
+      if (event.key === "/" && !isTypingTarget(event.target) && palette.hidden) {
+        event.preventDefault();
+        setOpen(true);
+      }
+      if (event.key === "Escape" && !palette.hidden) {
+        event.preventDefault();
+        setOpen(false);
+      }
+    });
+
+    if (shortcut) {
+      const isApple = /Mac|iPhone|iPad|iPod/i.test(navigator.platform);
+      shortcut.textContent = isApple ? "⌘ K" : "Ctrl K";
+    }
+  }
+
+  initCommandPalette();
+  document.addEventListener("astro:page-load", initCommandPalette);
+</script>

@@ -1,0 +1,90 @@
+---
+interface Props {
+  email?: string;
+  variant?: "yellow" | "blue" | "icon";
+  label?: string;
+}
+
+const {
+  email = "pritform@gmail.com",
+  variant = "yellow",
+  label = "Copy email",
+} = Astro.props;
+
+const styles =
+  variant === "icon"
+    ? "size-10 inline-flex items-center justify-center bg-white border-2 border-black shadow-[2px_2px_0_#000] hover:-translate-y-0.5 transition-transform"
+    : variant === "blue"
+      ? "inline-flex items-center gap-2 px-6 py-3 bg-[#BEE7FF] border-2 border-black text-black font-bold hover:-translate-y-0.5 transition-transform shadow-[3px_3px_0_#000]"
+      : "inline-flex items-center gap-2 px-6 py-3 bg-[var(--yellow)] border-2 border-black text-black font-bold hover:-translate-y-0.5 transition-transform shadow-[3px_3px_0_#000]";
+---
+
+<button
+  type="button"
+  data-copy-email={email}
+  class={styles}
+  aria-live="polite"
+  title={`Copy ${email} to clipboard`}
+>
+  <i class="ri-file-copy-line text-lg" aria-hidden="true"></i>
+  <span data-copy-label>{variant === "icon" ? "" : label}</span>
+</button>
+
+<script>
+  function attachCopyButtons() {
+    document.querySelectorAll("[data-copy-email]").forEach((btn) => {
+      if ((btn as HTMLElement).dataset.bound === "true") return;
+      (btn as HTMLElement).dataset.bound = "true";
+
+      btn.addEventListener("click", async () => {
+        const email = (btn as HTMLElement).dataset.copyEmail ?? "";
+        const labelEl = btn.querySelector("[data-copy-label]");
+        const original = labelEl?.textContent ?? "";
+        const isIconOnly = (btn as HTMLElement).dataset.copyEmail !== undefined && !labelEl?.textContent;
+
+        async function copy(text: string): Promise<boolean> {
+          try {
+            await navigator.clipboard.writeText(text);
+            return true;
+          } catch {
+            // Fallback for non-secure contexts / older browsers
+            try {
+              const ta = document.createElement("textarea");
+              ta.value = text;
+              ta.setAttribute("readonly", "");
+              ta.style.position = "fixed";
+              ta.style.opacity = "0";
+              document.body.appendChild(ta);
+              ta.select();
+              const ok = document.execCommand("copy");
+              document.body.removeChild(ta);
+              return ok;
+            } catch {
+              return false;
+            }
+          }
+        }
+
+        const ok = await copy(email);
+        if (labelEl && !isIconOnly) {
+          labelEl.textContent = ok ? "Copied!" : "Copy failed";
+          setTimeout(() => {
+            labelEl.textContent = original;
+          }, 2000);
+        } else {
+          // Icon-only buttons: brief visual confirmation via title + scale
+          (btn as HTMLElement).style.transform = "translateY(-2px)";
+          (btn as HTMLElement).setAttribute("title", ok ? "Copied!" : "Copy failed");
+          setTimeout(() => {
+            (btn as HTMLElement).style.transform = "";
+            (btn as HTMLElement).setAttribute("title", `Copy ${email} to clipboard`);
+          }, 1500);
+        }
+      });
+    });
+  }
+
+  attachCopyButtons();
+  // Re-attach after Astro view transitions
+  document.addEventListener("astro:after-swap", attachCopyButtons);
+</script>

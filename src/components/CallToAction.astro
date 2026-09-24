@@ -1,6 +1,7 @@
 ---
 import svgPinkStar from '../assets/pink-star.svg'
 import Button from './Button.astro'
+import CopyEmail from './CopyEmail.astro'
 
 ---
 
@@ -8,8 +9,9 @@ import Button from './Button.astro'
     <div class="max-w-3xl mx-auto bg-white text-center flex flex-col gap-4 border-3 shadow-[8px_8px_0px_rgba(0,0,0,0.3)]  relative p-10">
      <h1 class="text-3xl">Open to internships &amp; collabs</h1>
      <p class="text-lg max-w-lg mx-auto">Internships, open-source, privacy tooling, community work — if you're building something interesting, my inbox is open.</p>
-     <div class="flex justify-center">
+     <div class="flex flex-wrap justify-center gap-4">
        <Button text="Get in Touch" link="mailto:pritform@gmail.com" target="_self" />
+       <CopyEmail label="Copy email" variant="blue" />
      </div>
      <img src={svgPinkStar.src} alt="svg" width="80" class="absolute -top-10 right-20" />
     </div>

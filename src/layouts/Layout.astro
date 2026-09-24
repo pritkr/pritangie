@@ -5,6 +5,10 @@ interface Props {
 	image?: string;
 }
 
+import ScrollProgress from "../components/ScrollProgress.astro";
+import BackToTop from "../components/BackToTop.astro";
+import CommandPalette from "../components/CommandPalette.astro";
+
 const {
 	title = "Prit's Den — Open Source & Privacy Tech",
 	description = "Prit Kumar — privacy-first open-source developer and FOSS educator. Maintainer of Predirect (270+ ★), co-founder of Bodhya FOSS community.",
@@ -69,7 +73,10 @@ const socialImageURL = new URL(image, site);
 		<link rel="alternate" type="application/rss+xml" title="Prit's Den" href={new URL("/rss.xml", site).href} />
 	</head>
 	<body>
+		<ScrollProgress />
 		<slot />
+		<CommandPalette />
+		<BackToTop />
 	</body>
 </html>
 

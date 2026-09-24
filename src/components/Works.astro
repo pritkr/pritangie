@@ -19,7 +19,9 @@ const portfolio = [
     name: "Predirect",
     desc: `One install kills the tracking — 30+ tracked sites (YouTube, X, Reddit, Google…) rewritten to privacy-friendly frontends.`,
     role: "Solo developer",
-    outcome: "270★ on GitHub · Chrome, Firefox, Edge",
+    outcome: "Chrome, Firefox, Edge",
+    repo: "pritkr/predirect",
+    fallbackStars: 270,
     cover: "/assets/predirectpreview.avif",
     link: "https://github.com/pritkr/predirect",
     externalLabel: "Repository",
@@ -31,6 +33,7 @@ const portfolio = [
     desc: `Your messages never leave your machine — a daemon that bridges Telegram, Matrix & WhatsApp to local AI agents over a permission-gated Unix socket.`,
     role: "Co-built with fossism",
     outcome: "AGPL-3.0 · bridges 3 messengers",
+    repo: "fossism/chaind-cli",
     cover: "https://img.youtube.com/vi/zMO8yXD-v0Q/maxresdefault.jpg",
     link: "https://github.com/fossism/chaind-cli",
     externalLabel: "Repository",
@@ -41,6 +44,7 @@ const portfolio = [
     desc: `Newsletters that send themselves — realtime auto-sync from Frappe to Listmonk, built for the Bodhya community (FOSS United · Samagata).`,
     role: "Developer",
     outcome: "Auto-sync for Bodhya newsletters",
+    repo: "pritkr/listbrew",
     cover: "https://raw.githubusercontent.com/pritkr/listbrew/develop/ss1.webp",
     link: "https://github.com/pritkr/listbrew",
     externalLabel: "Repository",
@@ -91,6 +95,27 @@ const portfolio = [
               {item.role && (
                 <p class="text-sm">
                   <span class="font-semibold">{item.role}</span> · {item.outcome}
+                </p>
+              )}
+              {(item as { repo?: string; fallbackStars?: number }).repo && (
+                <p class="mt-1 inline-flex w-fit items-center gap-2 border-2 border-black bg-[#fefff0] px-2 py-0.5 text-xs font-bold">
+                  <span class="relative flex size-2">
+                    <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-500 opacity-75"></span>
+                    <span class="relative inline-flex size-2 rounded-full bg-green-600"></span>
+                  </span>
+                  <span
+                    data-gh-stars={(item as { repo: string }).repo}
+                    data-fallback={
+                      (item as { fallbackStars?: number }).fallbackStars
+                        ? `★ ${(item as { fallbackStars: number }).fallbackStars}`
+                        : "★ —"
+                    }
+                  >
+                    {(item as { fallbackStars?: number }).fallbackStars
+                      ? `★ ${(item as { fallbackStars: number }).fallbackStars} on GitHub`
+                      : "★ live on GitHub"}
+                  </span>
+                  <span class="font-normal text-gray-500" data-gh-updated style="display:none"></span>
                 </p>
               )}
               {item.meta && (
@@ -154,4 +179,67 @@ const portfolio = [
   document.getElementById("rail-next")!.addEventListener("click", () =>
     rail.scrollBy({ left: 360, behavior: step() }),
   );
+
+  // Live GitHub stars — client-only, cached 6h to respect rate limits.
+  // Falls back to static text if offline / rate-limited (privacy: no trackers, direct GitHub API call).
+  (async () => {
+    const nodes = Array.from(
+      document.querySelectorAll("[data-gh-stars]"),
+    ) as HTMLElement[];
+    if (!nodes.length) return;
+
+    const CACHE_KEY = "gh-stars-cache-v1";
+    const TTL = 6 * 60 * 60 * 1000;
+    type Cache = Record<string, { stars: number; forks: number; at: number }>;
+    let cache: Cache = {};
+    try {
+      cache = JSON.parse(localStorage.getItem(CACHE_KEY) ?? "{}");
+    } catch {
+      cache = {};
+    }
+
+    const fmt = (n: number) =>
+      new Intl.NumberFormat("en", { notation: "compact" }).format(n);
+
+    const paint = (repo: string, stars: number, live: boolean) => {
+      nodes
+        .filter((el) => el.dataset.ghStars === repo)
+        .forEach((el) => {
+          el.textContent = `★ ${fmt(stars)} on GitHub${live ? "" : ""}`;
+          el.setAttribute("title", live ? `Live from GitHub · ${repo}` : `Cached · ${repo}`);
+        });
+    };
+
+    const repos = [...new Set(nodes.map((el) => el.dataset.ghStars!))];
+    const now = Date.now();
+    const toFetch = repos.filter(
+      (r) => !cache[r] || now - cache[r]!.at > TTL,
+    );
+
+    // Paint cache immediately so something live-ish shows instantly
+    repos.forEach((r) => {
+      if (cache[r]) paint(r, cache[r]!.stars, false);
+    });
+
+    await Promise.allSettled(
+      toFetch.map(async (repo) => {
+        const res = await fetch(`https://api.github.com/repos/${repo}`);
+        if (!res.ok) throw new Error(`GitHub ${res.status}`);
+        const data = await res.json();
+        if (typeof data.stargazers_count !== "number") throw new Error("bad payload");
+        cache[repo] = {
+          stars: data.stargazers_count,
+          forks: data.forks_count ?? 0,
+          at: Date.now(),
+        };
+        paint(repo, data.stargazers_count, true);
+      }),
+    );
+
+    try {
+      localStorage.setItem(CACHE_KEY, JSON.stringify(cache));
+    } catch {
+      /* storage full / private mode — ignore */
+    }
+  })();
 </script>

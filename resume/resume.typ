@@ -103,6 +103,22 @@ Open-source developer and B.Tech CSE student building software that respects pri
 ]
 
 #resume-entry(
+  title: "JanSahay — Welfare Scheme Eligibility Platform",
+  location: "jansahay.pages.dev",
+  location-link: "https://jansahay.pages.dev",
+  title-link: "https://jansahay.pages.dev",
+  date: "Sep 2026",
+  description: "Built with Team Tejas at TEJAS India Hackathon 2026 (GEC Sheikhpura)"
+)
+#resume-item[
+  - JanSahay exists because people were quietly losing benefits they were already eligible for — Bihar's welfare schemes are scattered across PDFs and barely-usable portals, so I built a Hindi-first app where you register once and it instantly tells you which schemes you qualify for.
+  - Designed around my own users in rural Bihar: offline-first so it works without data, 48px touch targets, and Hindi TTS that reads scheme details aloud for people who struggle with text.
+  - Added a Hindi chat assistant that refuses to hallucinate — a deterministic rule engine decides eligibility, and a free LLM only rephrases the reply; no AI ever makes the call on who gets a benefit.
+  - Consent-first by design: a local sahayak (helper) verifies and syncs a person's profile via OTP, and deadline alerts warn people before a scheme window closes — not after.
+  - Under the hood it's a TypeScript monorepo shared between a React PWA and an Android app, deployed as a Cloudflare Worker and live at jansahay.pages.dev.
+]
+
+#resume-entry(
   title: "BEU Connect — Academic Utility Portal",
   location: "beu.prit.eu.org",
   location-link: "https://beu.prit.eu.org",
