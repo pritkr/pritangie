@@ -118,6 +118,7 @@ const groups = ["Navigate", "Quick actions"] as const;
     aria-haspopup="dialog"
     aria-controls="command-palette"
     aria-expanded="false"
+    aria-label="Open PritOS command menu"
     title="Open PritOS command menu"
   >
     <i class="ri-terminal-box-line" aria-hidden="true"></i>
@@ -147,7 +148,7 @@ const groups = ["Navigate", "Quick actions"] as const;
     >
       <header class="command-palette-header">
         <div class="flex items-center gap-2">
-          <span class="command-palette-prompt" aria-hidden="true">~/prit/den</span>
+          <span id="command-palette-title" class="command-palette-prompt">~/prit/den</span>
           <span class="command-palette-status">
             <span class="command-palette-status-dot" aria-hidden="true"></span>
             local only
