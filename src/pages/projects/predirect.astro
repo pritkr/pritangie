@@ -4,6 +4,7 @@ import Layout from "../../layouts/Layout.astro";
 import Header from "../../components/Header.astro";
 import Footer from "../../components/Footer.astro";
 import CallToAction from "../../components/CallToAction.astro";
+import PredirectDemo from "../../components/PredirectDemo.astro";
 ---
 
 <Layout
@@ -45,6 +46,14 @@ import CallToAction from "../../components/CallToAction.astro";
           <i class="ri-article-line text-lg mr-2"></i>Full story
         </a>
       </div>
+      <p class="mt-4 text-sm font-semibold">
+        <a
+          href="#redirect-playground"
+          class="underline decoration-2 underline-offset-2 hover:bg-[var(--yellow)] px-1 transition-colors"
+        >
+          Try the interactive route preview ↓
+        </a>
+      </p>
 
       <div class="space-y-8 mt-12">
         <div>
@@ -78,6 +87,8 @@ import CallToAction from "../../components/CallToAction.astro";
             domains.
           </p>
         </div>
+
+        <PredirectDemo />
 
         <div>
           <h2 class="text-xl font-bold">Result</h2>

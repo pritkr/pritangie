@@ -36,6 +36,15 @@ const commands: Command[] = [
   },
   {
     group: "Navigate",
+    label: "Try Predirect demo",
+    description: "Preview a privacy-friendly redirect",
+    icon: "ri-flashlight-line",
+    action: "navigate",
+    value: "/projects/predirect#redirect-playground",
+    keywords: "predirect demo redirect playground privacy route",
+  },
+  {
+    group: "Navigate",
     label: "Read the blog",
     description: "Notes from the Den",
     icon: "ri-article-line",
@@ -146,7 +155,7 @@ const groups = ["Navigate", "Quick actions"] as const;
       aria-modal="true"
       aria-labelledby="command-palette-title"
     >
-      <header class="command-palette-header">
+      <div class="command-palette-header">
         <div class="flex items-center gap-2">
           <span id="command-palette-title" class="command-palette-prompt">~/prit/den</span>
           <span class="command-palette-status">
@@ -163,7 +172,7 @@ const groups = ["Navigate", "Quick actions"] as const;
         >
           <i class="ri-close-line" aria-hidden="true"></i>
         </button>
-      </header>
+      </div>
 
       <div class="command-palette-search-wrap">
         <i class="ri-search-line" aria-hidden="true"></i>
@@ -217,11 +226,11 @@ const groups = ["Navigate", "Quick actions"] as const;
         </p>
       </div>
 
-      <footer id="command-palette-hint" class="command-palette-footer">
+      <div id="command-palette-hint" class="command-palette-footer">
         <span><kbd>↑</kbd><kbd>↓</kbd> navigate</span>
         <span><kbd>↵</kbd> run</span>
         <span class="command-palette-footer-note">no trackers · just shortcuts</span>
-      </footer>
+      </div>
     </section>
   </div>
 
@@ -546,15 +555,8 @@ const groups = ["Navigate", "Quick actions"] as const;
     }
   }
 
-  @media (max-width: 520px) {
+  @media (max-width: 767px) {
     #command-trigger {
-      min-width: 2.85rem;
-      justify-content: center;
-      padding-inline: 0.55rem;
-    }
-
-    .command-trigger-label,
-    #command-trigger kbd {
       display: none;
     }
 
@@ -613,6 +615,7 @@ const groups = ["Navigate", "Quick actions"] as const;
     const palette = document.getElementById("command-palette");
     const dialog = document.getElementById("command-palette-dialog");
     const trigger = document.getElementById("command-trigger");
+    const externalOpeners = Array.from(document.querySelectorAll<HTMLElement>("[data-command-open]"));
     const closeButton = document.getElementById("command-palette-close");
     const backdrop = root.querySelector<HTMLButtonElement>(".command-palette-backdrop");
     const search = document.getElementById("command-search") as HTMLInputElement | null;
@@ -753,6 +756,7 @@ const groups = ["Navigate", "Quick actions"] as const;
     ].filter((element): element is HTMLElement => Boolean(element && !element.hidden));
 
     trigger.addEventListener("click", () => setOpen(true));
+    externalOpeners.forEach((opener) => opener.addEventListener("click", () => setOpen(true)));
     closeButton.addEventListener("click", () => setOpen(false));
     backdrop?.addEventListener("click", () => setOpen(false));
 

@@ -1,0 +1,624 @@
+---
+const defaultUrl = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
+const defaultRedirect = "https://yewtu.be/watch?v=dQw4w9WgXcQ";
+
+const presets = [
+  {
+    label: "YouTube",
+    icon: "ri-youtube-line",
+    url: defaultUrl,
+  },
+  {
+    label: "Reddit",
+    icon: "ri-reddit-line",
+    url: "https://www.reddit.com/r/privacy/",
+  },
+  {
+    label: "X",
+    icon: "ri-twitter-x-line",
+    url: "https://x.com/privacy",
+  },
+];
+---
+
+<section id="redirect-playground" class="redirect-playground" aria-labelledby="redirect-playground-title">
+  <div class="redirect-playground-heading">
+    <span class="redirect-playground-eyebrow">
+      <i class="ri-flashlight-line" aria-hidden="true"></i>
+      Live route preview
+    </span>
+    <h2 id="redirect-playground-title">See Predirect think.</h2>
+    <p>
+      Paste a link and watch the route change. This tiny preview mirrors the
+      allowlisted redirects in the extension — without making a network request.
+    </p>
+  </div>
+
+  <form class="redirect-playground-form" data-route-form>
+    <label for="redirect-input">Paste a supported link</label>
+    <div class="redirect-input-row">
+      <input
+        id="redirect-input"
+        name="redirect-url"
+        type="url"
+        value={defaultUrl}
+        inputmode="url"
+        autocomplete="url"
+        spellcheck="false"
+        placeholder="https://www.youtube.com/watch?v=..."
+        aria-describedby="redirect-status redirect-disclaimer"
+      />
+      <button type="submit">
+        Preview route
+        <i class="ri-arrow-right-line" aria-hidden="true"></i>
+      </button>
+    </div>
+
+    <fieldset class="redirect-presets">
+      <legend>Or try a preset</legend>
+      <div>
+        {
+          presets.map((preset) => (
+            <button type="button" data-route-preset={preset.url}>
+              <i class={preset.icon} aria-hidden="true"></i>
+              {preset.label}
+            </button>
+          ))
+        }
+      </div>
+    </fieldset>
+  </form>
+
+  <p id="redirect-status" class="redirect-status" data-route-status aria-live="polite">
+    Showing the YouTube example. Try another link above.
+  </p>
+
+  <div class="redirect-route-grid" data-route-result>
+    <article class="redirect-route-card redirect-route-original">
+      <div class="redirect-route-card-topline">
+        <span>01 / original route</span>
+        <span class="redirect-route-badge redirect-route-badge-muted">tracked</span>
+      </div>
+      <p class="redirect-route-label">You leave the privacy layer here</p>
+      <p class="redirect-route-url" data-route-original>www.youtube.com/watch?v=dQw4w9WgXcQ</p>
+      <div class="redirect-route-actions">
+        <a data-route-original-link href={defaultUrl} target="_blank" rel="noopener noreferrer nofollow" referrerpolicy="no-referrer">
+          Open original <i class="ri-external-link-line" aria-hidden="true"></i>
+        </a>
+        <button type="button" data-copy-route="original" aria-label="Copy original route">Copy</button>
+      </div>
+    </article>
+
+    <div class="redirect-route-arrow" aria-hidden="true">
+      <span></span>
+      <i class="ri-arrow-right-line"></i>
+    </div>
+
+    <article class="redirect-route-card redirect-route-redirect">
+      <div class="redirect-route-card-topline">
+        <span>02 / privacy route</span>
+        <span class="redirect-route-badge">Predirect</span>
+      </div>
+      <p class="redirect-route-label">The same question, different front door</p>
+      <p class="redirect-route-url" data-route-redirect>yewtu.be/watch?v=dQw4w9WgXcQ</p>
+      <div class="redirect-route-actions">
+        <a data-route-redirect-link href={defaultRedirect} target="_blank" rel="noopener noreferrer nofollow" referrerpolicy="no-referrer">
+          Try the front end <i class="ri-external-link-line" aria-hidden="true"></i>
+        </a>
+        <button type="button" data-copy-route="redirect" aria-label="Copy privacy route">Copy</button>
+      </div>
+    </article>
+  </div>
+
+  <p id="redirect-disclaimer" class="redirect-disclaimer">
+    <i class="ri-information-line" aria-hidden="true"></i>
+    Illustrative preview only. The live Predirect map and front-end availability
+    can change; this demo never sends your pasted URL anywhere.
+  </p>
+  <noscript>
+    <p class="redirect-noscript">JavaScript is off, so the YouTube example is shown. Enable JavaScript to try another link.</p>
+  </noscript>
+</section>
+
+<style>
+  #redirect-playground {
+    margin-top: 3rem;
+    border: 3px solid #000;
+    background: #fffdeB;
+    box-shadow: 7px 7px 0 #000;
+  }
+
+  .redirect-playground-heading {
+    max-width: 40rem;
+    padding: 1.5rem 1.5rem 0;
+  }
+
+  .redirect-playground-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.35rem 0.55rem;
+    border: 2px solid #000;
+    background: #bae6ff;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .redirect-playground-heading h2 {
+    margin-top: 1rem;
+    font-size: clamp(1.8rem, 4vw, 2.6rem);
+    font-weight: 800;
+    line-height: 1.05;
+  }
+
+  .redirect-playground-heading p {
+    max-width: 36rem;
+    margin-top: 0.7rem;
+    color: #4e4e4e;
+    font-size: 0.95rem;
+    line-height: 1.55;
+  }
+
+  .redirect-playground-form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    padding: 1.5rem 1.5rem 1rem;
+  }
+
+  .redirect-playground-form > label,
+  .redirect-presets legend {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .redirect-input-row {
+    display: flex;
+    align-items: stretch;
+    gap: 0.6rem;
+  }
+
+  .redirect-input-row input {
+    min-width: 0;
+    flex: 1;
+    border: 2px solid #000;
+    background: #fff;
+    padding: 0.8rem 0.85rem;
+    color: #000;
+    font: 0.9rem ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    outline: none;
+  }
+
+  .redirect-input-row input:focus {
+    box-shadow: 4px 4px 0 #bae6ff;
+  }
+
+  .redirect-input-row input[aria-invalid="true"] {
+    border-color: #b91c1c;
+    box-shadow: 4px 4px 0 #fecaca;
+  }
+
+  .redirect-input-row button,
+  .redirect-presets button,
+  .redirect-route-actions button,
+  .redirect-route-actions a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    border: 2px solid #000;
+    background: #ffdc58;
+    color: #000;
+    font-size: 0.78rem;
+    font-weight: 800;
+    line-height: 1;
+    text-decoration: none;
+    cursor: pointer;
+    box-shadow: 3px 3px 0 #000;
+    transition: transform 140ms ease, box-shadow 140ms ease, background 140ms ease;
+  }
+
+  .redirect-input-row button {
+    flex: 0 0 auto;
+    padding: 0.8rem 1rem;
+  }
+
+  .redirect-input-row button:hover,
+  .redirect-presets button:hover,
+  .redirect-route-actions button:hover,
+  .redirect-route-actions a:hover {
+    background: #bae6ff;
+    transform: translate(-1px, -1px);
+    box-shadow: 4px 4px 0 #000;
+  }
+
+  .redirect-presets {
+    min-width: 0;
+    margin: 0.25rem 0 0;
+    padding: 0;
+    border: 0;
+  }
+
+  .redirect-presets legend {
+    margin-bottom: 0.5rem;
+  }
+
+  .redirect-presets > div {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .redirect-presets button {
+    padding: 0.55rem 0.7rem;
+    background: #fff;
+    box-shadow: 2px 2px 0 #000;
+  }
+
+  .redirect-status {
+    min-height: 1.4rem;
+    margin: 0 1.5rem 1rem;
+    color: #4e4e4e;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 0.75rem;
+  }
+
+  .redirect-status[data-state="error"] {
+    color: #b91c1c;
+    font-weight: 700;
+  }
+
+  .redirect-route-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 2.5rem minmax(0, 1fr);
+    align-items: stretch;
+    gap: 0.8rem;
+    padding: 0 1.5rem 1.5rem;
+  }
+
+  .redirect-route-card {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    border: 2px solid #000;
+    background: #fff;
+    padding: 1rem;
+  }
+
+  .redirect-route-redirect {
+    background: #ffdc58;
+  }
+
+  .redirect-route-card-topline {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.6rem;
+    color: #4e4e4e;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 0.65rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .redirect-route-badge {
+    padding: 0.25rem 0.35rem;
+    border: 1px solid #000;
+    background: #bae6ff;
+    color: #000;
+    font-size: 0.6rem;
+  }
+
+  .redirect-route-badge-muted {
+    background: #f4f4f4;
+  }
+
+  .redirect-route-label {
+    margin-top: 1.3rem;
+    color: #4e4e4e;
+    font-size: 0.78rem;
+  }
+
+  .redirect-route-url {
+    min-height: 3.2rem;
+    margin-top: 0.4rem;
+    overflow-wrap: anywhere;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 0.8rem;
+    font-weight: 800;
+    line-height: 1.45;
+  }
+
+  .redirect-route-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.55rem;
+    margin-top: auto;
+    padding-top: 1.1rem;
+  }
+
+  .redirect-route-actions button,
+  .redirect-route-actions a {
+    padding: 0.55rem 0.65rem;
+    font-size: 0.7rem;
+    box-shadow: 2px 2px 0 #000;
+  }
+
+  .redirect-route-actions button {
+    background: #fff;
+  }
+
+  .redirect-route-arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #000;
+    font-size: 1.6rem;
+  }
+
+  .redirect-route-arrow span {
+    display: none;
+  }
+
+  .redirect-disclaimer,
+  .redirect-noscript {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.4rem;
+    margin: 0;
+    padding: 0.8rem 1.5rem 1rem;
+    border-top: 2px solid #000;
+    color: #4e4e4e;
+    font-size: 0.72rem;
+    line-height: 1.45;
+  }
+
+  .redirect-disclaimer i {
+    flex: 0 0 auto;
+    margin-top: 0.1rem;
+    font-size: 0.95rem;
+  }
+
+  .redirect-noscript {
+    display: block;
+    color: #b91c1c;
+  }
+
+  :global(#redirect-playground input:focus-visible),
+  :global(#redirect-playground button:focus-visible),
+  :global(#redirect-playground a:focus-visible) {
+    outline: 3px solid #000;
+    outline-offset: 3px;
+  }
+
+  @media (max-width: 640px) {
+    .redirect-playground-heading,
+    .redirect-playground-form,
+    .redirect-route-grid,
+    .redirect-status,
+    .redirect-disclaimer,
+    .redirect-noscript {
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
+
+    .redirect-input-row {
+      flex-direction: column;
+    }
+
+    .redirect-input-row button {
+      width: 100%;
+    }
+
+    .redirect-route-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .redirect-route-arrow {
+      min-height: 1.5rem;
+      transform: rotate(90deg);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .redirect-input-row button,
+    .redirect-presets button,
+    .redirect-route-actions button,
+    .redirect-route-actions a {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  type RouteKind = "youtube" | "reddit" | "x";
+
+  type RouteResult = {
+    kind: RouteKind;
+    original: URL;
+    redirected: URL;
+  };
+
+  const supportedHosts = {
+    youtube: new Set([
+      "youtube.com",
+      "www.youtube.com",
+      "m.youtube.com",
+      "music.youtube.com",
+      "youtu.be",
+      "www.youtu.be",
+    ]),
+    reddit: new Set([
+      "reddit.com",
+      "www.reddit.com",
+      "old.reddit.com",
+      "np.reddit.com",
+      "redd.it",
+      "www.redd.it",
+    ]),
+    x: new Set([
+      "x.com",
+      "www.x.com",
+      "twitter.com",
+      "www.twitter.com",
+      "mobile.twitter.com",
+    ]),
+  } satisfies Record<RouteKind, Set<string>>;
+
+  const routeLabels: Record<RouteKind, string> = {
+    youtube: "YouTube",
+    reddit: "Reddit",
+    x: "X",
+  };
+
+  function initPredirectDemo() {
+    const root = document.getElementById("redirect-playground");
+    if (!root || root.dataset.bound === "true") return;
+    root.dataset.bound = "true";
+
+    const form = root.querySelector<HTMLFormElement>("[data-route-form]");
+    const input = root.querySelector<HTMLInputElement>("#redirect-input");
+    const status = root.querySelector<HTMLElement>("[data-route-status]");
+    const result = root.querySelector<HTMLElement>("[data-route-result]");
+    const originalText = root.querySelector<HTMLElement>("[data-route-original]");
+    const redirectText = root.querySelector<HTMLElement>("[data-route-redirect]");
+    const originalLink = root.querySelector<HTMLAnchorElement>("[data-route-original-link]");
+    const redirectLink = root.querySelector<HTMLAnchorElement>("[data-route-redirect-link]");
+    const presetButtons = Array.from(root.querySelectorAll<HTMLButtonElement>("[data-route-preset]"));
+    const copyButtons = Array.from(root.querySelectorAll<HTMLButtonElement>("[data-copy-route]"));
+
+    if (!form || !input || !status || !result || !originalText || !redirectText || !originalLink || !redirectLink) return;
+
+    const displayUrl = (url: URL) => `${url.host}${url.pathname}${url.search}${url.hash}`;
+
+    const resolveRoute = (raw: string): RouteResult => {
+      const value = raw.trim();
+      if (!value) throw new Error("Paste a link first.");
+
+      let original: URL;
+      try {
+        original = new URL(value);
+      } catch {
+        throw new Error("That does not look like a complete URL.");
+      }
+
+      if (original.protocol !== "https:") {
+        throw new Error("Use an HTTPS link — this preview only accepts secure routes.");
+      }
+      if (original.username || original.password || original.port) {
+        throw new Error("Remove credentials or a custom port from the link first.");
+      }
+
+      const host = original.hostname.toLowerCase().replace(/\.$/, "");
+      const kind = (Object.keys(supportedHosts) as RouteKind[]).find((candidate) =>
+        supportedHosts[candidate].has(host),
+      );
+      if (!kind) {
+        throw new Error("Try YouTube, Reddit, or X — those are the routes in this demo.");
+      }
+
+      const redirected = new URL(original.href);
+      if (kind === "youtube" && (host === "youtu.be" || host === "www.youtu.be")) {
+        const videoId = original.pathname.replace(/^\/+/, "");
+        redirected.hostname = "yewtu.be";
+        redirected.pathname = "/watch";
+        redirected.search = original.search;
+        if (videoId) redirected.searchParams.set("v", videoId);
+      } else if (kind === "youtube") {
+        redirected.hostname = "yewtu.be";
+      } else if (kind === "reddit") {
+        redirected.hostname = "redlib.freedit.eu";
+      } else {
+        redirected.hostname = "xcancel.com";
+      }
+      redirected.protocol = "https:";
+
+      return { kind, original, redirected };
+    };
+
+    const setStatus = (message: string, state: "ready" | "error" = "ready") => {
+      status.textContent = message;
+      status.dataset.state = state;
+    };
+
+    const renderRoute = (raw: string, announce = true) => {
+      try {
+        const route = resolveRoute(raw);
+        originalText.textContent = displayUrl(route.original);
+        redirectText.textContent = displayUrl(route.redirected);
+        originalLink.href = route.original.href;
+        redirectLink.href = route.redirected.href;
+        result.hidden = false;
+        input.setAttribute("aria-invalid", "false");
+        if (announce) {
+          setStatus(`${routeLabels[route.kind]} route ready. Nothing was sent — this is a local preview.`);
+        }
+      } catch (error) {
+        result.hidden = true;
+        input.setAttribute("aria-invalid", "true");
+        setStatus(error instanceof Error ? error.message : "That route could not be previewed.", "error");
+      }
+    };
+
+    const copyText = async (text: string) => {
+      try {
+        await navigator.clipboard.writeText(text);
+        return true;
+      } catch {
+        try {
+          const textarea = document.createElement("textarea");
+          textarea.value = text;
+          textarea.setAttribute("readonly", "");
+          textarea.style.position = "fixed";
+          textarea.style.opacity = "0";
+          document.body.appendChild(textarea);
+          textarea.select();
+          const copied = document.execCommand("copy");
+          textarea.remove();
+          return copied;
+        } catch {
+          return false;
+        }
+      }
+    };
+
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      renderRoute(input.value);
+    });
+
+    presetButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        input.value = button.dataset.routePreset ?? "";
+        input.focus();
+        renderRoute(input.value);
+      });
+    });
+
+    copyButtons.forEach((button) => {
+      button.addEventListener("click", async () => {
+        const kind = button.dataset.copyRoute;
+        const value = kind === "redirect" ? redirectText.textContent : originalText.textContent;
+        if (!value) return;
+        const copied = await copyText(value);
+        const originalLabel = button.textContent;
+        button.textContent = copied ? "Copied!" : "Try again";
+        window.setTimeout(() => {
+          button.textContent = originalLabel;
+        }, 1800);
+      });
+    });
+
+    renderRoute(input.value, false);
+  }
+
+  initPredirectDemo();
+  document.addEventListener("astro:page-load", initPredirectDemo);
+</script>
