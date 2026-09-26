@@ -1,0 +1,80 @@
+---
+import "../../styles/global.css";
+import Layout from "../../layouts/Layout.astro";
+import Header from "../../components/Header.astro";
+import Footer from "../../components/Footer.astro";
+---
+
+<Layout
+  title="Case Study — pebble-sync"
+  description="An ultra-compact, offline-first state-based CRDT sync engine with Merkle clocks and cryptographic audit trails."
+>
+  <Header />
+
+  <section class="py-16 sm:py-24 px-4">
+    <div
+      class="max-w-3xl mx-auto bg-white border-3 border-black p-8 sm:p-12 relative shadow-[6px_6px_0_#000]"
+    >
+      <div class="size-2 bg-white border-2 border-black absolute -top-2 -right-2"></div>
+      <div class="size-2 bg-white border-2 border-black absolute -top-2 -left-2"></div>
+      <div class="size-2 bg-white border-2 border-black absolute -bottom-2 -left-2"></div>
+      <div class="size-2 bg-white border-2 border-black absolute -bottom-2 -right-2"></div>
+
+      <p class="text-xs font-bold uppercase tracking-wider text-emerald-700">Case Study · Distributed Systems & Offline-First</p>
+      <h1 class="text-4xl sm:text-5xl font-black mt-2">pebble-sync</h1>
+      <p class="text-lg mt-3 text-gray-800">
+        Ultra-compact, offline-first state-based CRDT sync engine with Merkle clocks, delta replication, and tamper-evident cryptographic hash chains for edge, rural, and browser environments. Zero runtime dependencies.
+      </p>
+
+      <div class="flex flex-wrap gap-4 mt-6">
+        <a
+          href="https://github.com/pritkr/pebble-sync"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-block px-6 py-3 bg-[var(--yellow)] border-2 border-black text-black font-bold hover:-translate-y-0.5 transition-transform shadow-[3px_3px_0_#000]"
+        >
+          <i class="ri-github-fill text-lg mr-2"></i>Repository
+        </a>
+        <span class="inline-block px-4 py-3 bg-[#eef0f2] border-2 border-black text-xs font-mono font-bold self-center">
+          TypeScript · Zero-Dependency · Merkle Clocks · Ed25519/SHA-256
+        </span>
+      </div>
+
+      <div class="space-y-8 mt-12">
+        <div>
+          <h2 class="text-xl font-bold">The Problem with "Offline-First"</h2>
+          <p class="mt-2 leading-relaxed">
+            Most "offline-first" web apps rely on last-write-wins timestamps stored in client databases. Under multi-device concurrent edits or multi-day network partitions (common for grassroots workers in rural Bihar), naive timestamps overwrite data and cause silent data loss. Meanwhile, mainstream CRDT libraries (Automerge, Yjs) can be heavyweight for low-end mobile devices and lack cryptographic auditability.
+          </p>
+        </div>
+
+        <div>
+          <h2 class="text-xl font-bold">Technical Innovations in Pebble-Sync</h2>
+          <ul class="list-disc pl-5 mt-2 space-y-2 text-sm leading-relaxed">
+            <li>
+              <strong>State-Based CRDT Primitives:</strong> Formal implementations of Positive-Negative Counters (PNCounter), Last-Write-Wins Registers (LWWRegister), Observed-Remove Sets (ORSet), and hierarchical Collaborative Documents. All merges are provably associative, commutative, and idempotent.
+            </li>
+            <li>
+              <strong>Merkle Clock Delta Compaction:</strong> Instead of transmitting entire database states over expensive or flaky cellular networks, nodes exchange Merkle tree root hashes. The difference algorithm isolates only the missing deltas, cutting wire payload size by over 80%.
+            </li>
+            <li>
+              <strong>Tamper-Evident Cryptographic Hash Chains:</strong> Every state change operation is chained via cryptographic hashes and signed. Even in peer-to-peer or untrusted mesh sync, any malicious manipulation of historical records is mathematically detected and rejected.
+            </li>
+            <li>
+              <strong>Zero Runtime Dependencies:</strong> Written purely with modern TypeScript and standard platform cryptography. Works seamlessly in Node.js, Bun, Cloudflare Workers, and mobile browsers.
+            </li>
+          </ul>
+        </div>
+
+        <div>
+          <h2 class="text-xl font-bold">Target Alignment</h2>
+          <p class="mt-2 leading-relaxed">
+            Demonstrates rigorous distributed systems craftsmanship directly relevant to <strong>Ente.io</strong> (end-to-end encrypted sync cloud), <strong>ByteDance</strong> (Distributed NoSQL systems), and <strong>FOSS United builder grants</strong>.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <Footer />
+</Layout>

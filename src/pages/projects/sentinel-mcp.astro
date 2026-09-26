@@ -1,0 +1,85 @@
+---
+import "../../styles/global.css";
+import Layout from "../../layouts/Layout.astro";
+import Header from "../../components/Header.astro";
+import Footer from "../../components/Footer.astro";
+---
+
+<Layout
+  title="Case Study — sentinel-mcp"
+  description="A zero-overhead, capability-gated security reverse proxy and taint guard for the Model Context Protocol (MCP) in Go."
+>
+  <Header />
+
+  <section class="py-16 sm:py-24 px-4">
+    <div
+      class="max-w-3xl mx-auto bg-white border-3 border-black p-8 sm:p-12 relative shadow-[6px_6px_0_#000]"
+    >
+      <div class="size-2 bg-white border-2 border-black absolute -top-2 -right-2"></div>
+      <div class="size-2 bg-white border-2 border-black absolute -top-2 -left-2"></div>
+      <div class="size-2 bg-white border-2 border-black absolute -bottom-2 -left-2"></div>
+      <div class="size-2 bg-white border-2 border-black absolute -bottom-2 -right-2"></div>
+
+      <p class="text-xs font-bold uppercase tracking-wider text-blue-700">Case Study · Systems & AI Security</p>
+      <h1 class="text-4xl sm:text-5xl font-black mt-2">sentinel-mcp</h1>
+      <p class="text-lg mt-3 text-gray-800">
+        Zero-overhead capability-gated security proxy and runtime taint guard for the Model Context Protocol (MCP) written in Go. Protects LLM agents from prompt-injection tool exploits, unauthorized filesystem exfiltration, and SSRF.
+      </p>
+
+      <div class="flex flex-wrap gap-4 mt-6">
+        <a
+          href="https://github.com/pritkr/sentinel-mcp"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-block px-6 py-3 bg-[var(--yellow)] border-2 border-black text-black font-bold hover:-translate-y-0.5 transition-transform shadow-[3px_3px_0_#000]"
+        >
+          <i class="ri-github-fill text-lg mr-2"></i>Repository
+        </a>
+        <span class="inline-block px-4 py-3 bg-[#eef0f2] border-2 border-black text-xs font-mono font-bold self-center">
+          Go 1.27 · JSON-RPC 2.0 · &lt;0.18ms latency
+        </span>
+      </div>
+
+      <div class="space-y-8 mt-12">
+        <div>
+          <h2 class="text-xl font-bold">The Threat Model</h2>
+          <p class="mt-2 leading-relaxed">
+            As autonomous developer agents (Claude Code, Cursor, OpenCode) become standard, they are granted broad tool execution powers via the Model Context Protocol (MCP). If an LLM encounters untrusted input or prompt injection, it can be tricked into invoking tools that read sensitive credentials (<code class="bg-[#FFFDEB] border border-black px-1">~/.ssh/id_rsa</code>, <code class="bg-[#FFFDEB] border border-black px-1">.env</code>) or trigger Server-Side Request Forgery (SSRF) against cloud metadata endpoints like <code class="bg-[#FFFDEB] border border-black px-1">169.254.169.254</code>.
+          </p>
+        </div>
+
+        <div>
+          <h2 class="text-xl font-bold">Architecture & Design</h2>
+          <p class="mt-2 leading-relaxed">
+            Sentinel sits transparently between the agent client and upstream MCP tool servers over standard IO (stdio). It decodes JSON-RPC 2.0 frames on the fly with zero memory copies where possible:
+          </p>
+          <ul class="list-disc pl-5 mt-2 space-y-1 text-sm">
+            <li><strong>Declarative Capability Sandboxing:</strong> Enforces granular directory whitelisting and blocks path traversal (<code class="bg-[#FFFDEB] border border-black px-1">../</code>).</li>
+            <li><strong>SSRF Egress Guard:</strong> Intercepts network calls targeting RFC 1918 private subnets and cloud metadata services.</li>
+            <li><strong>Shannon Entropy Taint Detection:</strong> Computes real-time byte entropy on tool response outputs to flag and redact leaked API tokens, private keys, and high-entropy secrets before they enter the LLM's context window.</li>
+            <li><strong>Tamper-Proof Audit Stream:</strong> Emits structured JSONL audit logs with sub-millisecond timestamps, tool names, latency, and enforcement verdicts (ALLOW, BLOCK, REDACT).</li>
+          </ul>
+        </div>
+
+        <div>
+          <h2 class="text-xl font-bold">Benchmarks & Results</h2>
+          <div class="bg-[#F8F9FA] border-2 border-black p-4 mt-2 font-mono text-sm space-y-1">
+            <p class="font-bold text-black">// BenchmarkProxyPassThrough-8</p>
+            <p class="text-green-700">✓ Interception overhead: 0.178 ms / request</p>
+            <p class="text-green-700">✓ Peak memory allocation: &lt; 4.2 MB RSS</p>
+            <p class="text-green-700">✓ Security tests: 100% path-traversal & SSRF exploit rejection</p>
+          </div>
+        </div>
+
+        <div>
+          <h2 class="text-xl font-bold">Target Alignment</h2>
+          <p class="mt-2 leading-relaxed">
+            Directly tailored to high-scale backend systems and AI security architectures (such as Pragmatike, RightWalk Foundation, Cursor, and Robinhood Systems).
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <Footer />
+</Layout>

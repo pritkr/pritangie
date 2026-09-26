@@ -1,0 +1,80 @@
+---
+import "../../styles/global.css";
+import Layout from "../../layouts/Layout.astro";
+import Header from "../../components/Header.astro";
+import Footer from "../../components/Footer.astro";
+---
+
+<Layout
+  title="Case Study — dhvani-eval"
+  description="Telephony-grade streaming audio evaluation and acoustic degradation harness for Indic voice AI."
+>
+  <Header />
+
+  <section class="py-16 sm:py-24 px-4">
+    <div
+      class="max-w-3xl mx-auto bg-white border-3 border-black p-8 sm:p-12 relative shadow-[6px_6px_0_#000]"
+    >
+      <div class="size-2 bg-white border-2 border-black absolute -top-2 -right-2"></div>
+      <div class="size-2 bg-white border-2 border-black absolute -top-2 -left-2"></div>
+      <div class="size-2 bg-white border-2 border-black absolute -bottom-2 -left-2"></div>
+      <div class="size-2 bg-white border-2 border-black absolute -bottom-2 -right-2"></div>
+
+      <p class="text-xs font-bold uppercase tracking-wider text-amber-700">Case Study · Indic Voice AI & Speech Evaluations</p>
+      <h1 class="text-4xl sm:text-5xl font-black mt-2">dhvani-eval</h1>
+      <p class="text-lg mt-3 text-gray-800">
+        An open-source evaluation suite and streaming telephony degradation simulator for Indic & low-resource voice AI (Hindi, Maithili, Bhojpuri, code-mixed Hinglish). Quantifies speech model resilience under real rural telephony constraints.
+      </p>
+
+      <div class="flex flex-wrap gap-4 mt-6">
+        <a
+          href="https://github.com/pritkr/dhvani-eval"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-block px-6 py-3 bg-[var(--yellow)] border-2 border-black text-black font-bold hover:-translate-y-0.5 transition-transform shadow-[3px_3px_0_#000]"
+        >
+          <i class="ri-github-fill text-lg mr-2"></i>Repository
+        </a>
+        <span class="inline-block px-4 py-3 bg-[#eef0f2] border-2 border-black text-xs font-mono font-bold self-center">
+          Python 3.14 · Devanagari Normalization · 8kHz Telephony Sim
+        </span>
+      </div>
+
+      <div class="space-y-8 mt-12">
+        <div>
+          <h2 class="text-xl font-bold">The Real-World Dilemma</h2>
+          <p class="mt-2 leading-relaxed">
+            Standard speech recognition (ASR) benchmarks (like LibriSpeech) evaluate pristine, studio-recorded English audio. But when deploying voice assistants in rural India (for welfare schemes like JanSahay or farmer helplines like Gram Vaani), audio arrives over lossy 2G/EDGE cellular networks, 8kHz telephony codecs (G.711 / AMR), noisy village backgrounds, and code-mixed vernacular dialects (Hindi, Maithili, Bhojpuri). Existing benchmark suites completely ignore these channel physics.
+          </p>
+        </div>
+
+        <div>
+          <h2 class="text-xl font-bold">Key Architectural Features</h2>
+          <ul class="list-disc pl-5 mt-2 space-y-2 text-sm leading-relaxed">
+            <li>
+              <strong>Devanagari Unicode Normalization:</strong> Solves subtle Unicode rendering ambiguities in Hindi script — normalizes nuktas, halants, matra permutations, and Chandrabindu equivalences so phonetic matches aren't penalized by arbitrary font encodings.
+            </li>
+            <li>
+              <strong>Telephony Channel Degradation Engine:</strong> Emulates 8kHz bandpass downsampling, AMR narrowband codecs, burst packet dropout (simulating mobile handoffs in rural towers), and ambient room/traffic noise injection.
+            </li>
+            <li>
+              <strong>Streaming Voice Latency Profiler:</strong> Measures Time-to-First-Token (TTFT), End-of-Utterance (EOU) silence cutoffs, and chunk streaming throughput — essential metrics for real-time interactive voice bots.
+            </li>
+            <li>
+              <strong>Resilience Degradation Scoring:</strong> Computes the exact delta in Word Error Rate (ΔWER) between clean audio and telephony-degraded audio, revealing which models collapse when bandwidth drops.
+            </li>
+          </ul>
+        </div>
+
+        <div>
+          <h2 class="text-xl font-bold">Target Alignment</h2>
+          <p class="mt-2 leading-relaxed">
+            Directly targeted at frontier speech and evaluation teams: <strong>SuperKalam</strong> (AI Applied Engineer - Voice First), <strong>Karya</strong> (Research Intern - AI Evaluations), <strong>Gram Vaani</strong> (Voice AI & NLP), and <strong>CivicDataLab</strong>.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <Footer />
+</Layout>
