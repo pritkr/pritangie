@@ -25,3 +25,7 @@ pnpm-debug.log*
 
 # standalone project repositories (root directory only)
 /projects/
+
+# git clones of the published project repos, created by scripts/publish_repos.sh
+/.publish-stage/
+/repos/
