@@ -38,7 +38,13 @@ const year = new Date().getFullYear()
       </div>
 
       <p class="mt-7 text-center text-xs">
-        © {year} · Built with Astro · No trackers · No cookies · Hosted on my own terms
+        <a
+          href="/elsewhere"
+          class="font-bold underline decoration-2 underline-offset-2 transition-colors duration-150 hover:bg-[var(--yellow)]"
+        >
+          Elsewhere
+        </a>
+        · © {year} · Built with Astro · No trackers · No cookies · Hosted on my own terms
       </p>
     </div>
 </footer>

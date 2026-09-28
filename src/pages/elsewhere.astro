@@ -1,0 +1,313 @@
+---
+import "../styles/global.css";
+import Layout from "../layouts/Layout.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import svgUnderline from "../assets/underline.svg";
+import svgPinkStar from "../assets/pink-star.svg";
+import { author } from "../sample";
+
+/*
+  Everything else I make or hang out in, grouped by what it is rather than
+  dumped in one icon row. Every URL below already appears somewhere in the
+  repo — nothing here is invented.
+
+  RECENT INSTAGRAM POSTS
+  ----------------------
+  Instagram has no public read API any more (Basic Display deprecated Dec 2024,
+  oEmbed gone, Graph API only covers a professional account you own, and there
+  is no CORS), so the feed cannot be fetched from a browser. Drop a file at
+  `src/data/instagram.json` to light the grid up; without it the block renders
+  as a plain follow card. Shape:
+
+    [
+      {
+        "permalink": "https://www.instagram.com/p/…",
+        "caption": "short caption",
+        "image": "https://…/photo.jpg"
+      }
+    ]
+
+  `import.meta.glob` does not fail on a missing match, so the page builds
+  either way. Whatever produces that file (a Meta Graph API call from a build
+  step, or a hosted feed service's JSON) just has to write it.
+*/
+const feedFiles = import.meta.glob("../data/instagram*.json", { eager: true });
+const firstFeed = Object.values(feedFiles)[0] as { default?: unknown } | undefined;
+const igPosts: { permalink: string; caption?: string; image?: string }[] =
+  firstFeed && Array.isArray(firstFeed.default) ? firstFeed.default : [];
+
+const groups = [
+  {
+    id: "code",
+    title: "Code",
+    blurb: "Things I build and ship",
+    links: [
+      {
+        icon: "ri-github-fill",
+        label: "github.com/pritkr",
+        note: "Every repo — extensions, Go daemons, TypeScript engines, Python tooling.",
+        href: "https://github.com/pritkr",
+        tag: "Profile",
+        external: true,
+      },
+      {
+        icon: "ri-git-repository-line",
+        label: "fossism",
+        note: "The small org I co-build with. Home of chaind, the permission-gated bridge from chat apps to local AI agents.",
+        href: "https://github.com/fossism",
+        tag: "Org",
+        external: true,
+      },
+      {
+        icon: "ri-stack-line",
+        label: "All projects",
+        note: "Eight projects with case studies, ordered oldest to newest.",
+        href: "/projects",
+        tag: "On this site",
+        external: false,
+      },
+    ],
+  },
+  {
+    id: "writing",
+    title: "Writing",
+    blurb: "Longer thoughts, syncable",
+    links: [
+      {
+        icon: "ri-article-line",
+        label: "Blog",
+        note: "Notes on open source, privacy tooling, and building in public.",
+        href: "/blog",
+        tag: "3 posts",
+        external: false,
+      },
+      {
+        icon: "ri-rss-line",
+        label: "RSS feed",
+        note: "Follow in any reader. New posts show up here the moment they build.",
+        href: "/rss.xml",
+        tag: "XML",
+        external: false,
+      },
+    ],
+  },
+  {
+    id: "community",
+    title: "Community",
+    blurb: "Where the doing happens",
+    links: [
+      {
+        icon: "ri-community-line",
+        label: "Bodhya",
+        note: "The FOSS community I help build — workshops, small projects, code into public repos.",
+        href: "https://bodhya.net",
+        tag: "Community",
+        external: true,
+      },
+      {
+        icon: "ri-global-line",
+        label: "FOSS United",
+        note: "The wider network Bodhya sits in.",
+        href: "https://fossunited.org/c/gec-sheikhpura",
+        tag: "Network",
+        external: true,
+      },
+      {
+        icon: "ri-chat-3-line",
+        label: "Matrix",
+        note: "DM me here — no algorithm, federated, end-to-end encrypted.",
+        href: author.matrix,
+        tag: "@prit:matrix.org",
+        external: true,
+      },
+      {
+        icon: "ri-telegram-line",
+        label: "Telegram",
+        note: "Quickest way to reach me.",
+        href: author.telegram,
+        tag: "@annaaaron",
+        external: true,
+      },
+    ],
+  },
+  {
+    id: "elsewhere",
+    title: "Elsewhere",
+    blurb: "The accounts worth following",
+    links: [
+      {
+        icon: "ri-instagram-line",
+        label: "Instagram",
+        note: "Build notes, desk setup, and the occasional conference photo.",
+        href: author.ig,
+        tag: "@pritkmr",
+        external: true,
+      },
+      {
+        icon: "ri-linkedin-box-fill",
+        label: "LinkedIn",
+        note: "The professional version of the same story.",
+        href: author.linkedin,
+        tag: "in/prit-kumar",
+        external: true,
+      },
+    ],
+  },
+];
+---
+
+<Layout
+  title="Elsewhere — Prit Kumar"
+  description="Every GitHub repo, blog, RSS feed, FOSS community and social account behind Prit's Den, in one place."
+>
+  <Header />
+
+  <section class="pt-12 pb-6 sm:pt-16">
+    <div class="max-w-4xl mx-auto px-4">
+      <div>
+        <div class="relative inline-block">
+          <h1 class="text-5xl font-black">Elsewhere</h1>
+          <img
+            src={svgUnderline.src}
+            alt=""
+            width="200"
+            class="absolute -bottom-3 left-0"
+          />
+        </div>
+        <p class="mt-8 text-lg max-w-xl">
+          Everything else I make or hang out in — the repos, the writing, the
+          communities, and the accounts. Grouped by what they are, so you can
+          find the thing you came for.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  {/* Instagram: recent posts when a feed file is present, otherwise a follow card. */}
+  <section class="pb-10">
+    <div class="max-w-4xl mx-auto px-4">
+      <div
+        class="relative bg-white border-3 border-black shadow-[6px_6px_0_#000] p-6 sm:p-8"
+      >
+        <img
+          src={svgPinkStar.src}
+          alt=""
+          width="70"
+          class="absolute -top-6 -right-2"
+        />
+
+        <div class="flex flex-wrap items-center justify-between gap-5">
+          <div class="flex items-center gap-4">
+            <div
+              class="size-14 shrink-0 grid place-items-center border-2 border-black bg-gradient-to-br from-[var(--yellow)] to-[var(--blue)]"
+            >
+              <i class="ri-instagram-line text-2xl" aria-hidden="true"></i>
+            </div>
+            <div>
+              <p class="font-black text-xl">@pritkmr</p>
+              <p class="text-sm text-black/70">on Instagram</p>
+            </div>
+          </div>
+          <a
+            href={author.ig}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex h-11 items-center gap-2 rounded-full border-3 border-black bg-[var(--blue)] px-5 font-medium transition-[translate,box-shadow] duration-150 hover:-translate-y-0.5 active:translate-y-0.5"
+          >
+            Follow
+            <i class="ri-arrow-right-up-line text-lg" aria-hidden="true"></i>
+          </a>
+        </div>
+
+        {
+          igPosts.length > 0 ? (
+            <ul class="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-4">
+              {igPosts.map((post) => (
+                <li data-reveal>
+                  <a
+                    href={post.permalink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="group block border-2 border-black transition-shadow duration-200 hover:shadow-[4px_4px_0_#000]"
+                  >
+                    {post.image && (
+                      <img
+                        src={post.image}
+                        alt={post.caption ?? "Instagram post"}
+                        loading="lazy"
+                        class="aspect-square w-full object-cover"
+                      />
+                    )}
+                    {post.caption && (
+                      <p class="line-clamp-2 p-2 text-xs">{post.caption}</p>
+                    )}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p class="mt-6 text-sm text-black/60">
+              Recent posts aren't syndicated here — Instagram has no public
+              read API to pull them from.{" "}
+              <a
+                href={author.ig}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="underline decoration-2 underline-offset-2 transition-colors duration-150 hover:bg-[var(--yellow)]"
+              >
+                See them on Instagram
+              </a>
+              .
+            </p>
+          )
+        }
+      </div>
+    </div>
+  </section>
+
+  {
+    groups.map((group) => (
+      <section class="pb-6 mt-10" id={group.id}>
+        <div class="max-w-4xl mx-auto px-4">
+          <div class="flex flex-wrap items-baseline gap-3 mb-6">
+            <h2 class="text-3xl font-black">{group.title}</h2>
+            <p class="text-sm text-black/60">{group.blurb}</p>
+          </div>
+
+          <ul class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {group.links.map((link) => (
+              <li data-reveal>
+                <a
+                  href={link.href}
+                  target={link.external ? "_blank" : undefined}
+                  rel={link.external ? "noopener noreferrer" : undefined}
+                  class="group flex h-full gap-4 border-2 border-black bg-white p-5 transition-shadow duration-200 hover:shadow-[5px_5px_0_#000]"
+                >
+                  <div class="size-11 shrink-0 grid place-items-center border-2 border-black bg-[#FFFDEB]">
+                    <i class={`${link.icon} text-xl`} aria-hidden="true" />
+                  </div>
+                  <div class="min-w-0">
+                    <div class="flex flex-wrap items-center gap-2">
+                      <span class="font-bold">{link.label}</span>
+                      <span class="border border-black px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wide">
+                        {link.tag}
+                      </span>
+                      {link.external && (
+                        <i
+                          class="ri-arrow-right-up-line text-sm text-black/40 transition-transform duration-150 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                          aria-hidden="true"
+                        />
+                      )}
+                    </div>
+                    <p class="mt-1 text-sm text-black/75">{link.note}</p>
+                  </div>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+    ))
+  }
+</Layout>

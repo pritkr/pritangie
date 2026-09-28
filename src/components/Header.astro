@@ -9,6 +9,7 @@ const links = [
     { name: "Projects", path: "/projects", target: "_self" },
     { name: "Résumé", path: "/resume.pdf", target: "_blank" },
     { name: "About", path: "/about", target: "_self" },
+    { name: "Elsewhere", path: "/elsewhere", target: "_self" },
     { name: "Contact", path: "mailto:pritform@gmail.com", target: "_self" },
 ];
 
@@ -33,7 +34,7 @@ const rel = (target: string) => (target === "_blank" ? "noopener noreferrer" : u
     />
 
     <div
-        class="flex border-3 border-black bg-white max-w-[310px] md:max-w-xl m-auto relative z-10"
+        class="flex border-3 border-black bg-white max-w-[310px] md:max-w-2xl m-auto relative z-10"
     >
         <!-- top boxes -->
         <div
@@ -80,7 +81,7 @@ const rel = (target: string) => (target === "_blank" ? "noopener noreferrer" : u
             <ul class="hidden md:flex">
                 {
                     links.map((item) => (
-                        <li class="border-l-2 border-black p-3 py-4">
+                        <li class="border-l-2 border-black px-2 py-4 md:px-2.5">
                             <a
                                 href={item.path}
                                 target={item.target}
