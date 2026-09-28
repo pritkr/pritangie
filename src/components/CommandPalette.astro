@@ -310,6 +310,7 @@ const groups = ["Navigate", "Quick actions"] as const;
     border: 0;
     background: rgb(0 0 0 / 0.58);
     cursor: default;
+    animation: backdrop-enter 180ms cubic-bezier(0.23, 1, 0.32, 1) both;
   }
 
   .command-palette-dialog {
@@ -403,6 +404,12 @@ const groups = ["Navigate", "Quick actions"] as const;
     color: #000;
     font: inherit;
     font-size: 1rem;
+  }
+
+  .command-palette-search-wrap input:focus-visible {
+    outline: 2px solid #000;
+    outline-offset: 2px;
+    border-radius: 2px;
   }
 
   .command-palette-search-wrap input::placeholder {
@@ -555,6 +562,35 @@ const groups = ["Navigate", "Quick actions"] as const;
     }
   }
 
+  @keyframes command-palette-exit {
+    from {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+    to {
+      opacity: 0;
+      transform: translateY(-0.75rem) scale(0.98);
+    }
+  }
+
+  @keyframes backdrop-enter {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes backdrop-exit {
+    from { opacity: 1; }
+    to { opacity: 0; }
+  }
+
+  .command-palette-shell.is-closing .command-palette-dialog {
+    animation: command-palette-exit 150ms cubic-bezier(0.23, 1, 0.32, 1) both;
+  }
+
+  .command-palette-shell.is-closing .command-palette-backdrop {
+    animation: backdrop-exit 150ms cubic-bezier(0.23, 1, 0.32, 1) both;
+  }
+
   @media (max-width: 767px) {
     #command-trigger {
       display: none;
@@ -631,6 +667,8 @@ const groups = ["Navigate", "Quick actions"] as const;
     let previouslyFocused: HTMLElement | null = null;
     let previousOverflow = "";
     let toastTimer: number | undefined;
+    let closeTimer: number | undefined;
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
     const isTypingTarget = (target: EventTarget | null) => {
       const element = target as HTMLElement | null;
@@ -674,22 +712,38 @@ const groups = ["Navigate", "Quick actions"] as const;
     };
 
     const setOpen = (open: boolean) => {
-      palette.hidden = !open;
-      palette.setAttribute("aria-hidden", String(!open));
+      window.clearTimeout(closeTimer);
+      palette.classList.remove("is-closing");
       trigger.setAttribute("aria-expanded", String(open));
 
       if (open) {
+        palette.hidden = false;
+        palette.setAttribute("aria-hidden", "false");
         previouslyFocused = document.activeElement as HTMLElement | null;
         previousOverflow = document.body.style.overflow;
         document.body.classList.add("command-palette-open");
         search.value = "";
         filterItems();
         window.setTimeout(() => search.focus(), 0);
-      } else {
-        document.body.classList.remove("command-palette-open");
-        document.body.style.overflow = previousOverflow;
-        previouslyFocused?.focus();
+        return;
       }
+
+      document.body.classList.remove("command-palette-open");
+      document.body.style.overflow = previousOverflow;
+      previouslyFocused?.focus();
+      palette.setAttribute("aria-hidden", "true");
+
+      const finishClose = () => {
+        palette.hidden = true;
+        palette.classList.remove("is-closing");
+      };
+
+      if (reduceMotion.matches) {
+        finishClose();
+        return;
+      }
+      palette.classList.add("is-closing");
+      closeTimer = window.setTimeout(finishClose, 150);
     };
 
     const copyText = async (text: string) => {
@@ -716,10 +770,35 @@ const groups = ["Navigate", "Quick actions"] as const;
 
     const showToast = (message: string) => {
       window.clearTimeout(toastTimer);
+      toast.getAnimations?.().forEach((animation) => animation.cancel());
       toast.textContent = message;
       toast.hidden = false;
+
+      if (!reduceMotion.matches && toast.animate) {
+        toast.animate(
+          [
+            { opacity: 0, transform: "translate(-50%, 8px)" },
+            { opacity: 1, transform: "translate(-50%, 0)" },
+          ],
+          { duration: 150, easing: "cubic-bezier(0.23, 1, 0.32, 1)" },
+        );
+      }
+
       toastTimer = window.setTimeout(() => {
-        toast.hidden = true;
+        if (reduceMotion.matches || !toast.animate) {
+          toast.hidden = true;
+          return;
+        }
+        const outgoing = toast.animate(
+          [
+            { opacity: 1, transform: "translate(-50%, 0)" },
+            { opacity: 0, transform: "translate(-50%, 8px)" },
+          ],
+          { duration: 150, easing: "cubic-bezier(0.23, 1, 0.32, 1)", fill: "forwards" },
+        );
+        outgoing.onfinish = () => {
+          toast.hidden = true;
+        };
       }, 2200);
     };
 

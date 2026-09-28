@@ -2,7 +2,7 @@
 import "../styles/global.css";
 ---
 
-<section class="py-12 bg-[#FFFDEB] text-black">
+<section class="py-12 px-4 bg-[#FFFDEB] text-black">
     <div
         class="max-w-3xl mx-auto border-3 border-black bg-white p-8 relative shadow-[4px_4px_0_#000]"
     >
@@ -24,7 +24,7 @@ import "../styles/global.css";
         >
         </div>
 
-        <blockquote class="text-center">
+        <blockquote class="text-center min-h-[10rem]">
             <p
                 id="quote-text"
                 class="text-xl md:text-2xl font-medium leading-relaxed italic mb-4"
@@ -79,6 +79,32 @@ import "../styles/global.css";
     ];
 
     const quote = quotes[Math.floor(Math.random() * quotes.length)]!;
-    document.getElementById("quote-text")!.textContent = `"${quote.text}"`;
-    document.getElementById("quote-author")!.textContent = `— ${quote.author}`;
+    const quoteEl = document.getElementById("quote-text")!;
+    const authorEl = document.getElementById("quote-author")!;
+    quoteEl.textContent = `"${quote.text}"`;
+    authorEl.textContent = `— ${quote.author}`;
+
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (!reduceMotion && quoteEl.animate) {
+        // Curtain drops top -> bottom, like a receipt printing out of the card.
+        quoteEl.animate(
+            [
+                { clipPath: "inset(0 0 100% 0)", transform: "translateY(-4px)" },
+                { clipPath: "inset(0 0 0 0)", transform: "translateY(0)" },
+            ],
+            { duration: 240, easing: "cubic-bezier(0.23, 1, 0.32, 1)" },
+        );
+        authorEl.animate(
+            [
+                { opacity: 0, transform: "translateY(4px)" },
+                { opacity: 1, transform: "translateY(0)" },
+            ],
+            {
+                duration: 240,
+                delay: 60,
+                easing: "cubic-bezier(0.23, 1, 0.32, 1)",
+                fill: "backwards",
+            },
+        );
+    }
 </script>

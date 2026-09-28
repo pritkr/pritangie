@@ -8,6 +8,7 @@ interface Props {
 import ScrollProgress from "../components/ScrollProgress.astro";
 import BackToTop from "../components/BackToTop.astro";
 import CommandPalette from "../components/CommandPalette.astro";
+import Reveal from "../components/Reveal.astro";
 
 const {
 	title = "Prit's Den — Open Source & Privacy Tech",
@@ -70,10 +71,72 @@ const socialImageURL = new URL(image, site);
 		<link rel="manifest" href="/site.webmanifest" />
 		<meta name="generator" content={Astro.generator} />
 		<link rel="stylesheet" href="/fonts/remixicon/remixicon.css" />
+
+		{/*
+		  View transition — a push, not a wipe.
+
+		  This used to be `::view-transition-old(root) { animation: none }` plus a
+		  200ms clip-path wipe on the new page, which left the outgoing page
+		  sitting there as a frozen, fully-opaque photograph while a sheet slid
+		  over it: a slide deck, not navigation. Now both pages move — the old
+		  one accelerates out underneath while the new one eases in over it — and
+		  the header is pulled out of the root snapshot so the nav bar holds still
+		  and only page content appears to move.
+
+		  Direction-aware reversal was tried and dropped: Chrome does not fire a
+		  `navigate` event for browser-initiated traversals, so back/forward
+		  could not be detected reliably. This push is always forward.
+
+		  Kept inline (is:inline) rather than in the component <style> because
+		  Astro extracts that to an external stylesheet, and a transition whose
+		  rules have not loaded yet falls back to the UA crossfade.
+		*/}
+		<style is:inline>
+			@view-transition {
+				navigation: auto;
+			}
+			::view-transition-old(root) {
+				animation: vt-out 200ms cubic-bezier(0.4, 0, 1, 1) both;
+			}
+			::view-transition-new(root) {
+				animation: vt-in 340ms cubic-bezier(0.22, 1, 0.36, 1) both;
+			}
+			/* The old page drifts back and fades — it is leaving, not covered. */
+			@keyframes vt-out {
+				to {
+					transform: translateX(-2.5%);
+					opacity: 0;
+				}
+			}
+			/* The new page arrives from the right on a strong ease-out: fast off
+			   the line, soft landing. Longer than the exit so the two overlap and
+			   read as one gesture rather than two queued steps. */
+			@keyframes vt-in {
+				from {
+					transform: translateX(100%);
+				}
+			}
+			/* The header is a persistent landmark, not page content. */
+			::view-transition-group(site-header) {
+				animation: none;
+			}
+			::view-transition-old(site-header),
+			::view-transition-new(site-header) {
+				animation: none;
+			}
+			@media (prefers-reduced-motion: reduce) {
+				::view-transition-group(*),
+				::view-transition-old(*),
+				::view-transition-new(*) {
+					animation: none !important;
+				}
+			}
+		</style>
 		<link rel="alternate" type="application/rss+xml" title="Prit's Den" href={new URL("/rss.xml", site).href} />
 	</head>
 	<body>
 		<ScrollProgress />
+		<Reveal />
 		<slot />
 		<CommandPalette />
 		<BackToTop />
@@ -95,9 +158,6 @@ const socialImageURL = new URL(image, site);
 		background-color: var(--main-bg);
 		font-family: "Space Grotesk", sans-serif;
 		scroll-behavior: smooth;
-	}
-	@view-transition {
-		navigation: auto;
 	}
 </style>
 <script is:inline>

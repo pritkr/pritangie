@@ -43,22 +43,22 @@ const testimonials = [
 
 
 <section>
-    <div class="max-w-4xl mx-auto pb-20 px-10 overflow-hidden">
+    <div class="max-w-4xl mx-auto pb-12 px-10 overflow-hidden">
       <div class="grid grid-cols-1 md:grid-cols-2">
         <div class="flex relative">
-          <h1 class="text-3xl">People that tolerate me</h1>
-          <img src={svgNew.src} alt="arrow" width="40" class="absolute -right-3 md:-right-10 bottom-0" />
+          <h2 class="text-3xl">People that tolerate me</h2>
+          <img src={svgNew.src} alt="" width="40" class="absolute -right-3 md:-right-10 bottom-0" />
         </div>
       </div>
-  
-  
-      <div class="grid grid-cols-1 md:grid-cols-2 py-30">
-        {testimonials.map(item => ( 
-          <div class={`flex flex-col gap-3 p-5 pr-15 bg-white border-2 shadow-[6px_6px_0px_rgba(0,0,0,0.3)] ${item.cls}`}>
+
+
+      <div class="grid grid-cols-1 md:grid-cols-2 py-24">
+        {testimonials.map(item => (
+          <div data-reveal class={`flex flex-col gap-3 p-5 pr-15 bg-white border-2 shadow-[6px_6px_0px_rgba(0,0,0,0.3)] ${item.cls}`}>
             <p>{item.comment}</p>
             <div class="flex items-center gap-2">
               <div><div class="size-11 rounded-full border overflow-hidden">
-                  <img src={item.author.pic} alt={`${item.author.name} avatar`} class="w-full h-full object-cover" />
+                  <img src={item.author.pic} alt={`${item.author.name} avatar`} width="44" height="44" loading="lazy" class="w-full h-full object-cover" />
               </div></div>
               <div>
                 <h3 class="font-medium">{item.author.name}</h3>

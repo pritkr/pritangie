@@ -9,4 +9,32 @@
 
 @import "tailwindcss";
 
+@theme {
+  /* Motion tokens — added by plans/010, see AUDIT.md §2 */
+  --default-transition-duration: 150ms;
+  --default-transition-timing-function: cubic-bezier(0.23, 1, 0.32, 1); /* --ease-out: strong ease-out for UI */
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1); /* iOS-like drawer curve */
+}
 
+/* plans/015 — one global reduced-motion gate. Reduced motion means *fewer and
+   gentler* animations, not zero: the transition property list is narrowed to
+   colour/opacity-class properties so movement snaps but feedback still reads.
+   Animations collapse to a single 1ms frame, which lands `both`-filled entrance
+   animations (plans 017/018) on their final state instantly. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto !important;
+  }
+  *,
+  *::before,
+  *::after {
+    transition-property: opacity, color, background-color, border-color,
+      box-shadow, text-decoration-color, outline-color, fill, stroke !important;
+    transition-duration: 150ms !important;
+    animation-duration: 1ms !important;
+    animation-delay: 0ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}

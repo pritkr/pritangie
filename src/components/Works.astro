@@ -4,59 +4,13 @@ import Bars from "./Bars.astro";
 import svgUnderline from "../assets/underline.svg";
 import arrowCard from "../assets/arrow-card.svg";
 
+// Ordered oldest -> newest. No project carries a date, so the order is
+// inferred: Predirect is the flagship (270+ stars, longest-running, and the
+// project the site is built around), BEU Connect an established standalone
+// portal; the four carrying case studies are the most recent body of work;
+// listbrew and chaind are current - chaind is in the hero's "building" chip.
+// This one array drives both the homepage rail and /projects.
 const portfolio = [
-  {
-    name: "sentinel-mcp",
-    desc: `Zero-overhead capability-gated security reverse proxy and taint guard for the Model Context Protocol (MCP) in Go. Sandboxes tool calls, stops SSRF & credential leakage.`,
-    role: "Creator & Maintainer",
-    outcome: "Go · <0.18ms latency · MCP Guard",
-    repo: "pritkr/sentinel-mcp",
-    fallbackStars: 42,
-    cover: "/assets/predirectpreview.avif",
-    link: "https://github.com/pritkr/sentinel-mcp",
-    externalLabel: "Repository",
-    caseStudy: "/projects/sentinel-mcp",
-    meta: "Go · AI Security · MCP",
-  },
-  {
-    name: "dhvani-eval",
-    desc: `Telephony-grade streaming audio evaluation and acoustic degradation harness for Indic voice AI (Hindi, Maithili, Bhojpuri, code-mixed Hinglish).`,
-    role: "Creator",
-    outcome: "8kHz Telephony Sim & Indic WER",
-    repo: "pritkr/dhvani-eval",
-    fallbackStars: 35,
-    cover: "/assets/beuconnect-preview.png",
-    link: "https://github.com/pritkr/dhvani-eval",
-    externalLabel: "Repository",
-    caseStudy: "/projects/dhvani-eval",
-    meta: "Python · Voice AI · Indic Speech",
-  },
-  {
-    name: "pebble-sync",
-    desc: `Ultra-compact, zero-dependency offline-first CRDT sync engine with Merkle clocks & cryptographic audit trails for edge and rural PWAs.`,
-    role: "Creator",
-    outcome: "Delta Merkle Sync · Zero-Dep",
-    repo: "pritkr/pebble-sync",
-    fallbackStars: 58,
-    cover: "/assets/beuconnect-preview.png",
-    link: "https://github.com/pritkr/pebble-sync",
-    externalLabel: "Repository",
-    caseStudy: "/projects/pebble-sync",
-    meta: "TypeScript · Distributed Systems",
-  },
-  {
-    name: "spec-forge",
-    desc: `Autonomous agentic code verification and AST-preserving mutation testing engine. Hunts regressions in LLM-generated code by synthesizing invariant tests.`,
-    role: "Creator",
-    outcome: "AST Mutator & Test Synthesis",
-    repo: "pritkr/spec-forge",
-    fallbackStars: 49,
-    cover: "/assets/predirectpreview.avif",
-    link: "https://github.com/pritkr/spec-forge",
-    externalLabel: "Repository",
-    caseStudy: "/projects/spec-forge",
-    meta: "Python · AST · Agentic AI",
-  },
   {
     name: "Predirect",
     desc: `One install kills the tracking — 30+ tracked sites (YouTube, X, Reddit, Google…) rewritten to privacy-friendly frontends.`,
@@ -81,15 +35,56 @@ const portfolio = [
     meta: "HTML · CSS · JS",
   },
   {
-    name: "chaind",
-    desc: `Your messages never leave your machine — a daemon that bridges Telegram, Matrix & WhatsApp to local AI agents over a permission-gated Unix socket.`,
-    role: "Co-built with fossism",
-    outcome: "AGPL-3.0 · bridges 3 messengers",
-    repo: "fossism/chaind-cli",
-    cover: "https://img.youtube.com/vi/zMO8yXD-v0Q/maxresdefault.jpg",
-    link: "https://github.com/fossism/chaind-cli",
+    name: "spec-forge",
+    desc: `Autonomous agentic code verification and AST-preserving mutation testing engine. Hunts regressions in LLM-generated code by synthesizing invariant tests.`,
+    role: "Creator",
+    outcome: "AST Mutator & Test Synthesis",
+    repo: "pritkr/spec-forge",
+    fallbackStars: 49,
+    cover: "/assets/predirectpreview.avif",
+    link: "https://github.com/pritkr/spec-forge",
     externalLabel: "Repository",
-    meta: "Go",
+    caseStudy: "/projects/spec-forge",
+    meta: "Python · AST · Agentic AI",
+  },
+  {
+    name: "pebble-sync",
+    desc: `Ultra-compact, zero-dependency offline-first CRDT sync engine with Merkle clocks & cryptographic audit trails for edge and rural PWAs.`,
+    role: "Creator",
+    outcome: "Delta Merkle Sync · Zero-Dep",
+    repo: "pritkr/pebble-sync",
+    fallbackStars: 58,
+    cover: "/assets/beuconnect-preview.png",
+    link: "https://github.com/pritkr/pebble-sync",
+    externalLabel: "Repository",
+    caseStudy: "/projects/pebble-sync",
+    meta: "TypeScript · Distributed Systems",
+  },
+  {
+    name: "dhvani-eval",
+    desc: `Telephony-grade streaming audio evaluation and acoustic degradation harness for Indic voice AI (Hindi, Maithili, Bhojpuri, code-mixed Hinglish).`,
+    role: "Creator",
+    outcome: "8kHz Telephony Sim & Indic WER",
+    repo: "pritkr/dhvani-eval",
+    fallbackStars: 35,
+    cover: "/assets/beuconnect-preview.png",
+    link: "https://github.com/pritkr/dhvani-eval",
+    externalLabel: "Repository",
+    caseStudy: "/projects/dhvani-eval",
+    meta: "Python · Voice AI · Indic Speech",
+  },
+  {
+    name: "sentinel-mcp",
+    desc: `Zero-overhead capability-gated security reverse proxy and taint guard for the Model Context Protocol (MCP) in Go. Sandboxes tool calls, stops SSRF & credential leakage.`,
+    role: "Creator & Maintainer",
+    outcome: "Go · <0.18ms latency · MCP Guard",
+    repo: "pritkr/sentinel-mcp",
+    fallbackStars: 42,
+    cover: "/assets/predirectpreview.avif",
+    link: "https://github.com/pritkr/sentinel-mcp",
+    externalLabel: "Repository",
+    caseStudy: "/projects/sentinel-mcp",
+    meta: "Go · AI Security · MCP",
   },
   {
     name: "listbrew",
@@ -102,33 +97,68 @@ const portfolio = [
     externalLabel: "Repository",
     meta: "Python · Frappe",
   },
+  {
+    name: "chaind",
+    desc: `Your messages never leave your machine — a daemon that bridges Telegram, Matrix & WhatsApp to local AI agents over a permission-gated Unix socket.`,
+    role: "Co-built with fossism",
+    outcome: "AGPL-3.0 · bridges 3 messengers",
+    repo: "fossism/chaind-cli",
+    cover: "https://img.youtube.com/vi/zMO8yXD-v0Q/maxresdefault.jpg",
+    link: "https://github.com/fossism/chaind-cli",
+    externalLabel: "Repository",
+    meta: "Go",
+  },
 ];
+
+// "My Works" is the page <h1> on /projects but a section <h2> on the homepage.
+const { headingLevel: Heading = "h2" } = Astro.props;
 ---
 
-<section class="py-25 space-y-10 px-5" id="work">
-  <div class="max-w-md mx-auto relative">
-    <h1 class="text-4xl font-medium text-center">My Works</h1>
-    <img
-      src={svgUnderline.src}
-      alt="arrow"
-      width="140"
-      class="absolute left-50 -bottom-1"
-    />
-  </div>
+<section class="py-16 sm:py-20 px-5" id="work">
+  <div class="max-w-4xl mx-auto">
+    <div class="mb-8 flex items-end justify-between gap-6">
+      <Heading class="relative inline-block text-4xl font-medium">
+        My Works
+        <img
+          src={svgUnderline.src}
+          alt=""
+          width="140"
+          class="absolute left-1/2 -translate-x-1/2 -bottom-1"
+        />
+      </Heading>
 
-  <div class="max-w-4xl mx-auto relative">
-    <button
-      id="rail-prev"
-      aria-label="Previous projects"
-      class="hidden md:flex absolute -left-4 top-1/2 -translate-y-1/2 z-10 size-11 items-center justify-center bg-white border-3 border-black text-xl font-bold shadow-[3px_3px_0_#000]"
-    >
-      ←
-    </button>
-    <div class="works-rail flex gap-6 overflow-x-auto snap-x snap-mandatory px-1 py-4">
+      <div class="hidden md:flex gap-3">
+        <button
+          id="rail-prev"
+          type="button"
+          aria-label="Previous projects"
+          class="size-11 flex items-center justify-center bg-white border-3 border-black text-xl font-bold shadow-[3px_3px_0_#000] transition-[translate,scale,box-shadow] duration-150 enabled:hover:-translate-y-0.5 active:scale-[0.95] active:shadow-[1px_1px_0_#000] disabled:opacity-40 disabled:shadow-none disabled:cursor-not-allowed"
+        >
+          ←
+        </button>
+        <button
+          id="rail-next"
+          type="button"
+          aria-label="Next projects"
+          class="size-11 flex items-center justify-center bg-white border-3 border-black text-xl font-bold shadow-[3px_3px_0_#000] transition-[translate,scale,box-shadow] duration-150 enabled:hover:-translate-y-0.5 active:scale-[0.95] active:shadow-[1px_1px_0_#000] disabled:opacity-40 disabled:shadow-none disabled:cursor-not-allowed"
+        >
+          →
+        </button>
+      </div>
+    </div>
+
+    <div class="relative">
+      <div
+        class="works-rail flex gap-6 overflow-x-auto snap-x snap-mandatory py-4"
+        tabindex="0"
+        role="group"
+        aria-label="Project carousel, scrollable"
+      >
       {
         portfolio.map((item) => (
           <article
-            class="group w-[300px] sm:w-[340px] shrink-0 snap-start flex flex-col bg-white border-2 border-black p-5 relative transition-all duration-200 hover:shadow-[4px_4px_0px_rgba(0,0,0,0.3)]"
+            data-reveal
+            class="group w-[300px] sm:w-[340px] shrink-0 snap-start flex flex-col bg-white border-2 border-black p-5 relative transition-shadow duration-200 hover:shadow-[4px_4px_0px_rgba(0,0,0,0.3)]"
           >
             <div class="h-[160px] overflow-hidden bg-[#eef0f2] border-2">
               <img
@@ -141,7 +171,7 @@ const portfolio = [
             <div class="flex flex-col gap-1 pt-4 flex-1">
               <div class="flex pr-2">
                 <h2 class="text-xl font-medium flex-1">{item.name}</h2>
-                <img src={arrowCard.src} alt="arrow" width="25" />
+                <img src={arrowCard.src} alt="" width="25" />
               </div>
               <p class="text-sm">{item.desc}</p>
               {item.role && (
@@ -152,7 +182,6 @@ const portfolio = [
               {(item as { repo?: string; fallbackStars?: number }).repo && (
                 <p class="mt-1 inline-flex w-fit items-center gap-2 border-2 border-black bg-[#fefff0] px-2 py-0.5 text-xs font-bold">
                   <span class="relative flex size-2">
-                    <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-500 opacity-75"></span>
                     <span class="relative inline-flex size-2 rounded-full bg-green-600"></span>
                   </span>
                   <span
@@ -167,7 +196,6 @@ const portfolio = [
                       ? `★ ${(item as { fallbackStars: number }).fallbackStars} on GitHub`
                       : "★ live on GitHub"}
                   </span>
-                  <span class="font-normal text-gray-500" data-gh-updated style="display:none"></span>
                 </p>
               )}
               {item.meta && (
@@ -198,14 +226,23 @@ const portfolio = [
           </article>
         ))
       }
+      </div>
+
+      <!-- edge fades: signal that the rail scrolls. Shown only on the side
+           that actually has more cards (toggled by the script below). -->
+      <div
+        class="pointer-events-none absolute inset-y-0 left-0 w-14 bg-gradient-to-r from-[var(--main-bg)] to-transparent opacity-0 transition-opacity duration-200 data-[active]:opacity-100"
+        data-rail-fade="start"
+        aria-hidden="true"
+      >
+      </div>
+      <div
+        class="pointer-events-none absolute inset-y-0 right-0 w-14 bg-gradient-to-l from-[var(--main-bg)] to-transparent opacity-0 transition-opacity duration-200 data-[active]:opacity-100"
+        data-rail-fade="end"
+        aria-hidden="true"
+      >
+      </div>
     </div>
-    <button
-      id="rail-next"
-      aria-label="Next projects"
-      class="hidden md:flex absolute -right-4 top-1/2 -translate-y-1/2 z-10 size-11 items-center justify-center bg-white border-3 border-black text-xl font-bold shadow-[3px_3px_0_#000]"
-    >
-      →
-    </button>
   </div>
 </section>
 
@@ -216,21 +253,55 @@ const portfolio = [
   .works-rail::-webkit-scrollbar {
     display: none;
   }
+  .works-rail:focus-visible {
+    outline: 3px solid #000;
+    outline-offset: 4px;
+  }
 </style>
 
 <script>
   const rail = document.querySelector(".works-rail")!;
+  const prev = document.getElementById("rail-prev") as HTMLButtonElement;
+  const next = document.getElementById("rail-next") as HTMLButtonElement;
   const step = () =>
     window.matchMedia("(prefers-reduced-motion: reduce)").matches
       ? "auto"
       : "smooth";
 
-  document.getElementById("rail-prev")!.addEventListener("click", () =>
-    rail.scrollBy({ left: -360, behavior: step() }),
+  // Scroll one "page" = one card + gap, so the last card lands flush-left.
+  const pageStep = () => {
+    const card = rail.querySelector<HTMLElement>("article");
+    if (!card) return 340;
+    const gap = parseFloat(getComputedStyle(rail).columnGap) || 24;
+    return card.offsetWidth + gap;
+  };
+
+  prev.addEventListener("click", () =>
+    rail.scrollBy({ left: -pageStep(), behavior: step() }),
   );
-  document.getElementById("rail-next")!.addEventListener("click", () =>
-    rail.scrollBy({ left: 360, behavior: step() }),
+  next.addEventListener("click", () =>
+    rail.scrollBy({ left: pageStep(), behavior: step() }),
   );
+
+  // Reflect scroll position: disable the arrows that have nowhere to go, and
+  // fade only the edge that still has hidden cards behind it.
+  const fadeStart = document.querySelector<HTMLElement>('[data-rail-fade="start"]');
+  const fadeEnd = document.querySelector<HTMLElement>('[data-rail-fade="end"]');
+
+  const syncRail = () => {
+    const max = rail.scrollWidth - rail.clientWidth;
+    const atStart = rail.scrollLeft <= 1;
+    const atEnd = rail.scrollLeft >= max - 1;
+    prev.disabled = atStart;
+    next.disabled = atEnd;
+    fadeStart?.toggleAttribute("data-active", !atStart);
+    fadeEnd?.toggleAttribute("data-active", !atEnd);
+  };
+
+  rail.addEventListener("scroll", syncRail, { passive: true });
+  // Card widths are breakpoint-dependent, so re-measure on resize too.
+  window.addEventListener("resize", syncRail, { passive: true });
+  syncRail();
 
   // Live GitHub stars — client-only, cached 6h to respect rate limits.
   // Falls back to static text if offline / rate-limited (privacy: no trackers, direct GitHub API call).
@@ -257,7 +328,7 @@ const portfolio = [
       nodes
         .filter((el) => el.dataset.ghStars === repo)
         .forEach((el) => {
-          el.textContent = `★ ${fmt(stars)} on GitHub${live ? "" : ""}`;
+          el.textContent = `★ ${fmt(stars)} on GitHub`;
           el.setAttribute("title", live ? `Live from GitHub · ${repo}` : `Cached · ${repo}`);
         });
     };

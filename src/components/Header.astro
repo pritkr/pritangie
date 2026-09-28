@@ -14,18 +14,20 @@ const links = [
 
 const { pathname } = Astro.url;
 const current = pathname.replace(/\/+$/, "") || "/";
+// Only the PDF opens a new tab; internal and mailto: links must not.
+const rel = (target: string) => (target === "_blank" ? "noopener noreferrer" : undefined);
 ---
 
-<header class="relative border-b-3 p-7 overflow-hidden">
+<header class="relative border-b-3 p-7 overflow-hidden" style="view-transition-name: site-header">
     <img
         src={svgPinkStar.src}
-        alt="svg"
+        alt=""
         width="80"
         class="absolute -right-9 -top-4"
     />
     <img
         src={svgPinkStar.src}
-        alt="svg"
+        alt=""
         width="80"
         class="absolute -left-8 -bottom-5 hidden md:block"
     />
@@ -64,7 +66,7 @@ const current = pathname.replace(/\/+$/, "") || "/";
                 <button
                     type="button"
                     data-command-open
-                    class="inline-flex items-center gap-1.5 border-2 border-black bg-[var(--yellow)] px-2 py-1 font-mono text-xs font-bold"
+                    class="inline-flex items-center gap-1.5 border-2 border-black bg-[var(--yellow)] px-2 py-1 font-mono text-xs font-bold transition-transform duration-150 active:scale-[0.97]"
                     aria-label="Open PritOS command menu"
                     title="Open PritOS command menu"
                 >
@@ -82,7 +84,8 @@ const current = pathname.replace(/\/+$/, "") || "/";
                             <a
                                 href={item.path}
                                 target={item.target}
-                                class="whitespace-nowrap relative flex items-center before:absolute before:left-0 before:bottom-1 before:h-[8px] before:w-0 before:bg-[var(--yellow)] before:transition-all before:duration-300 hover:before:w-full"
+                                rel={rel(item.target)}
+                                class="whitespace-nowrap relative flex items-center before:absolute before:left-0 before:bottom-1 before:h-[8px] before:w-full before:origin-left before:scale-x-0 before:bg-[var(--yellow)] before:transition-transform before:duration-300 hover:before:scale-x-100"
                             >
                                 <span class="relative z-5">
                                     {item.name}{" "}
@@ -98,11 +101,11 @@ const current = pathname.replace(/\/+$/, "") || "/";
 </header>
 
 <div
-    class="block md:hidden fixed left-0 top-0 h-full w-full bg-white z-20 p-3 transition-all duration-300 -translate-x-[100%]"
+    class="block md:hidden fixed left-0 top-0 h-full w-full bg-white z-20 p-3 transition-transform duration-300 ease-drawer -translate-x-[100%] invisible"
     id="menu-content"
 >
     <div class="flex p-6">
-        <h3 class="flex-1 font-bold uppercase">Menu</h3>
+        <p class="flex-1 font-bold uppercase">Menu</p>
         <a href="#" id="menu-close" aria-label="Close menu">
             <i class="ri-close-line text-3xl"></i>
         </a>
@@ -114,6 +117,7 @@ const current = pathname.replace(/\/+$/, "") || "/";
                     <a
                         href={item.path}
                         target={item.target}
+                        rel={rel(item.target)}
                         class="p-3 whitespace-nowrap text-2xl font-bold"
                     >
                         {item.name} {current == (item.path.replace(/\/+$/, "") || "/") ? "//" : ""}
@@ -130,20 +134,47 @@ const current = pathname.replace(/\/+$/, "") || "/";
         const menuOpen = document.querySelector("#menu-open");
         const menuClose = document.querySelector("#menu-close");
 
+        // `invisible` keeps the closed drawer's links out of the tab order.
+        // It must not be part of the transform transition (that would leave
+        // visibility stuck at `hidden` while opening), so on close we wait
+        // for the slide-out to finish before applying it.
+        const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+        const setOpen = (open: boolean) => {
+            if (!menuContent) return;
+            if (open) {
+                menuContent.classList.remove("invisible");
+                menuContent.classList.remove("-translate-x-[100%]");
+                return;
+            }
+            menuContent.classList.add("-translate-x-[100%]");
+            const hide = () => {
+                menuContent.classList.add("invisible");
+                menuContent.removeEventListener("transitionend", hide);
+            };
+            if (reduceMotion) hide();
+            else menuContent.addEventListener("transitionend", hide);
+        };
+
         menuOpen?.addEventListener("click", (e) => {
             e.preventDefault();
-            menuContent?.classList.remove("-translate-x-[100%]");
+            setOpen(true);
         });
 
         menuClose?.addEventListener("click", (e) => {
             e.preventDefault();
-            menuContent?.classList.add("-translate-x-[100%]");
+            setOpen(false);
         });
 
         menuContent?.querySelectorAll("li a").forEach((item) => {
-            item.addEventListener("click", (e) => {
-                menuContent?.classList.add("-translate-x-[100%]");
-            });
+            item.addEventListener("click", () => setOpen(false));
+        });
+
+        document.addEventListener("keydown", (e) => {
+            if (e.key === "Escape" && !menuContent?.classList.contains("invisible")) {
+                setOpen(false);
+                (menuOpen as HTMLElement | null)?.focus();
+            }
         });
     });
 </script>

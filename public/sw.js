@@ -22,19 +22,40 @@ self.addEventListener('fetch', (event) => {
 
   event.respondWith(
     caches.open(CACHE).then(async (cache) => {
-      try {
-        const cached = await cache.match(request);
-        const network = fetch(request)
-          .then((resp) => {
-            if (resp && resp.ok) cache.put(request, resp.clone());
-            return resp;
-          })
-          .catch(() => cached);
+      // Documents: network-first. Serving cached HTML for navigations meant a
+      // returning visitor never saw a redeploy until they visited twice — the
+      // cache is now only an offline fallback, never the source of truth.
+      if (request.mode === 'navigate') {
+        try {
+          const fresh = await fetch(request);
+          if (fresh && fresh.ok) cache.put(request, fresh.clone());
+          return fresh;
+        } catch {
+          const cached = await cache.match(request);
+          if (cached) return cached;
+          throw new Error('offline and no cached page');
+        }
+      }
 
-        if (request.mode === 'navigate' && cached) return cached;
-        return cached || network;
+      // Static same-origin assets: cache-first, revalidate in the background.
+      const cached = await cache.match(request);
+      if (cached) {
+        event.waitUntil(
+          fetch(request)
+            .then((resp) => {
+              if (resp && resp.ok) cache.put(request, resp.clone());
+            })
+            .catch(() => {})
+        );
+        return cached;
+      }
+
+      try {
+        const fresh = await fetch(request);
+        if (fresh && fresh.ok) cache.put(request, fresh.clone());
+        return fresh;
       } catch {
-        return fetch(request);
+        throw new Error('offline and not cached');
       }
     })
   );

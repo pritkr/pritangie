@@ -29,3 +29,9 @@ pnpm-debug.log*
 # git clones of the published project repos, created by scripts/publish_repos.sh
 /.publish-stage/
 /repos/
+
+# personal documents that must never land in the public repo
+/resume/reliance-bill/
+
+# scratch exports (e.g. image-generator output) — keep out of the repo
+/ChatGPT Image *.png

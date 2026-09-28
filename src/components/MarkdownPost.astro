@@ -36,9 +36,9 @@ const older = currentIdx >= 0 && currentIdx < posts.length - 1 ? posts[currentId
 <section class="mb-30 p-3">
     <div class="max-w-3xl mx-auto p-3 bg-white flex flex-col gap-7 border-3 mt-10">
         {frontmatter.image?.url && (
-            <img src={frontmatter.image.url} alt={frontmatter.image.alt ?? "Post cover image"} class="w-full max-h-[380px] object-cover border-2" loading="eager" />
+            <img src={frontmatter.image.url} alt={frontmatter.image.alt ?? "Post cover image"} width="1200" height="630" class="w-full max-h-[380px] object-cover border-2" loading="eager" />
         )}
-        <h1 class="title text-4xl font-black">{frontmatter.title}</h1>
+        <h1 class="text-4xl font-black">{frontmatter.title}</h1>
 
         <div class="flex flex-col">
             <div class="flex border-t border-b border-gray-100 mb-5 py-4">
@@ -55,13 +55,13 @@ const older = currentIdx >= 0 && currentIdx < posts.length - 1 ? posts[currentId
         {(newer || older) && (
             <nav class="grid grid-cols-1 sm:grid-cols-2 gap-4 border-t-2 border-black pt-6 mt-10" aria-label="More posts">
                 {newer ? (
-                    <a href={newer.url} class="p-4 border-2 border-black hover:shadow-[4px_4px_0px_rgba(0,0,0,0.3)] transition-all duration-200">
+                    <a href={newer.url} class="p-4 border-2 border-black hover:shadow-[4px_4px_0px_rgba(0,0,0,0.3)] transition-shadow duration-200">
                         <p class="text-xs uppercase tracking-wider text-black">Newer</p>
                         <h3 class="font-bold line-clamp-2">{newer.frontmatter.title}</h3>
                     </a>
                 ) : <span></span>}
                 {older ? (
-                    <a href={older.url} class="p-4 border-2 border-black sm:text-right hover:shadow-[4px_4px_0px_rgba(0,0,0,0.3)] transition-all duration-200">
+                    <a href={older.url} class="p-4 border-2 border-black sm:text-right hover:shadow-[4px_4px_0px_rgba(0,0,0,0.3)] transition-shadow duration-200">
                         <p class="text-xs uppercase tracking-wider text-black">Older</p>
                         <h3 class="font-bold line-clamp-2">{older.frontmatter.title}</h3>
                     </a>

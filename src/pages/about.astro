@@ -7,11 +7,14 @@ import WorkshopBooking from "../components/WorkshopBooking.astro";
 import { author } from "../sample";
 ---
 
-<Layout title="About Prit/Me">
+<Layout
+  title="About Prit"
+  description="Prit Kumar — B.Tech CSE undergrad at Bihar Engineering University building privacy-first open source software and FOSS communities."
+>
     <Header />
 
     <!-- Background same as Hero section gradient -->
-    <section class="relative py-24 sm:py-32 overflow-hidden">
+    <section class="relative pt-16 pb-10 sm:pt-24 sm:pb-14 overflow-hidden">
         <div class="max-w-5xl mx-auto px-6 lg:px-8">
             <!-- Title -->
             <div class="text-center mb-16">
@@ -103,12 +106,12 @@ import { author } from "../sample";
             </div>
 
             <!-- Contact Buttons -->
-            <div class="flex flex-wrap justify-center gap-5 mt-16">
+            <div class="flex flex-wrap justify-center gap-5 mt-12">
                 <a
                     href="https://github.com/pritkr"
                     target="_blank"
                     rel="noopener noreferrer"
-                    class="inline-block px-6 py-3 rounded-full bg-[#BEE7FF] border border-black text-black font-medium hover:translate-y-[-2px] transition-transform duration-200 shadow-[2px_2px_0_#000]"
+                    class="inline-block px-6 py-3 rounded-full bg-[#BEE7FF] border border-black text-black font-medium hover:translate-y-[-2px] transition-[translate,box-shadow] duration-150 active:translate-y-0.5 active:shadow-[1px_1px_0_#000] shadow-[2px_2px_0_#000]"
                 >
                     <i class="ri-github-fill text-lg mr-2"></i> GitHub
                 </a>
@@ -117,14 +120,14 @@ import { author } from "../sample";
                     href="https://linkedin.com/in/prit-kumar"
                     target="_blank"
                     rel="noopener noreferrer"
-                    class="inline-block px-6 py-3 rounded-full bg-[#BEE7FF] border border-black text-black font-medium hover:translate-y-[-2px] transition-transform duration-200 shadow-[2px_2px_0_#000]"
+                    class="inline-block px-6 py-3 rounded-full bg-[#BEE7FF] border border-black text-black font-medium hover:translate-y-[-2px] transition-[translate,box-shadow] duration-150 active:translate-y-0.5 active:shadow-[1px_1px_0_#000] shadow-[2px_2px_0_#000]"
                 >
                     <i class="ri-linkedin-box-fill text-lg mr-2"></i> LinkedIn
                 </a>
 
                 <a
                     href={author.email}
-                    class="inline-block px-6 py-3 rounded-full bg-[#BEE7FF] border border-black text-black font-medium hover:translate-y-[-2px] transition-transform duration-200 shadow-[2px_2px_0_#000]"
+                    class="inline-block px-6 py-3 rounded-full bg-[#BEE7FF] border border-black text-black font-medium hover:translate-y-[-2px] transition-[translate,box-shadow] duration-150 active:translate-y-0.5 active:shadow-[1px_1px_0_#000] shadow-[2px_2px_0_#000]"
                 >
                     <i class="ri-mail-line text-lg mr-2"></i> Email
                 </a>

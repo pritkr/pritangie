@@ -51,7 +51,7 @@ const services = [
 <section class="relative px-3 md:px-10 overflow-hidden">
   <img
     src={svgPinkStar.src}
-    alt="svg"
+    alt=""
     width="80"
     class="absolute -right-8 bottom-0"
   />
@@ -59,9 +59,9 @@ const services = [
   <div class="max-w-4xl mx-auto">
     <div class="grid grid-cols-1 md:grid-cols-[60%_40%] py-10 relative">
       <div class="flex items-end">
-        <h1 class="text-4xl">
+        <h2 class="text-4xl">
           Something about me & this site
-        </h1>
+        </h2>
         <svg
           class="size-20"
           viewBox="0 0 37 35"
@@ -87,8 +87,8 @@ const services = [
       >
         {
           stats.map((item) => (
-            <div class="flex flex-col p-3 md:p-6  md:border-b-2 last:border-none">
-              <h1 class="text-2xl font-medium">{item.value}</h1>
+            <div class="flex flex-col p-3 md:p-6  md:border-b-2 last:md:border-b-0">
+              <p class="text-2xl font-medium">{item.value}</p>
               <p class="text-sm">{item.name}</p>
             </div>
           ))

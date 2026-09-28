@@ -1,7 +1,7 @@
 ---
 interface Props {
   email?: string;
-  variant?: "yellow" | "blue" | "icon";
+  variant?: "yellow" | "blue" | "outline" | "icon";
   label?: string;
 }
 
@@ -11,12 +11,17 @@ const {
   label = "Copy email",
 } = Astro.props;
 
+// `outline` mirrors Button.astro's pill geometry exactly (h-12 px-6 border-3
+// rounded-full) and differs only in fill, so a copy button placed beside a
+// primary CTA reads as its secondary rather than a mismatched twin.
 const styles =
   variant === "icon"
-    ? "size-10 inline-flex items-center justify-center bg-white border-2 border-black shadow-[2px_2px_0_#000] hover:-translate-y-0.5 transition-transform"
-    : variant === "blue"
-      ? "inline-flex items-center gap-2 px-6 py-3 bg-[#BEE7FF] border-2 border-black text-black font-bold hover:-translate-y-0.5 transition-transform shadow-[3px_3px_0_#000]"
-      : "inline-flex items-center gap-2 px-6 py-3 bg-[var(--yellow)] border-2 border-black text-black font-bold hover:-translate-y-0.5 transition-transform shadow-[3px_3px_0_#000]";
+    ? "size-10 inline-flex items-center justify-center bg-white border-2 border-black shadow-[2px_2px_0_#000] hover:-translate-y-0.5 transition-[translate,box-shadow] duration-150 active:translate-y-0.5 active:shadow-[1px_1px_0_#000]"
+    : variant === "outline"
+      ? "h-12 inline-flex items-center gap-2 px-6 rounded-full bg-white border-3 border-black text-black font-medium shadow-[3px_3px_0_#000] hover:-translate-y-0.5 transition-[translate,box-shadow] duration-150 active:translate-y-0.5 active:shadow-[1px_1px_0_#000]"
+      : variant === "blue"
+        ? "inline-flex items-center gap-2 px-6 py-3 bg-[#BEE7FF] border-2 border-black text-black font-bold hover:-translate-y-0.5 transition-[translate,box-shadow] duration-150 active:translate-y-0.5 active:shadow-[1px_1px_0_#000] shadow-[3px_3px_0_#000]"
+        : "inline-flex items-center gap-2 px-6 py-3 bg-[var(--yellow)] border-2 border-black text-black font-bold hover:-translate-y-0.5 transition-[translate,box-shadow] duration-150 active:translate-y-0.5 active:shadow-[1px_1px_0_#000] shadow-[3px_3px_0_#000]";
 ---
 
 <button
@@ -27,7 +32,12 @@ const styles =
   title={`Copy ${email} to clipboard`}
 >
   <i class="ri-file-copy-line text-lg" aria-hidden="true"></i>
-  <span data-copy-label>{variant === "icon" ? "" : label}</span>
+  <span
+    data-copy-label
+    class={variant === "icon" ? "" : "inline-block min-w-[11ch] text-left"}
+  >
+    {variant === "icon" ? "" : label}
+  </span>
 </button>
 
 <script>
@@ -41,6 +51,25 @@ const styles =
         const labelEl = btn.querySelector("[data-copy-label]");
         const original = labelEl?.textContent ?? "";
         const isIconOnly = (btn as HTMLElement).dataset.copyEmail !== undefined && !labelEl?.textContent;
+
+        // plans/016 — the label hard-swapped in one frame, and because
+        // "Copied!" / "Copy failed" are shorter than the label the bordered
+        // button resized twice. min-w-[11ch] reserves the width; swapLabel
+        // animates the change so it reads as a state change, not a teleport.
+        const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        const swapLabel = (text: string) => {
+          if (!labelEl) return;
+          labelEl.textContent = text;
+          if (!reduceMotion && labelEl.animate) {
+            labelEl.animate(
+              [
+                { opacity: 0, transform: "translateY(6px)" },
+                { opacity: 1, transform: "translateY(0)" },
+              ],
+              { duration: 160, easing: "cubic-bezier(0.23, 1, 0.32, 1)" },
+            );
+          }
+        };
 
         async function copy(text: string): Promise<boolean> {
           try {
@@ -67,10 +96,8 @@ const styles =
 
         const ok = await copy(email);
         if (labelEl && !isIconOnly) {
-          labelEl.textContent = ok ? "Copied!" : "Copy failed";
-          setTimeout(() => {
-            labelEl.textContent = original;
-          }, 2000);
+          swapLabel(ok ? "Copied!" : "Copy failed");
+          setTimeout(() => swapLabel(original), 2000);
         } else {
           // Icon-only buttons: brief visual confirmation via title + scale
           (btn as HTMLElement).style.transform = "translateY(-2px)";
