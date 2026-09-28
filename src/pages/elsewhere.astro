@@ -6,36 +6,22 @@ import Footer from "../components/Footer.astro";
 import svgUnderline from "../assets/underline.svg";
 import svgPinkStar from "../assets/pink-star.svg";
 import { author } from "../sample";
+import { instagramPosts } from "../data/instagram";
 
 /*
-  Everything else I make or hang out in, grouped by what it is rather than
-  dumped in one icon row. Every URL below already appears somewhere in the
-  repo — nothing here is invented.
+  Posts are served from this site, not embedded from Instagram.
 
-  RECENT INSTAGRAM POSTS
-  ----------------------
-  Instagram has no public read API any more (Basic Display deprecated Dec 2024,
-  oEmbed gone, Graph API only covers a professional account you own, and there
-  is no CORS), so the feed cannot be fetched from a browser. Drop a file at
-  `src/data/instagram.json` to light the grid up; without it the block renders
-  as a plain follow card. Shape:
+  Images live in `public/ig/` and are listed in `src/data/instagram.ts`, so the
+  grid is plain static files: no third-party iframe, no cookies, no Instagram
+  script, and the page's "no trackers · no cookies" claim stays true. Fetching
+  them from Instagram at build time would mean hitting an API that no longer
+  exists for this, so they are downloaded once by hand and committed.
 
-    [
-      {
-        "permalink": "https://www.instagram.com/p/…",
-        "caption": "short caption",
-        "image": "https://…/photo.jpg"
-      }
-    ]
-
-  `import.meta.glob` does not fail on a missing match, so the page builds
-  either way. Whatever produces that file (a Meta Graph API call from a build
-  step, or a hosted feed service's JSON) just has to write it.
+  `bun run ig:sync` does that download (see the script) if you'd rather not
+  move files by hand. The grid disappears cleanly when there are no posts —
+  the page never advertises a missing feature.
 */
-const feedFiles = import.meta.glob("../data/instagram*.json", { eager: true });
-const firstFeed = Object.values(feedFiles)[0] as { default?: unknown } | undefined;
-const igPosts: { permalink: string; caption?: string; image?: string }[] =
-  firstFeed && Array.isArray(firstFeed.default) ? firstFeed.default : [];
+const posts = instagramPosts.filter((p) => p.image);
 
 const groups = [
   {
@@ -221,45 +207,30 @@ const groups = [
         </div>
 
         {
-          igPosts.length > 0 ? (
-            <ul class="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-4">
-              {igPosts.map((post) => (
+          posts.length > 0 && (
+            <ul class="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-3">
+              {posts.map((post) => (
                 <li data-reveal>
                   <a
                     href={post.permalink}
                     target="_blank"
                     rel="noopener noreferrer"
                     class="group block border-2 border-black transition-shadow duration-200 hover:shadow-[4px_4px_0_#000]"
+                    title={post.caption ?? "Open on Instagram"}
                   >
-                    {post.image && (
-                      <img
-                        src={post.image}
-                        alt={post.caption ?? "Instagram post"}
-                        loading="lazy"
-                        class="aspect-square w-full object-cover"
-                      />
-                    )}
-                    {post.caption && (
-                      <p class="line-clamp-2 p-2 text-xs">{post.caption}</p>
-                    )}
+                    <img
+                      src={post.image}
+                      alt={post.caption ?? "Instagram post"}
+                      width="400"
+                      height="400"
+                      loading="lazy"
+                      decoding="async"
+                      class="aspect-square w-full object-cover"
+                    />
                   </a>
                 </li>
               ))}
             </ul>
-          ) : (
-            <p class="mt-6 text-sm text-black/60">
-              Recent posts aren't syndicated here — Instagram has no public
-              read API to pull them from.{" "}
-              <a
-                href={author.ig}
-                target="_blank"
-                rel="noopener noreferrer"
-                class="underline decoration-2 underline-offset-2 transition-colors duration-150 hover:bg-[var(--yellow)]"
-              >
-                See them on Instagram
-              </a>
-              .
-            </p>
           )
         }
       </div>
