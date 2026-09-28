@@ -284,6 +284,8 @@ const shotIndex = flat.map((im) => im.post);
   let p = 0; // post index
   let i = 0; // image index within the post
   let builtFor = -1;
+  /** The wall tile the viewer was opened from, so focus can go back to it. */
+  let openedFrom: HTMLButtonElement | undefined;
 
   /* The strip is rebuilt only when the post changes — not on every arrow press,
      and never 88 nodes up front. */
@@ -332,8 +334,9 @@ const shotIndex = flat.map((im) => im.post);
     paintStrip();
   }
 
-  function openPost(postIndex: number, imageIndex = 0) {
+  function openPost(postIndex: number, imageIndex = 0, from?: HTMLButtonElement) {
     p = Math.max(0, Math.min(posts.length - 1, postIndex));
+    if (from) openedFrom = from;
     show(imageIndex);
     viewer.hidden = false;
     document.body.style.overflow = "hidden";
@@ -344,8 +347,13 @@ const shotIndex = flat.map((im) => im.post);
     viewer.hidden = true;
     img.removeAttribute("src");
     document.body.style.overflow = "";
-    // By index, not document.activeElement — that misses programmatic clicks.
-    tiles[p]?.focus();
+    // Back to the tile that was actually clicked. Post navigation can leave the
+    // viewer on a different post, so the opener — not the current post — is what
+    // focus should return to. Falls back to the first tile of the current post.
+    const fallback = Number(openedFrom?.dataset.shot ?? p);
+    const target = openedFrom ?? tiles[fallback];
+    openedFrom = undefined;
+    target?.focus();
   }
 
   tiles.forEach((t) => {
@@ -354,11 +362,13 @@ const shotIndex = flat.map((im) => im.post);
       // A wall tile knows which post it belongs to; open that post on the image
       // it represents so the two agree.
       const imgIndex = t.dataset.n ? Number(t.dataset.n) : 0;
-      openPost(shot, imgIndex);
+      openPost(shot, imgIndex, t);
     });
   });
   prevBtn.addEventListener("click", () => show(i - 1));
   nextBtn.addEventListener("click", () => show(i + 1));
+  // Moving between posts does not change the opener — Esc should still land back
+  // on the photo the viewer was opened from.
   postPrev.addEventListener("click", () => openPost(p - 1, 0));
   postNext.addEventListener("click", () => openPost(p + 1, 0));
   closeBtn.addEventListener("click", close);
