@@ -37,14 +37,22 @@ const year = new Date().getFullYear()
         </div>
       </div>
 
-      <p class="mt-7 text-center text-xs">
+      <p class="mt-7 flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-center text-xs">
         <a
           href="/elsewhere"
           class="font-bold underline decoration-2 underline-offset-2 transition-colors duration-150 hover:bg-[var(--yellow)]"
         >
           Elsewhere
         </a>
-        · © {year} · Built with Astro · No trackers · No cookies · Hosted on my own terms
+        <span aria-hidden="true">·</span>
+        <a
+          href="/gallery"
+          class="underline decoration-2 underline-offset-2 transition-colors duration-150 hover:bg-[var(--yellow)]"
+        >
+          Gallery
+        </a>
+        <span aria-hidden="true">·</span>
+        <span>© {year} · Built with Astro · No trackers · No cookies</span>
       </p>
     </div>
 </footer>

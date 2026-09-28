@@ -11,6 +11,9 @@ const links = [
     { name: "About", path: "/about", target: "_self" },
     { name: "Elsewhere", path: "/elsewhere", target: "_self" },
     { name: "Contact", path: "mailto:pritform@gmail.com", target: "_self" },
+    // /gallery is deliberately NOT in the top nav: eight items squeeze the
+    // logo into the first link at the md breakpoint. It is reached from
+    // /elsewhere and the footer instead, which keeps the primary nav at seven.
 ];
 
 const { pathname } = Astro.url;

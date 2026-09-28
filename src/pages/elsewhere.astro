@@ -6,22 +6,17 @@ import Footer from "../components/Footer.astro";
 import svgUnderline from "../assets/underline.svg";
 import svgPinkStar from "../assets/pink-star.svg";
 import { author } from "../sample";
-import { instagramPosts } from "../data/instagram";
+import { galleryPosts } from "../data/gallery";
+
+const covers = galleryPosts.map((p) => p.images[0]).filter(Boolean);
 
 /*
-  Posts are served from this site, not embedded from Instagram.
-
-  Images live in `public/ig/` and are listed in `src/data/instagram.ts`, so the
-  grid is plain static files: no third-party iframe, no cookies, no Instagram
-  script, and the page's "no trackers · no cookies" claim stays true. Fetching
-  them from Instagram at build time would mean hitting an API that no longer
-  exists for this, so they are downloaded once by hand and committed.
-
-  `bun run ig:sync` does that download (see the script) if you'd rather not
-  move files by hand. The grid disappears cleanly when there are no posts —
-  the page never advertises a missing feature.
+  The Instagram block is a preview into the gallery: four covers and a link. The
+  full set lives at /gallery, which is the right place for 11 posts and 88
+  images rather than squeezing them into a section of this page.
 */
-const posts = instagramPosts.filter((p) => p.image);
+const posts = galleryPosts;
+const totalImages = galleryPosts.reduce((n, p) => n + p.images.length, 0);
 
 const groups = [
   {
@@ -208,29 +203,36 @@ const groups = [
 
         {
           posts.length > 0 && (
-            <ul class="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
-              {posts.map((post) => (
-                <li data-reveal>
-                  <a
-                    href={post.permalink}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="group block border-2 border-black transition-shadow duration-200 hover:shadow-[4px_4px_0_#000]"
-                    title={post.caption ?? "Open on Instagram"}
-                  >
-                    <img
-                      src={post.image}
-                      alt={post.caption ?? "Instagram post"}
-                      width="400"
-                      height="400"
-                      loading="lazy"
-                      decoding="async"
-                      class="aspect-square w-full object-cover object-top"
-                    />
-                  </a>
-                </li>
-              ))}
-            </ul>
+            <>
+              <ul class="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-4">
+                {covers.slice(0, 4).map((image) => (
+                  <li data-reveal>
+                    <a
+                      href="/gallery"
+                      class="group block overflow-hidden border-2 border-black transition-shadow duration-200 hover:shadow-[4px_4px_0_#000]"
+                      title="Open the gallery"
+                    >
+                      <img
+                        src={image.cover}
+                        alt={image.cover ? "Photo from the gallery" : ""}
+                        width={image.w}
+                        height={image.h}
+                        loading="lazy"
+                        decoding="async"
+                        class="aspect-square w-full object-cover object-top"
+                      />
+                    </a>
+                  </li>
+                ))}
+              </ul>
+              <a
+                href="/gallery"
+                class="mt-6 inline-flex h-11 items-center gap-2 rounded-full border-3 border-black bg-white px-5 font-medium transition-[translate,box-shadow] duration-150 hover:-translate-y-0.5 active:translate-y-0.5"
+              >
+                See all {posts.length} posts · {totalImages} photos
+                <i class="ri-arrow-right-line text-lg" aria-hidden="true" />
+              </a>
+            </>
           )
         }
       </div>

@@ -1,0 +1,384 @@
+---
+import "../styles/global.css";
+import Layout from "../layouts/Layout.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import svgUnderline from "../assets/underline.svg";
+import { author } from "../sample";
+import { galleryPosts } from "../data/gallery";
+
+/*
+  A self-hosted photo wall.
+
+  Justified rows rather than a uniform grid: every image keeps its true aspect
+  ratio, and each row is only as tall as it needs to be, so the wall has no
+  dead space and nothing is cropped. Row membership is computed here at build
+  time from the original pixel dimensions, and each image's width comes from a
+  flex-grow factor equal to its aspect ratio — so a row scales with the
+  container and every image keeps its shape at any width. No JavaScript, no
+  layout shift, and the reading order stays newest-first.
+
+  The wall uses the small `cover` files (11 of them are loaded, ~60KB each);
+  the `full` size is fetched only when the lightbox opens.
+*/
+const ROW_RATIO = 3.4; // target width/height of a row at the design container
+
+type Img = { full: string; cover: string; w: number; h: number; post: number; n: number };
+
+const flat: Img[] = [];
+galleryPosts.forEach((post, pi) => {
+  post.images.forEach((im, n) => {
+    flat.push({
+      full: im.full,
+      cover: im.cover,
+      w: im.w || 4,
+      h: im.h || 3,
+      post: pi,
+      n,
+    });
+  });
+});
+
+// Pack images into justified rows: fill a row until adding the next image
+// would exceed the target aspect budget, then start a new row.
+const rows: Img[][] = [];
+let cur: Img[] = [];
+let curW = 0;
+for (const im of flat) {
+  const r = im.w / im.h;
+  if (cur.length && curW + r > ROW_RATIO) {
+    rows.push(cur);
+    cur = [];
+    curW = 0;
+  }
+  cur.push(im);
+  curW += r;
+}
+if (cur.length) rows.push(cur);
+
+const totalImages = flat.length;
+const totalLikes = galleryPosts.reduce((n, p) => n + p.likes, 0);
+const when = new Intl.DateTimeFormat("en", { month: "short", day: "numeric", year: "numeric" });
+const handle = author.ig.replace(/\/+$/, "").split("/").pop();
+const oldest = galleryPosts[galleryPosts.length - 1]?.date ?? "";
+const newest = galleryPosts[0]?.date ?? "";
+const span =
+  oldest && newest && oldest !== newest
+    ? `${when.format(new Date(oldest))} – ${when.format(new Date(newest))}`
+    : when.format(new Date(newest));
+
+/* Payload for the viewer: grouped by post, so opening a photo shows that whole
+   post rather than a single image. `shotIndex` maps a wall tile to its post. */
+const viewerData = galleryPosts.map((post) => ({
+  date: post.date,
+  likes: post.likes,
+  permalink: post.permalink,
+  caption: post.caption,
+  videoCount: post.videoCount,
+  images: post.images.map((im) => ({ full: im.full, w: im.w, h: im.h })),
+}));
+const shotIndex = flat.map((im) => im.post);
+---
+
+<Layout
+  title="Gallery — Prit Kumar"
+  description={`${totalImages} photos from ${galleryPosts.length} posts by @${handle} on Instagram, self-hosted — hackathons, college events, travel and everything in between.`}
+>
+  <Header />
+
+  <section class="pt-12 pb-8 sm:pt-16">
+    <div class="max-w-6xl mx-auto px-4">
+      <div class="relative inline-block">
+        <h1 class="text-5xl font-black">Gallery</h1>
+        <img
+          src={svgUnderline.src}
+          alt=""
+          width="200"
+          class="absolute -bottom-3 left-0"
+        />
+      </div>
+      <p class="mt-8 max-w-2xl text-lg">
+        {totalImages} photos from {galleryPosts.length} posts by{" "}
+        <a
+          href={author.ig}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="underline decoration-2 underline-offset-2 transition-colors duration-150 hover:bg-[var(--yellow)]"
+          >@{handle}</a
+        > — {totalLikes.toLocaleString("en")} likes between them. Every image
+        is served from this site rather than embedded from Instagram. Click any
+        photo to enlarge it.
+      </p>
+      <p class="mt-3 font-mono text-sm text-black/60">{span}</p>
+    </div>
+  </section>
+
+  <section class="pb-20">
+    <div class="max-w-6xl mx-auto px-4">
+      <div data-wall class="flex flex-col gap-2">
+        {
+          rows.map((row) => (
+            <div class="flex gap-2">
+              {row.map((im) => (
+                <button
+                  type="button"
+                  data-shot={im.post}
+                  data-n={im.n}
+                  class="group relative block overflow-hidden bg-[#e8e4d8] transition-shadow duration-200 hover:shadow-[5px_5px_0_#000] focus-visible:outline-4 focus-visible:outline-offset-2 focus-visible:outline-black"
+                  style={`flex: ${(im.w / im.h).toFixed(4)} 1 0%`}
+                  aria-label={`Open post ${im.post + 1}, photo ${im.n + 1}: ${galleryPosts[im.post]?.caption ?? ""}`}
+                >
+                  <img
+                    src={im.cover}
+                    alt={galleryPosts[im.post]?.caption ?? "Photo"}
+                    width={im.w}
+                    height={im.h}
+                    loading="lazy"
+                    decoding="async"
+                    class="h-full w-full object-cover"
+                  />
+                </button>
+              ))}
+            </div>
+          ))
+        }
+      </div>
+
+      <p class="mt-10 text-sm text-black/60">
+        Shot on whatever was in the pocket that day. Anything missing lives on{" "}
+        <a
+          href={author.ig}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="underline decoration-2 underline-offset-2 transition-colors duration-150 hover:bg-[var(--yellow)]"
+          >Instagram</a
+        >.
+      </p>
+    </div>
+  </section>
+
+  {/*
+    The viewer script runs in the browser, where Astro's frontmatter scope does
+    not exist — so the data is serialised here and read back from the DOM. `<`
+    is escaped so a caption can never close the script tag early.
+  */}
+  <script
+    type="application/json"
+    data-viewer-data
+    is:inline
+    set:html={JSON.stringify(viewerData).replace(/</g, "\\u003c")}
+  />
+
+  <div
+    data-viewer
+    hidden
+    class="fixed inset-0 z-[80] flex flex-col bg-black/95 backdrop-blur-md"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Photo viewer"
+  >
+    <header class="flex shrink-0 items-center justify-between gap-4 px-4 py-3 sm:px-6">
+      <p data-v-meta class="font-mono text-xs text-white/60"></p>
+      <button
+        type="button"
+        data-v-close
+        class="grid size-10 shrink-0 place-items-center border border-white/70 text-xl leading-none text-white transition-transform duration-150 hover:rotate-90 active:scale-95"
+        aria-label="Close photo viewer"
+      >
+        ×
+      </button>
+    </header>
+
+    <div class="relative flex min-h-0 flex-1 items-center justify-center px-12 sm:px-20">
+      <button
+        type="button"
+        data-v-prev
+        class="absolute left-2 z-10 grid size-11 place-items-center rounded-full border border-white/40 text-white transition-colors duration-150 hover:bg-white/10 active:scale-95 sm:left-4"
+        aria-label="Previous photo"
+      >
+        ←
+      </button>
+      <img
+        data-v-img
+        src=""
+        alt=""
+        class="max-h-full max-w-full object-contain"
+      />
+      <button
+        type="button"
+        data-v-next
+        class="absolute right-2 z-10 grid size-11 place-items-center rounded-full border border-white/40 text-white transition-colors duration-150 hover:bg-white/10 active:scale-95 sm:right-4"
+        aria-label="Next photo"
+      >
+        →
+      </button>
+    </div>
+
+    <footer class="shrink-0 px-4 pb-5 pt-3 sm:px-6">
+      <div class="mx-auto max-w-3xl">
+        <p data-v-caption class="text-sm leading-relaxed text-white/90"></p>
+        <div class="mt-2 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-white/55">
+          <span data-v-dots class="font-mono"></span>
+          <a
+            data-v-link
+            href="#"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="underline decoration-2 underline-offset-2 transition-colors duration-150 hover:text-white"
+          >
+            View post on Instagram
+          </a>
+          <span class="ml-auto flex items-center gap-2">
+            <button
+              type="button"
+              data-v-post-prev
+              class="border border-white/40 px-2.5 py-1 transition-colors duration-150 hover:bg-white/10 disabled:opacity-30"
+            >
+              ← Prev post
+            </button>
+            <button
+              type="button"
+              data-v-post-next
+              class="border border-white/40 px-2.5 py-1 transition-colors duration-150 hover:bg-white/10 disabled:opacity-30"
+            >
+              Next post →
+            </button>
+          </span>
+        </div>
+        <div data-v-strip class="mt-3 flex flex-wrap gap-1.5" role="group" aria-label="Photos in this post"></div>
+      </div>
+    </footer>
+  </div>
+</Layout>
+
+<script>
+  type Img = { full: string; w: number; h: number };
+  type Post = {
+    date: string;
+    likes: number;
+    permalink: string;
+    caption: string;
+    videoCount: number;
+    images: Img[];
+  };
+
+  // Frontmatter scope does not exist in the browser — read the data back.
+  const data = document.querySelector<HTMLScriptElement>("[data-viewer-data]")!;
+  const posts: Post[] = JSON.parse(data.textContent!);
+  const when = new Intl.DateTimeFormat("en", { month: "short", day: "numeric", year: "numeric" });
+
+  const viewer = document.querySelector<HTMLElement>("[data-viewer]")!;
+  const img = document.querySelector<HTMLImageElement>("[data-v-img]")!;
+  const meta = document.querySelector<HTMLElement>("[data-v-meta]")!;
+  const cap = document.querySelector<HTMLElement>("[data-v-caption]")!;
+  const dots = document.querySelector<HTMLElement>("[data-v-dots]")!;
+  const link = document.querySelector<HTMLAnchorElement>("[data-v-link]")!;
+  const strip = document.querySelector<HTMLElement>("[data-v-strip]")!;
+  const prevBtn = document.querySelector<HTMLButtonElement>("[data-v-prev]")!;
+  const nextBtn = document.querySelector<HTMLButtonElement>("[data-v-next]")!;
+  const postPrev = document.querySelector<HTMLButtonElement>("[data-v-post-prev]")!;
+  const postNext = document.querySelector<HTMLButtonElement>("[data-v-post-next]")!;
+  const closeBtn = document.querySelector<HTMLButtonElement>("[data-v-close]")!;
+  const tiles = document.querySelectorAll<HTMLButtonElement>("[data-shot]");
+
+  let p = 0; // post index
+  let i = 0; // image index within the post
+  let builtFor = -1;
+
+  /* The strip is rebuilt only when the post changes — not on every arrow press,
+     and never 88 nodes up front. */
+  function buildStrip() {
+    if (builtFor === p) return;
+    builtFor = p;
+    strip.textContent = "";
+    posts[p]!.images.forEach((_, n) => {
+      const b = document.createElement("button");
+      b.type = "button";
+      b.className = "size-8 border transition-colors duration-150";
+      b.setAttribute("aria-label", `Photo ${n + 1} of ${posts[p]!.images.length}`);
+      b.addEventListener("click", () => show(n));
+      strip.append(b);
+    });
+  }
+
+  function paintStrip() {
+    [...strip.children].forEach((c, n) => {
+      c.className =
+        "size-8 border transition-colors duration-150 " +
+        (n === i ? "border-white bg-white" : "border-white/35 hover:border-white/80");
+    });
+  }
+
+  /* Images navigate within the post; the explicit Prev/Next post buttons move
+     between posts, so browsing never silently jumps to a different caption. */
+  function show(n: number) {
+    const post = posts[p]!;
+    i = (n + post.images.length) % post.images.length;
+    const image = post.images[i]!;
+    img.src = image.full;
+    img.alt = post.caption || "Photo";
+    // Reserve the true aspect ratio so nothing reflows as the image decodes.
+    img.style.aspectRatio = image.w && image.h ? `${image.w} / ${image.h}` : "";
+    meta.textContent =
+      `${when.format(new Date(post.date))} · ${post.likes.toLocaleString("en")} likes` +
+      (post.videoCount ? ` · ${post.videoCount} video${post.videoCount > 1 ? "s" : ""}` : "");
+    cap.textContent = post.caption || "";
+    link.href = post.permalink;
+    dots.textContent = `post ${p + 1} / ${posts.length} · photo ${i + 1} of ${post.images.length}`;
+    prevBtn.disabled = nextBtn.disabled = post.images.length < 2;
+    postPrev.disabled = p === 0;
+    postNext.disabled = p === posts.length - 1;
+    buildStrip();
+    paintStrip();
+  }
+
+  function openPost(postIndex: number, imageIndex = 0) {
+    p = Math.max(0, Math.min(posts.length - 1, postIndex));
+    show(imageIndex);
+    viewer.hidden = false;
+    document.body.style.overflow = "hidden";
+    closeBtn.focus();
+  }
+
+  function close() {
+    viewer.hidden = true;
+    img.removeAttribute("src");
+    document.body.style.overflow = "";
+    // By index, not document.activeElement — that misses programmatic clicks.
+    tiles[p]?.focus();
+  }
+
+  tiles.forEach((t) => {
+    const shot = Number(t.dataset.shot);
+    t.addEventListener("click", () => {
+      // A wall tile knows which post it belongs to; open that post on the image
+      // it represents so the two agree.
+      const imgIndex = t.dataset.n ? Number(t.dataset.n) : 0;
+      openPost(shot, imgIndex);
+    });
+  });
+  prevBtn.addEventListener("click", () => show(i - 1));
+  nextBtn.addEventListener("click", () => show(i + 1));
+  postPrev.addEventListener("click", () => openPost(p - 1, 0));
+  postNext.addEventListener("click", () => openPost(p + 1, 0));
+  closeBtn.addEventListener("click", close);
+  viewer.addEventListener("click", (e) => {
+    if (e.target === viewer) close();
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (viewer.hidden) return;
+    if (e.key === "Escape") return close();
+    if (e.key === "ArrowLeft") { e.preventDefault(); show(i - 1); }
+    if (e.key === "ArrowRight") { e.preventDefault(); show(i + 1); }
+    if (e.key === "Tab") {
+      const ring = [closeBtn, prevBtn, nextBtn, postPrev, postNext, ...strip.children].filter(
+        (b) => !(b as HTMLButtonElement).disabled,
+      ) as HTMLElement[];
+      const at = ring.indexOf(document.activeElement as HTMLElement);
+      if (at < 0) return;
+      e.preventDefault();
+      ring[(at + (e.shiftKey ? -1 : 1) + ring.length) % ring.length]?.focus();
+    }
+  });
+</script>

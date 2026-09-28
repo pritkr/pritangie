@@ -8,7 +8,8 @@
     "check": "astro check",
     "preview": "astro preview",
     "astro": "astro",
-    "ig:sync": "bun scripts/ig_sync.ts"
+    "ig:sync": "bun scripts/ig_sync.ts",
+    "ig:gallery": "./scripts/sync_gallery.sh"
   },
   "dependencies": {
     "@astrojs/rss": "^4.0.19",
