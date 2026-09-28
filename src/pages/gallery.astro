@@ -18,10 +18,22 @@ import { galleryPosts } from "../data/gallery";
   container and every image keeps its shape at any width. No JavaScript, no
   layout shift, and the reading order stays newest-first.
 
-  The wall uses the small `cover` files (11 of them are loaded, ~60KB each);
-  the `full` size is fetched only when the lightbox opens.
+  The wall uses the small `cover` files (~43KB each, fetched lazily as you
+  scroll); the `full` size is fetched only when the viewer opens.
 */
-const ROW_RATIO = 3.4; // target width/height of a row at the design container
+
+/*
+  Rows are not all the same height. A single target ratio makes a technically
+  correct wall that reads as a spreadsheet — every band the same depth, the eye
+  has nothing to catch on. Cycling a few ratios gives the wall a rhythm: some
+  rows sit tall and let a portrait breathe, others run wide and quick. It is
+  still fully justified, just with an uneven pulse.
+
+  The ratio is the sum of the aspect ratios in a row, so the row's rendered
+  height is containerWidth / ratio. Lower = taller row, fewer photos in it.
+*/
+const ROW_RHYTHM = [3.0, 3.7, 2.6, 3.3];
+const GUTTER = 6; // px, mirrored in the flex gap classes below
 
 type Img = { full: string; cover: string; w: number; h: number; post: number; n: number };
 
@@ -40,13 +52,15 @@ galleryPosts.forEach((post, pi) => {
 });
 
 // Pack images into justified rows: fill a row until adding the next image
-// would exceed the target aspect budget, then start a new row.
+// would exceed that row's aspect budget, then start a new row on the next
+// ratio in the rhythm.
 const rows: Img[][] = [];
 let cur: Img[] = [];
 let curW = 0;
 for (const im of flat) {
+  const budget = ROW_RHYTHM[rows.length % ROW_RHYTHM.length]!;
   const r = im.w / im.h;
-  if (cur.length && curW + r > ROW_RATIO) {
+  if (cur.length && curW + r > budget) {
     rows.push(cur);
     cur = [];
     curW = 0;
@@ -97,48 +111,97 @@ const shotIndex = flat.map((im) => im.post);
           class="absolute -bottom-3 left-0"
         />
       </div>
-      <p class="mt-8 max-w-2xl text-lg">
-        {totalImages} photos from {galleryPosts.length} posts by{" "}
-        <a
-          href={author.ig}
-          target="_blank"
-          rel="noopener noreferrer"
-          class="underline decoration-2 underline-offset-2 transition-colors duration-150 hover:bg-[var(--yellow)]"
-          >@{handle}</a
-        > — {totalLikes.toLocaleString("en")} likes between them. Every image
-        is served from this site rather than embedded from Instagram. Click any
-        photo to enlarge it.
-      </p>
-      <p class="mt-3 font-mono text-sm text-black/60">{span}</p>
+
+      <div class="mt-10 flex flex-wrap items-end gap-x-10 gap-y-6">
+        <p class="max-w-md text-lg leading-relaxed">
+          Every photo from{" "}
+          <a
+            href={author.ig}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="underline decoration-2 underline-offset-2 transition-colors duration-150 hover:bg-[var(--yellow)]"
+            >@{handle}</a
+          >, served from this site rather than embedded from Instagram. Click
+          any photo and the whole post it came from opens.
+        </p>
+
+        <dl class="flex gap-2">
+          {
+            [
+              { n: totalImages, label: "photos" },
+              { n: galleryPosts.length, label: "posts" },
+              { n: totalLikes, label: "likes" },
+            ].map((s) => (
+              <div class="border-3 border-black bg-white px-3 py-2 transition-shadow duration-200 hover:shadow-[4px_4px_0_#000]">
+                <dt class="font-mono text-[10px] uppercase tracking-wider text-black/55">
+                  {s.label}
+                </dt>
+                <dd class="mt-0.5 text-2xl leading-none font-black tabular-nums">
+                  {s.n.toLocaleString("en")}
+                </dd>
+              </div>
+            ))
+          }
+          <div class="border-3 border-dashed border-black/35 px-3 py-2">
+            <dt class="font-mono text-[10px] uppercase tracking-wider text-black/55">
+              span
+            </dt>
+            <dd class="mt-0.5 text-2xl leading-none font-black tabular-nums">
+              {new Date(newest).getFullYear()}
+            </dd>
+          </div>
+        </dl>
+      </div>
+      <p class="mt-4 font-mono text-sm text-black/60">{span}</p>
     </div>
   </section>
 
   <section class="pb-20">
     <div class="max-w-6xl mx-auto px-4">
-      <div data-wall class="flex flex-col gap-2">
+      <div data-wall class="flex flex-col gap-1.5">
         {
           rows.map((row) => (
-            <div class="flex gap-2">
-              {row.map((im) => (
-                <button
-                  type="button"
-                  data-shot={im.post}
-                  data-n={im.n}
-                  class="group relative block overflow-hidden bg-[#e8e4d8] transition-shadow duration-200 hover:shadow-[5px_5px_0_#000] focus-visible:outline-4 focus-visible:outline-offset-2 focus-visible:outline-black"
-                  style={`flex: ${(im.w / im.h).toFixed(4)} 1 0%`}
-                  aria-label={`Open post ${im.post + 1}, photo ${im.n + 1}: ${galleryPosts[im.post]?.caption ?? ""}`}
-                >
-                  <img
-                    src={im.cover}
-                    alt={galleryPosts[im.post]?.caption ?? "Photo"}
-                    width={im.w}
-                    height={im.h}
-                    loading="lazy"
-                    decoding="async"
-                    class="h-full w-full object-cover"
-                  />
-                </button>
-              ))}
+            <div class="flex gap-1.5">
+              {row.map((im) => {
+                const post = galleryPosts[im.post]!;
+                return (
+                  <button
+                    type="button"
+                    data-shot={im.post}
+                    data-n={im.n}
+                    class="group relative block overflow-hidden bg-[#e8e4d8] outline-3 outline-transparent transition-shadow duration-200 hover:z-10 hover:shadow-[5px_5px_0_#000] hover:outline-black focus-visible:z-10 focus-visible:shadow-[5px_5px_0_#000] focus-visible:outline-black"
+                    style={`flex: ${(im.w / im.h).toFixed(4)} 1 0%`}
+                    aria-label={`Open post ${im.post + 1}, photo ${im.n + 1}: ${post.caption ?? ""}`}
+                  >
+                    <img
+                      src={im.cover}
+                      alt={post.caption ?? "Photo"}
+                      width={im.w}
+                      height={im.h}
+                      loading="lazy"
+                      decoding="async"
+                      class="h-full w-full object-cover transition-transform duration-500 ease-[var(--ease-out)] group-hover:scale-[1.04]"
+                    />
+
+                    {/* Metadata stays out of the way until hover or keyboard
+                        focus. `hover:` in Tailwind v4 only fires on
+                        hover-capable pointers, so touch is unaffected. */}
+                    <span
+                      aria-hidden="true"
+                      class="pointer-events-none absolute inset-x-0 bottom-0 flex items-end justify-between gap-2 bg-linear-to-t from-black/75 via-black/15 to-transparent p-2 opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-focus-visible:opacity-100"
+                    >
+                      <span class="font-mono text-[10px] leading-tight text-white">
+                        {when.format(new Date(post.date))}
+                      </span>
+                      {post.videoCount > 0 && (
+                        <span class="shrink-0 border border-white/70 px-1 py-px font-mono text-[9px] uppercase tracking-wider text-white">
+                          reel
+                        </span>
+                      )}
+                    </span>
+                  </button>
+                );
+              })}
             </div>
           ))
         }
@@ -251,6 +314,22 @@ const shotIndex = flat.map((im) => im.post);
   </div>
 </Layout>
 
+<style is:global>
+  /* The clicked tile grows into the viewer's letterboxed photo and shrinks back
+     on close. Timing matches the site's --ease-out so the morph feels like the
+     rest of the motion, not a separate effect bolted on. */
+  ::view-transition-group(gallery-photo) {
+    animation-duration: 320ms;
+    animation-timing-function: cubic-bezier(0.23, 1, 0.32, 1);
+  }
+  /* Everything else — the wall behind, the viewer chrome — just cross-fades
+     rather than sliding, so the photo is the only thing that appears to move. */
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation-duration: 200ms;
+  }
+</style>
+
 <script>
   type Img = { full: string; w: number; h: number };
   type Post = {
@@ -334,26 +413,74 @@ const shotIndex = flat.map((im) => im.post);
     paintStrip();
   }
 
+  /* The photo grows out of the tile it was clicked from and shrinks back into
+     it on close, using the native View Transitions API — no library.
+
+     The name is a single baton that must be held by exactly one element at a
+     time: two elements sharing it aborts the whole transition. So it is passed
+     from the tile to the viewer image on open, and back on close — never
+     duplicated. Naming all 88 tiles up front would abort every time. */
+  const NAME = "gallery-photo";
+  const calm = matchMedia("(prefers-reduced-motion: reduce)");
+  const canMorph = () => document.startViewTransition && !calm.matches;
+
   function openPost(postIndex: number, imageIndex = 0, from?: HTMLButtonElement) {
     p = Math.max(0, Math.min(posts.length - 1, postIndex));
     if (from) openedFrom = from;
-    show(imageIndex);
-    viewer.hidden = false;
-    document.body.style.overflow = "hidden";
-    closeBtn.focus();
+
+    const apply = () => {
+      show(imageIndex);
+      viewer.hidden = false;
+      document.body.style.overflow = "hidden";
+      closeBtn.focus();
+    };
+    if (!canMorph() || !from) return apply();
+
+    from.style.viewTransitionName = NAME;
+    try {
+      document.startViewTransition(() => {
+        from.style.viewTransitionName = "";
+        // The image keeps the name while the viewer is open, so closing can
+        // morph back out of it.
+        img.style.viewTransitionName = NAME;
+        apply();
+      });
+    } catch {
+      // An aborted transition is cosmetic; the viewer still has to open.
+      from.style.viewTransitionName = "";
+      apply();
+    }
   }
 
   function close() {
-    viewer.hidden = true;
-    img.removeAttribute("src");
-    document.body.style.overflow = "";
+    const fallback = Number(openedFrom?.dataset.shot ?? p);
+    const target = openedFrom ?? tiles[fallback];
+
+    const apply = () => {
+      viewer.hidden = true;
+      img.removeAttribute("src");
+      document.body.style.overflow = "";
+      target?.focus();
+    };
     // Back to the tile that was actually clicked. Post navigation can leave the
     // viewer on a different post, so the opener — not the current post — is what
     // focus should return to. Falls back to the first tile of the current post.
-    const fallback = Number(openedFrom?.dataset.shot ?? p);
-    const target = openedFrom ?? tiles[fallback];
     openedFrom = undefined;
-    target?.focus();
+
+    if (!canMorph() || !target) return apply();
+    const run = document.startViewTransition(() => {
+      img.style.viewTransitionName = "";
+      target.style.viewTransitionName = NAME;
+      apply();
+    });
+    // Release the tile's name once the morph lands, or the next open — on a
+    // different tile — would be a duplicate. `finished` rejects when a
+    // transition is skipped, which must not surface as an unhandled error.
+    run.finished
+      .catch(() => {})
+      .finally(() => {
+        target.style.viewTransitionName = "";
+      });
   }
 
   tiles.forEach((t) => {
