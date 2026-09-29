@@ -5,12 +5,14 @@
     firstname: "Prit Kumar",
     lastname: "",
     email: "pritform@gmail.com",
+    phone: "+91 9508364740",
     github: "pritkr",
     linkedin: "prit-kumar",
+    website: "https://prit.eu.org",
     address: "Bihar, India",
     positions: (
-      "Open-Source Developer",
-      "Privacy Advocate"
+      "Software Engineering Intern",
+      "Full-Stack · Backend · Open Source"
     )
   ),
   profile-picture: none,
@@ -35,7 +37,7 @@
   title-link: none,
 ) = {
   let title-content = if title-link != none {
-    link(title-link)[#title]
+    link(title-link)[#title #text(size: 8pt, fill: rgb("#5d5d5d"))[↗]]
   } else {
     title
   }
@@ -44,21 +46,21 @@
   } else {
     location
   }
-  block(above: 1em, below: 0.65em)[
+  block(above: 0.55em, below: 0.3em)[
     #pad[
       #justified-header(title-content, location-content)
       #if description != "" or date != "" [
         #block[
           #box(width: 1fr)[
             #align(left)[
-              #text(fill: dark-ink, size: 11pt, weight: "regular")[
+              #text(fill: dark-ink, size: 10pt, weight: "regular")[
                 #description
               ]
             ]
           ]
           #box(width: 1fr)[
             #align(right)[
-              #text(fill: dark-ink, size: 11pt, weight: "regular")[#date]
+              #text(fill: dark-ink, size: 10pt, weight: "regular")[#date]
             ]
           ]
         ]
@@ -69,109 +71,99 @@
 
 #let resume-item(body) = {
   set text(
-    size: 11pt,
+    size: 10pt,
     style: "normal",
     weight: "regular",
     fill: dark-ink,
   )
   set block(
-    above: 0.75em,
-    below: 1.25em,
+    above: 0.5em,
+    below: 0.65em,
   )
-  set par(leading: 0.65em)
-  block(above: 0.5em)[
+  set par(leading: 0.5em)
+  block(above: 0.3em)[
     #body
   ]
 }
 
 = Summary
-Open-source developer and B.Tech CSE student building software that respects privacy and freedom. Maintainer of *Predirect* (Manifest V3 browser extension with *270+ ★* on GitHub) redirecting ~30 surveilled platforms to privacy-friendly frontends, published on Chrome, Firefox, and Edge. Lead of tech & programs at *Bodhya* FOSS community (aligned with FOSS United / Samagata) bringing tech opportunities, mentorship, and workshops to engineering students in Bihar.
+I build software that gives people more control: private browsing, easier access to university data, and clearer paths to public benefits. My work spans a browser extension with 1,000+ installs, tools for 30,000+ student records, and eligibility across 1,000+ schemes. B.Tech CSE student seeking remote SWE internships and full-time roles.
 
 = Projects
 #resume-entry(
   title: "Predirect — Privacy Browser Extension",
-  location: "github.com/pritkr/predirect",
-  location-link: "https://github.com/pritkr/predirect",
+  location: "Manifest V3 · Browser APIs",
   title-link: "https://github.com/pritkr/predirect",
-  date: "Nov 2023 - Present",
+  date: "Nov 2023 – Present",
   description: "Maintainer & Lead Developer (270+ ★ on GitHub · GPL-3.0)"
 )
 #resume-item[
-  - Manifest V3 browser extension redirecting ~30 tracked sites (YouTube, X, Reddit, Google, Instagram, TikTok) to privacy-friendly frontends (Piped, Nitter, Redlib, SearXNG, etc.).
-  - Minimal-permission architecture published on Chrome Web Store, Firefox Add-ons (incl. Android), and Microsoft Edge.
-  - Automated instance health checking and sync workflows maintained via GitHub Actions (`pritkr/instances`).
-]
-
-#resume-entry(
-  title: "JanSahay — Welfare Scheme Eligibility Platform",
-  location: "jansahay.pages.dev",
-  location-link: "https://jansahay.pages.dev",
-  title-link: "https://jansahay.pages.dev",
-  date: "Sep 2026",
-  description: "Built with Team Tejas at TEJAS India Hackathon 2026 (GEC Sheikhpura)"
-)
-#resume-item[
-  - JanSahay exists because people were quietly losing benefits they were already eligible for — Bihar's welfare schemes are scattered across PDFs and barely-usable portals, so I built a Hindi-first app where you register once and it instantly tells you which schemes you qualify for.
-  - Designed around my own users in rural Bihar: offline-first so it works without data, 48px touch targets, and Hindi TTS that reads scheme details aloud for people who struggle with text.
-  - Added a Hindi chat assistant that refuses to hallucinate — a deterministic rule engine decides eligibility, and a free LLM only rephrases the reply; no AI ever makes the call on who gets a benefit.
-  - Consent-first by design: a local sahayak (helper) verifies and syncs a person's profile via OTP, and deadline alerts warn people before a scheme window closes — not after.
-  - Under the hood it's a TypeScript monorepo shared between a React PWA and an Android app, deployed as a Cloudflare Worker and live at jansahay.pages.dev.
+  - Redirects 30+ tracking-heavy sites (YouTube, X, Reddit, Google, Instagram, TikTok) to privacy-friendly frontends such as Piped, Redlib, and SearXNG.
+  - Reached 1,000+ installs across Chrome, Firefox (including Android), and Microsoft Edge; built with minimal permissions.
+  - Automated frontend-instance health checks and synchronization with GitHub Actions (pritkr/instances).
 ]
 
 #resume-entry(
   title: "BEU Connect — Academic Utility Portal",
-  location: "beu.prit.eu.org",
-  location-link: "https://beu.prit.eu.org",
+  location: "OCR · Vision-Language Models · ETL",
   title-link: "https://beu.prit.eu.org",
-  date: "2024 - Present",
+  date: "2024 – Present",
   description: "Creator & Lead Developer"
 )
 #resume-item[
-  - Centralized portal bundling syllabus, exam results, result analytics, and official alerts for Bihar Engineering University colleges.
-  - Scraped and parsed PYQ (past-year question) papers from scattered unofficial sites into a structured, searchable archive.
-  - Digitized scanned question papers using OCR and Vision-Language Models (VLMs).
-  - Built a bulk ingestion pipeline dumping result data for all BEU students into a queryable database powering result analytics.
-  - Optimized frontend architecture ensuring rapid mobile load times and seamless navigation for thousands of BEU engineering students.
+  - Built a student portal consolidating syllabi, exam results, analytics, and official alerts for Bihar Engineering University.
+  - Scraped and parsed past-year papers into a searchable archive; digitized scanned papers with OCR and vision-language models.
+  - Loaded results for 30,000+ BEU student records through a bulk-ingestion pipeline into a queryable database for analytics.
 ]
 
 #resume-entry(
-  title: "chaind-cli — Sovereign AI Agent Daemon",
-  location: "github.com/fossism/chaind-cli",
-  location-link: "https://github.com/fossism/chaind-cli",
+  title: "chaind-cli — Chat Apps to Local AI Agents",
+  location: "Go · Unix Sockets",
   title-link: "https://github.com/fossism/chaind-cli",
-  date: "2024 - Present",
+  date: "2024 – Present",
   description: "Lead Developer"
 )
 #resume-item[
-  - Headless Go daemon bridging messaging apps (WhatsApp, Matrix, Telegram) directly to local AI agents via permission-gated Unix sockets.
-  - Designed for secure, zero-cloud interaction with self-hosted LLMs without exposing open network ports.
+  - Built a headless Go daemon connecting WhatsApp, Matrix, and Telegram to local AI agents over permission-gated Unix sockets.
+  - Enables self-hosted LLM use without cloud dependencies or exposed network ports.
 ]
 
 #resume-entry(
   title: "listbrew — Contact Sync Engine",
-  location: "github.com/pritkr/listbrew",
-  location-link: "https://github.com/pritkr/listbrew",
+  location: "Python · Frappe · CI",
   title-link: "https://github.com/pritkr/listbrew",
-  date: "Dec 2025 - Present",
+  date: "Dec 2025 – Present",
   description: "Creator & Maintainer"
 )
 #resume-item[
-  - Real-time contact synchronization engine written in Python for Frappe to sync contacts directly into Listmonk.
-  - Shipped with full automated CI/CD quality gates using Ruff, Semgrep, ESLint, PyUpgrade, and pip-audit.
+  - Built a Python contact-sync engine connecting Frappe with Listmonk; added CI checks with Ruff, Semgrep, PyUpgrade, and pip-audit.
 ]
 
-= Experience & Community
+#resume-entry(
+  title: "JanSahay — Welfare Scheme Eligibility Platform",
+  location: "React PWA · Android · Cloudflare Workers",
+  title-link: "https://jansahay.pages.dev",
+  date: "Sep 2026",
+  description: "Finalist · TEJAS India Hackathon 2026 (GEC Sheikhpura)"
+)
+#resume-item[
+  - Catalogs 1,000+ central and state schemes from myScheme in an India-wide, Hindi-first eligibility app; users create a profile once to find matching benefits.
+  - Uses deterministic rules for eligibility and an LLM only to rephrase results; includes offline access, Hindi text-to-speech, OTP-assisted profile sync, and deadline alerts.
+  - Shares a TypeScript monorepo across a React PWA and Android app, with backend services on Cloudflare Workers.
+]
+
+= Experience
 #resume-entry(
   title: "Bodhya FOSS Community",
   location: "bodhya.net — Bihar, India",
   location-link: "https://bodhya.net",
   title-link: "https://bodhya.net",
-  date: "Jan 2026 - Present",
+  date: "Jan 2026 – Present",
   description: "Tech & Programs Lead — Founding Core Team"
 )
 #resume-item[
-  - Lead tech and programs for a FOSS community aligned with FOSS United & Samagata linking tier-2/3 college students with open-source mentors, workshops, internships, and real projects.
-  - Built production tooling including automated certificate generators, event portals, and Frappe/Listmonk sync integrations.
+  - Lead technology and programs connecting engineering students in Bihar with open-source mentors, workshops, internships, and projects.
+  - Built certificate-generation and event tools, plus Frappe/Listmonk integrations.
 ]
 
 #resume-entry(
@@ -179,14 +171,12 @@ Open-source developer and B.Tech CSE student building software that respects pri
   location: "navprayas.in — Manpur Patwatoli, Gaya, Bihar",
   location-link: "https://navprayas.in",
   title-link: "https://navprayas.in",
-  date: "May 2025 - Present",
+  date: "May 2025 – Present",
   description: "Team Lead — Website, Database & Anchoring"
 )
 #resume-item[
-  - Team lead for website, database, and anchoring at Navprayas — a student-run non-profit (est. 2000) driving education and development for the Manpur–Patwatoli society in Gaya, Bihar (15K+ participants, 700+ alumni).
-  - Drove the org's first online registration transition, integrating Razorpay payment gateway, for MTSE (Manpur Talent Search Exam, classes V–X) and other events.
-  - Handled issues faced by school students and their parents using the new online forms for the first time — providing end-to-end support.
-  - Anchored annual felicitation ceremonies including Pratibha Milan.
+  - Led website and database work for a student-run nonprofit serving Manpur-Patwatoli, Gaya.
+  - Delivered the organization's first online registration flow with Razorpay for MTSE and other events.
 ]
 
 #resume-entry(
@@ -194,44 +184,29 @@ Open-source developer and B.Tech CSE student building software that respects pri
   location: "fossunited.org/c/gec-sheikhpura",
   location-link: "https://fossunited.org/c/gec-sheikhpura",
   title-link: "https://fossunited.org/c/gec-sheikhpura",
-  date: "Aug 2025 - Present",
+  date: "Aug 2025 – Present",
   description: "Core Team Member"
 )
 #resume-item[
-  - Core team member of Bihar's first FOSS United college club — organizing Git/GitHub workshops, Linux installation parties, and GSoC career conferences.
-  - Arch Linux advocate; converted ~15 student machines to Linux environments and terminal workflows.
+  - Organized Git/GitHub workshops, Linux installation events, and GSoC career sessions with the FOSS United college club.
+  - Migrated 15 student machines to Linux and terminal-based workflows.
 ]
 
 = Technical Skills
-#resume-skill-item(
-  "Languages",
-  ("Python", "TypeScript", "JavaScript", "Go", "C", "C++", "Bash", "SQL")
-)
-#resume-skill-item(
-  "Web & Stack",
-  ("React", "Astro", "Tailwind CSS", "HTML/CSS", "REST APIs", "Node.js")
-)
-#resume-skill-item(
-  "Tools & Systems",
-  ("Git/GitHub", "GitHub Actions", "Linux (Arch)", "Docker", "Nginx", "PostgreSQL", "Supabase", "Frappe")
-)
-#resume-skill-item(
-  "Data & Automation",
-  ("Web Scraping & Parsing", "OCR & Vision-Language Models", "ETL Pipelines", "CI/CD")
-)
-#resume-skill-item(
-  "Agentic AI",
-  ("OpenCode", "Claude Code", "AI Agent Workflows", "LLM-Assisted Development")
-)
-#resume-skill-item(
-  "Focus Areas",
-  ("Privacy Tech", "FOSS", "Self-Hosting", "Community Building")
-)
+#v(0.35em)
+#resume-item[
+  #set par(leading: 0.8em)
+  *Languages:* Python, TypeScript, JavaScript, Go, C, Bash, SQL \
+  *Frontend:* React, Astro, Tailwind CSS, HTML/CSS \
+  *Backend & Cloud:* Node.js, REST APIs, PostgreSQL, Supabase, Cloudflare Workers \
+  *Tools & Systems:* Git/GitHub, GitHub Actions, Linux (Arch), Docker, Nginx, Frappe \
+  *Data & Automation:* Web scraping, OCR, vision-language models, ETL, CI/CD
+]
 
 = Education
 #resume-entry(
   title: "Government Engineering College (GEC), Sheikhpura",
   location: "Sheikhpura, Bihar, India",
-  date: "2024 - 2028",
-  description: "B.Tech in Computer Science & Engineering — Bihar Engineering University (BEU)"
+  date: "Expected 2028",
+  description: "B.Tech CSE · Bihar Engineering University (BEU)"
 )

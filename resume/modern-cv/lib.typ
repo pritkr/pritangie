@@ -213,7 +213,7 @@
   show: body => context {
     set document(
       author: author.firstname + " " + author.lastname,
-      title: "Résumé",
+      title: author.firstname + " - Resume",
     )
     body
   }
@@ -228,7 +228,7 @@
   
   set page(
     paper: paper-size,
-    margin: (left: 11mm, right: 11mm, top: 9mm, bottom: 8mm),
+    margin: (left: 9mm, right: 9mm, top: 7.5mm, bottom: 7mm),
     footer: if show-footer [#__resume_footer(
         author,
         language,
@@ -340,7 +340,7 @@
     
     align(center)[
       #set text(
-        size: 9pt,
+        size: 8pt,
         weight: "regular",
         style: "normal",
       )
@@ -356,6 +356,11 @@
             #box[#text(author.phone)]
             #separator
           ]
+          #if ("address" in author) [
+            #fa-icon("location-dot", fill: color-darknight)
+            #box[#author.address]
+            #separator
+          ]
           #if ("email" in author) [
             #email-icon
             #box[#link("mailto:" + author.email)[#author.email]]
@@ -368,14 +373,19 @@
           #if ("github" in author) [
             #separator
             #github-icon
-            #box[#link("https://github.com/" + author.github)[#author.github]]
+            #box[#link("https://github.com/" + author.github)[github.com/#author.github]]
           ]
           #if ("linkedin" in author) [
             #separator
             #linkedin-icon
             #box[
-              #link("https://www.linkedin.com/in/" + author.linkedin)[#author.firstname #author.lastname]
+              #link("https://www.linkedin.com/in/" + author.linkedin)[linkedin.com/in/#author.linkedin]
             ]
+          ]
+          #if ("website" in author) [
+            #separator
+            #website-icon
+            #box[#link(author.website)[prit.eu.org]]
           ]
           #if ("twitter" in author) [
             #separator
@@ -393,11 +403,6 @@
             #orcid-icon
             #box[#link("https://orcid.org/" + author.orcid)[#author.orcid]]
           ]
-          #if ("website" in author) [
-            #separator
-            #website-icon
-            #box[#link(author.website)[#author.website]]
-          ]
         ]
       ]
     ]
@@ -411,7 +416,6 @@
       [
         #name
         #positions
-        #address
         #contacts
       ],
       align(left + horizon)[
@@ -428,7 +432,6 @@
   } else {
     name
     positions
-    address
     contacts
   }
 
@@ -697,42 +700,38 @@
     let separator = [  #box(sym.bar.v)  ]
     let author_list = ()
 
+    if ("address" in author) {
+      author_list.push[#box[Location: #author.address]]
+    }
     if ("phone" in author) {
       author_list.push[
-        #phone-icon
-        #box[#text(author.phone)]
+        #box[Phone: #text(author.phone)]
       ]
     }
     if ("email" in author) {
       author_list.push[
-        #email-icon
-        #box[#link("mailto:" + author.email)[#author.email]]
+        #box[Email: #link("mailto:" + author.email)[#author.email]]
       ]
     }
     if ("github" in author) {
       author_list.push[
-        #github-icon
-        #box[#link("https://github.com/" + author.github)[#author.github]]
+        #box[GitHub: #link("https://github.com/" + author.github)[github.com/#author.github]]
       ]
     }
     if ("linkedin" in author) {
       author_list.push[
-        #linkedin-icon
         #box[
-          #link("https://www.linkedin.com/in/" + author.linkedin)[#author.firstname #author.lastname]
+          LinkedIn: #link("https://www.linkedin.com/in/" + author.linkedin)[linkedin.com/in/#author.linkedin]
         ]
       ]
+    }
+    if ("website" in author) {
+      author_list.push[#box[Portfolio: #link(author.website)[prit.eu.org]]]
     }
     if ("orcid" in author) {
       author_list.push[
         #orcid-icon
         #box[#link("https://orcid.org/" + author.orcid)[#author.orcid]]
-      ]
-    }
-    if ("website" in author) {
-      author_list.push[
-        #website-icon
-        #box[#link(author.website)[#author.website]]
       ]
     }
 
@@ -764,7 +763,6 @@
       [
         #name
         #positions
-        #address
         #contacts
       ],
     )
