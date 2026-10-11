@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
-    "check": "astro check",
+    "check": "bun check",
+    "check:astro": "astro check",
     "preview": "astro preview",
     "astro": "astro",
     "ig:sync": "bun scripts/ig_sync.ts",
@@ -15,13 +16,13 @@
     "@astrojs/rss": "^4.0.19",
     "@astrojs/sitemap": "^3.7.4",
     "@tailwindcss/vite": "^4.3.3",
-    "astro": "^7.3.5",
+    "astro": "^7.3.8",
     "tailwindcss": "^4.3.3",
-    "vite": "^8.3.0"
+    "vite": "^8.3.4"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
-    "@types/node": "^26.6.2",
+    "@types/node": "^26.6.5",
     "typescript": "^7.0.2"
   }
 }
